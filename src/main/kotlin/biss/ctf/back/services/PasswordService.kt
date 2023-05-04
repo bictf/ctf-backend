@@ -11,6 +11,11 @@ class PasswordService() {
         return "newPassword"
     }
 
+    fun isPasswordTrue(passwordDiff: ArrayList<Int>): Boolean{
+        return !passwordDiff.contains(PasswordCharState.CorrectCharWrongPlace.ordinal) &&
+                !passwordDiff.contains(PasswordCharState.IncorrectChar.ordinal)
+    }
+
     fun checkPasswordsDiff(password: String, newPassword: String): ArrayList<Int> {
         if(password.length != newPassword.length){
             throw Exception("Password is in the wrong length!")

@@ -5,7 +5,6 @@ import biss.ctf.back.services.PasswordService
 import biss.ctf.back.services.UserDataService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.sql.DriverManager.println
 
 @RestController
 @RequestMapping("/login")
@@ -17,9 +16,11 @@ class LoginController(
     @GetMapping
     fun login(@RequestParam username: String, @RequestParam password: String): LoginResponseToUser {
         val user = userDataService.getUserByIp("11")
-        val passwordDiff = passwordService.checkPasswordsDiff(user.password, password)
 
-        return LoginResponseToUser(false, passwordDiff)
+        val passwordDiff = passwordService.checkPasswordsDiff(user.password, password)
+        val isPasswordTrue = passwordService.isPasswordTrue(passwordDiff)
+
+        return LoginResponseToUser(isPasswordTrue, passwordDiff)
     }
 
     @ExceptionHandler(Exception::class)
