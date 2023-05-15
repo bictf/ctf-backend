@@ -8,5 +8,5 @@ val FILES_DB = arrayOf(
     FileEntity("bla2", "biii"),
     FileEntity("bla3", "blaa"),
     FileEntity("bla4", "bolo"),
-
+    FileEntity("bli", "bolo"),
     )

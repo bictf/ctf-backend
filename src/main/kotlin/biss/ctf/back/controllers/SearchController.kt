@@ -12,9 +12,9 @@ class SearchController(
 ) {
 
     @GetMapping
-    fun login(@RequestParam search: String): SearchResponseToUser {
-        val numberOfMatchFiles = fileService.countFilesWithRegex(search)
-        val firstMatchFile = fileService.findFileWithRegex(search)
+    fun login(@RequestParam text: String): SearchResponseToUser {
+        val numberOfMatchFiles = fileService.countFilesWithRegex(text)
+        val firstMatchFile = fileService.findFileWithRegex(text)
 
         return SearchResponseToUser(numberOfMatchFiles, firstMatchFile)
     }
