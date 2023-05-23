@@ -3,14 +3,15 @@ package biss.ctf.back.controllers
 import biss.ctf.back.objects.apiObjects.toUser.LoginResponseToUser
 import biss.ctf.back.services.PasswordService
 import biss.ctf.back.services.UserDataService
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/login")
 class LoginController(
-        val userDataService: UserDataService,
-        val passwordService: PasswordService
+    @Autowired val userDataService: UserDataService,
+    @Autowired val passwordService: PasswordService
 ) {
 
     @GetMapping
@@ -20,7 +21,12 @@ class LoginController(
         val passwordDiff = passwordService.checkPasswordsDiff(user.password, password)
         val isPasswordTrue = passwordService.isPasswordTrue(passwordDiff)
 
-        return LoginResponseToUser(isPasswordTrue, passwordDiff)
+        var cookie = "{}"
+        if (isPasswordTrue){
+            cookie = """{"username":"admin", "isAdmin":false}"""
+        }
+
+        return LoginResponseToUser(isPasswordTrue, passwordDiff, cookie)
     }
 
     @ExceptionHandler(Exception::class)
