@@ -21,7 +21,12 @@ class LoginController(
         val passwordDiff = passwordService.checkPasswordsDiff(user.password, password)
         val isPasswordTrue = passwordService.isPasswordTrue(passwordDiff)
 
-        return LoginResponseToUser(isPasswordTrue, passwordDiff)
+        var cookie = "{}"
+        if (isPasswordTrue){
+            cookie = """{"username":"admin", "isAdmin":false}"""
+        }
+
+        return LoginResponseToUser(isPasswordTrue, passwordDiff, cookie)
     }
 
     @ExceptionHandler(Exception::class)
