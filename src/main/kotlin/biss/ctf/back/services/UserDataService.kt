@@ -7,6 +7,6 @@ import org.springframework.stereotype.Service
 class UserDataService(
         val userDataRepository: UserDataRepository
 ) {
-    fun getUserByIp(ip: String) = userDataRepository.get(ip)
+    fun getUserByUUID(uuid: String) = userDataRepository.get(uuid)
 
 }

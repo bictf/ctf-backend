@@ -15,9 +15,9 @@ class LoginController(
 ) {
 
     @GetMapping
-    fun login(@RequestParam username: String, @RequestParam password: String): LoginResponseToUser {
-        val user = userDataService.getUserByIp("11")
+    fun login(@RequestParam username: String, @RequestParam password: String, @RequestParam uuid: String): LoginResponseToUser {
 
+        val user = userDataService.getUserByUUID(uuid)
         val passwordDiff = passwordService.checkPasswordsDiff(user.password, password)
         val isPasswordTrue = passwordService.isPasswordTrue(passwordDiff)
 

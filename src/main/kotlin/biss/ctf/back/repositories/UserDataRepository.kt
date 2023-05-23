@@ -1,22 +1,27 @@
 package biss.ctf.back.repositories
 
 import biss.ctf.back.entities.UserDataEntity
+import biss.ctf.back.services.PasswordService
+import mu.KotlinLogging
 import org.springframework.stereotype.Repository
 import java.util.*
-import java.util.Collections.emptyMap
 
 @Repository
-class UserDataRepository {
+class UserDataRepository (
+    val passwordService: PasswordService
+){
 
     private val users = HashMap<String, UserDataEntity>()
+    private val logger = KotlinLogging.logger {}
 
     fun set(userDataEntity: UserDataEntity) {
-        users.put(userDataEntity.IP, userDataEntity)
+        users.put(userDataEntity.UUID, userDataEntity)
     }
 
-    fun get(IP: String): UserDataEntity {
-        users.put("11", UserDataEntity("11", "Cc123456", 0L))
-
-        return users[IP] ?: throw IllegalArgumentException("User with IP [${IP}] doesn't exist")
+    fun get(uuid: String): UserDataEntity {
+        users.putIfAbsent(uuid, UserDataEntity(uuid, passwordService.generateNewPassword(), 0L))
+        val user = users[uuid]!!
+        logger.info("Logging in for user \"${user.UUID}\" and password \"${user.password}\"")
+        return users[uuid]!!
     }
 }
