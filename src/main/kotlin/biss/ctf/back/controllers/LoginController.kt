@@ -4,6 +4,7 @@ import biss.ctf.back.objects.apiObjects.toUser.LoginResponseToUser
 import biss.ctf.back.services.PasswordService
 import biss.ctf.back.services.UserDataService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -31,6 +32,6 @@ class LoginController(
 
     @ExceptionHandler(Exception::class)
     fun customerNotFound(exception: Exception): ResponseEntity<String> {
-        return ResponseEntity.badRequest().body(exception.message)
+        return ResponseEntity.status(401).body(exception.message)
     }
 }
