@@ -1,14 +1,27 @@
 package biss.ctf.back.services
 
 import biss.ctf.back.objects.PasswordCharState
-import org.springframework.aot.hint.TypeReference.listOf
 import org.springframework.stereotype.Service
 import java.util.*
+import kotlin.random.Random
+
+const val MINIMUM_PASSWORD_LENGTH = 24
+const val MAXIMUM_PASSWORD_LENGTH = 28
+val PASSWORD_CHAR_POOL = ('0'..'9') + ('a'..'z') + ('A'..'Z')
 
 @Service
 class PasswordService() {
     fun generateNewPassword(): String {
-        return "newPassword"
+        val passwordLength = Random.nextInt(MINIMUM_PASSWORD_LENGTH, MAXIMUM_PASSWORD_LENGTH)
+        val charPool: MutableList<Char> = PASSWORD_CHAR_POOL.map{it} as MutableList<Char>
+
+        return (1..passwordLength)
+            .map { Random.nextInt(0, charPool.size).let {
+                val temp = charPool[it]
+                charPool.removeAt(it)
+                temp
+            } }
+            .joinToString("")
     }
 
     fun isPasswordTrue(passwordDiff: ArrayList<Int>): Boolean{
