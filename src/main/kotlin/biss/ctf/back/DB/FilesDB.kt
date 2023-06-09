@@ -9,4 +9,5 @@ val FILES_DB = arrayOf(
     FileEntity("bla3", "blaa"),
     FileEntity("bla4", "bolo"),
     FileEntity("bli", "bolo"),
+    FileEntity("Top Secret File", "??????????", isAdminFile=true)
     )
