@@ -1,6 +1,7 @@
 package biss.ctf.back.controllers
 
 import biss.ctf.back.objects.apiObjects.toUser.LoginResponseToUser
+import biss.ctf.back.services.EncryptService
 import biss.ctf.back.services.PasswordService
 import biss.ctf.back.services.UserDataService
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,7 +13,8 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/login")
 class LoginController(
     @Autowired val userDataService: UserDataService,
-    @Autowired val passwordService: PasswordService
+    @Autowired val passwordService: PasswordService,
+    @Autowired val encryptService: EncryptService
 ) {
 
     @GetMapping
@@ -24,10 +26,16 @@ class LoginController(
 
         var cookie = "{}"
         if (isPasswordTrue){
-            cookie = """{"username":"admin", "isAdmin":false}"""
+            cookie = """{"username":"admin", "isAdmin":true}"""
+            userDataService.userLoggedIn(uuid)
         }
 
-        return LoginResponseToUser(isPasswordTrue, passwordDiff, cookie)
+        return LoginResponseToUser(isPasswordTrue, passwordDiff, encryptService.encrypt(cookie))
+    }
+
+    @GetMapping("/doesUserLoggedIn")
+    fun doesUserLoggedIn(@RequestParam uuid: String): Boolean {
+        return userDataService.doesUserLoggedIn(uuid)
     }
 
     @ExceptionHandler(Exception::class)

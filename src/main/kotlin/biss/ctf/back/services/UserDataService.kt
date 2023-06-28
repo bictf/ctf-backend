@@ -9,4 +9,7 @@ class UserDataService(
 ) {
     fun getUserByUUID(uuid: String) = userDataRepository.get(uuid)
 
+    fun userLoggedIn(uuid: String) = userDataRepository.userLoggedIn(uuid)
+
+    fun doesUserLoggedIn(uuid: String) = userDataRepository.doesUserLoggedIn(uuid)
 }
