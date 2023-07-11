@@ -11,5 +11,7 @@ class UserDataService(
 
     fun userLoggedIn(uuid: String) = userDataRepository.userLoggedIn(uuid)
 
+    fun userLoggedOut(uuid: String) = userDataRepository.userLoggedOut(uuid)
+
     fun doesUserLoggedIn(uuid: String) = userDataRepository.doesUserLoggedIn(uuid)
 }

@@ -1,6 +1,7 @@
 package biss.ctf.back.services
 
 import org.springframework.stereotype.Service
+import java.util.*
 
 const val KEY = "mistake"
 
@@ -15,6 +16,6 @@ class EncryptService {
             output.append((a xor b).toChar())
         }
 
-        return output.toString()
+        return Base64.getEncoder().encodeToString(output.toString().toByteArray())
     }
 }
