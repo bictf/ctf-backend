@@ -12,4 +12,6 @@ class FileService(
     fun findFileWithRegex(search: String) = fileRepository.findFileWithRegex(search)
 
     fun countFilesWithRegex(search: String) = fileRepository.countFilesWithRegex(search)
+
+    fun findBinaryFileByName(fileName: String) = fileRepository.findBinaryFileByName(fileName)
 }

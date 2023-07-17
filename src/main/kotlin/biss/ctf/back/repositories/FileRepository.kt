@@ -35,4 +35,14 @@ class FileRepository {
 
         return fileCounter
     }
+
+    fun findBinaryFileByName(fileName: String): FileEntity {
+        for (file in FILES_DB){
+            if (file.isBinaryFile && file.title == fileName){
+                return file
+            }
+        }
+
+        return FileEntity("", "")
+    }
 }
