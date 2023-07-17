@@ -23,6 +23,9 @@ class LoginController(
 
     @GetMapping
     fun login(@RequestParam username: String, @RequestParam password: String, @RequestParam uuid: String): LoginResponseToUser {
+        if (username != "muhammad"){
+            throw Exception("User name is invalid")
+        }
 
         val user = userDataService.getUserByUUID(uuid)
         val passwordDiff = passwordService.checkPasswordsDiff(user.password, password)
@@ -30,7 +33,7 @@ class LoginController(
 
         var cookie = "{}"
         if (isPasswordTrue){
-            cookie = encryptService.encrypt("""{"username":"admin", "isAdmin":false}""")
+            cookie = encryptService.encrypt("""{"username":"muhammad", "isAdmin":false}""")
             userDataService.userLoggedIn(uuid)
 
             logger.info("Logging in for user \"${user.UUID}\" and password \"${user.password}\"")

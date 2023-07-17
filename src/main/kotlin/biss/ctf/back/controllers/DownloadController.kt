@@ -17,7 +17,7 @@ class DownloadController(
         val file = fileService.findBinaryFileByName(fileName)
 
         response.status = HttpServletResponse.SC_OK
-        response.addHeader("Content-Disposition", "attachment; filename=\"${fileName}.${file.file.extension}\"")
+        response.addHeader("Content-Disposition", "attachment; filename=\"TobSecretFile.zib\"")
 
         if (!file.isBinaryFile){
             throw FileNotFoundException()

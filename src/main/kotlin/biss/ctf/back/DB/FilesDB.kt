@@ -1,7 +1,6 @@
 package biss.ctf.back.DB
 
 import biss.ctf.back.entities.FileEntity
-import biss.ctf.back.services.RESULT as LOOT_FILE
 import java.io.File
 
 val FILES_DB = arrayOf(
@@ -11,5 +10,5 @@ val FILES_DB = arrayOf(
     FileEntity("bla3", "blaa"),
     FileEntity("bla4", "bolo"),
     FileEntity("bli", "bolo"),
-    FileEntity("Top Secret File", "?????????????????", isBinaryFile=true, file= File(LOOT_FILE)),
+    FileEntity("Tob Secret File", "?????????????????", isBinaryFile=true, file= File("src/main/resources/loot/loot.zip")),
 )

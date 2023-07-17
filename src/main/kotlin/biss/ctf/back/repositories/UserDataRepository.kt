@@ -17,7 +17,7 @@ class UserDataRepository (
     }
 
     fun get(uuid: String): UserDataEntity {
-        users.putIfAbsent(uuid, UserDataEntity(uuid, passwordService.generateNewPassword(), false))
+        users.putIfAbsent(uuid, UserDataEntity(uuid, passwordService.generateNewPassword(), false, hashMapOf()))
         return users[uuid]!!
     }
 
@@ -42,5 +42,18 @@ class UserDataRepository (
         val user = get(uuid)
 
         return user.hasLoggedIn
+    }
+
+    fun userCompletedLevel(uuid: String, levelId: String, answer: Boolean){
+        val user = get(uuid)
+
+        user.path[levelId] = answer
+
+        set(user)
+    }
+
+    fun doesUserCompletedLevels(uuid: String): Boolean {
+        val user = get(uuid)
+        return user.isTruePath()
     }
 }

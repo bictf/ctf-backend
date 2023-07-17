@@ -14,4 +14,8 @@ class UserDataService(
     fun userLoggedOut(uuid: String) = userDataRepository.userLoggedOut(uuid)
 
     fun doesUserLoggedIn(uuid: String) = userDataRepository.doesUserLoggedIn(uuid)
+
+    fun userCompletedLevel(uuid: String, levelId: String, answer: Boolean) = userDataRepository.userCompletedLevel(uuid, levelId, answer)
+
+    fun doesUserCompletedLevels(uuid: String) = userDataRepository.doesUserCompletedLevels(uuid)
 }
