@@ -1,11 +1,11 @@
 services:
-  ctf-backend:
-    image: ctf-back:latest
+  biss-ctf-back:
+    image: biss-ctf-back:latest
     restart: always
     ports:
-      - "7000:7000"
-  ctf-frontend:
-    image: ctf-front:latest
+      - "7000"
+  biss-ctf-front:
+    image: biss-ctf-front:latest
     restart: always
     ports:
-      - "8000:80"
+      - "80:80"
