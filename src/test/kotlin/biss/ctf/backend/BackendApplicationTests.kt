@@ -1,13 +1,13 @@
-package biss.ctf.back
+package biss.ctf.backend
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class BissCtfBackApplicationTests {
+class BackendApplicationTests {
 
-    @Test
-    fun contextLoads() {
-    }
+	@Test
+	fun contextLoads() {
+	}
 
 }

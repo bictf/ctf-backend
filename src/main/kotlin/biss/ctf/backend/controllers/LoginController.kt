@@ -18,12 +18,18 @@ class LoginController(
     @Autowired val passwordService: PasswordService,
     @Autowired val encryptService: EncryptService
 ) {
-    private val logger = KotlinLogging.logger {}
-    private val TIME_TO_RESET_PASSWORD_IN_MIN: Long = 1
+    companion object {
+        private val logger = KotlinLogging.logger(LoginController::class.java.name)
+        private val TIME_TO_RESET_PASSWORD_IN_MIN: Long = 1
+    }
 
     @GetMapping
-    fun login(@RequestParam username: String, @RequestParam password: String, @RequestParam uuid: String): LoginResponseToUser {
-        if (username != "muhammad"){
+    fun login(
+        @RequestParam username: String,
+        @RequestParam password: String,
+        @RequestParam uuid: String
+    ): LoginResponseToUser {
+        if (username != "muhammad") {
             throw Exception("User name is invalid")
         }
 
@@ -32,20 +38,19 @@ class LoginController(
         val isPasswordTrue = passwordService.isPasswordTrue(passwordDiff)
 
         var cookie = "{}"
-        if (isPasswordTrue){
+        if (isPasswordTrue) {
             cookie = encryptService.encrypt("""{"username":"muhammad", "isAdmin":false}""")
             userDataService.userLoggedIn(uuid)
 
             logger.info("Logging in for user \"${user.UUID}\" and password \"${user.password}\"")
-        }
-        else{
-            Timer().schedule( (TIME_TO_RESET_PASSWORD_IN_MIN * 60 * 1000)) {
-                if(!userDataService.doesUserLoggedIn(uuid)){
+        } else {
+            Timer().schedule((TIME_TO_RESET_PASSWORD_IN_MIN * 60 * 1000)) {
+                if (!userDataService.doesUserLoggedIn(uuid)) {
                     userDataService.userLoggedOut(uuid)
                 }
             }
         }
-        
+
         return LoginResponseToUser(isPasswordTrue, passwordDiff, cookie, TIME_TO_RESET_PASSWORD_IN_MIN)
     }
 
