@@ -23,7 +23,7 @@ jobs:
       with:
         name: backend-image
         path: backend.tar
-        if-no-files-found: fail
+        if-no-files-found: error
         retention-days: 90
               
       
