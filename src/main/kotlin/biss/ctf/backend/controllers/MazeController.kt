@@ -1,7 +1,7 @@
 package biss.ctf.back.controllers
 
-import biss.ctf.back.objects.apiObjects.toUser.LootResponseToUser
 import biss.ctf.back.objects.apiObjects.toUser.LevelResponseToUser
+import biss.ctf.back.objects.apiObjects.toUser.LootResponseToUser
 import biss.ctf.back.objects.apiObjects.toUser.NextLevelResponseToUser
 import biss.ctf.back.objects.apiObjects.toUser.TrashResponseToUser
 import biss.ctf.back.services.MazeService
@@ -26,19 +26,24 @@ class MazeController(
     }
 
     @PostMapping("/level")
-    fun submitAnswer(@RequestParam uuid: String, @RequestParam id: String, @RequestParam answer: String, @RequestParam password: String): NextLevelResponseToUser {
+    fun submitAnswer(
+        @RequestParam uuid: String,
+        @RequestParam id: String,
+        @RequestParam answer: String,
+        @RequestParam password: String
+    ): NextLevelResponseToUser {
         val level = mazeService.getLevelByID(id)
 
-        if (level.password != password){
+        if (level.password != password) {
             throw Exception("wrong password, try again!")
         }
 
         userDataService.userCompletedLevel(uuid, id, level.rightAnswer == answer)
 
-        if(id == LAST_LEVEL.sha256){
+        if (id == LAST_LEVEL.sha256) {
             return if (userDataService.doesUserCompletedLevels(uuid)) {
                 LootResponseToUser()
-            } else{
+            } else {
                 TrashResponseToUser()
             }
         }

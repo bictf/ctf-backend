@@ -2,7 +2,6 @@ package biss.ctf.back.services
 
 import biss.ctf.back.entities.MazeLevelEntity
 import biss.ctf.back.repositories.MazeRepository
-import biss.ctf.back.repositories.UserDataRepository
 import org.springframework.stereotype.Service
 
 @Service

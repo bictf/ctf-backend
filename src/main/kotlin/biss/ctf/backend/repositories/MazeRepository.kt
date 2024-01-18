@@ -12,12 +12,12 @@ class MazeRepository {
 
     fun getNext(levelId: String): MazeLevelEntity {
         var flag = false
-        for (level in MAZE_LEVELS_DB){
-            if (flag){
+        for (level in MAZE_LEVELS_DB) {
+            if (flag) {
                 return level
             }
 
-            if (level.sha256 == levelId){
+            if (level.sha256 == levelId) {
                 flag = true
             }
         }

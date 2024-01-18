@@ -11,8 +11,8 @@ class EncryptService {
         val output = StringBuilder()
 
         for (i in input.indices) {
-            val a: Int = input[i].toInt()
-            val b: Int = KEY[i % KEY.length].toInt()
+            val a: Int = input[i].code
+            val b: Int = KEY[i % KEY.length].code
             output.append((a xor b).toChar())
         }
 

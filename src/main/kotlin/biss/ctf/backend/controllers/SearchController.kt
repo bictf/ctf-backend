@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/search")
 class SearchController(
-        val fileService: FileService
+    val fileService: FileService
 ) {
 
     @GetMapping

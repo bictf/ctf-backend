@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class UserDataService(
-        val userDataRepository: UserDataRepository
+    val userDataRepository: UserDataRepository
 ) {
     fun getUserByUUID(uuid: String) = userDataRepository.get(uuid)
 
@@ -15,7 +15,8 @@ class UserDataService(
 
     fun doesUserLoggedIn(uuid: String) = userDataRepository.doesUserLoggedIn(uuid)
 
-    fun userCompletedLevel(uuid: String, levelId: String, answer: Boolean) = userDataRepository.userCompletedLevel(uuid, levelId, answer)
+    fun userCompletedLevel(uuid: String, levelId: String, answer: Boolean) =
+        userDataRepository.userCompletedLevel(uuid, levelId, answer)
 
     fun doesUserCompletedLevels(uuid: String) = userDataRepository.doesUserCompletedLevels(uuid)
 }

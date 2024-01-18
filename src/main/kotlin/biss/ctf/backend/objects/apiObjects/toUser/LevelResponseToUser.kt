@@ -7,8 +7,8 @@ data class LevelResponseToUser(
     val question: String,
     val answers: List<String>,
     val passwordPlace: String,
-){
-    constructor(level: MazeLevelEntity): this(
+) {
+    constructor(level: MazeLevelEntity) : this(
         level.sha256,
         level.question,
         (level.wrongAnswers + level.rightAnswer).shuffled(),

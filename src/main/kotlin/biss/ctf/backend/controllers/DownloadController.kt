@@ -10,7 +10,7 @@ import java.io.*
 @RestController
 @RequestMapping("/download")
 class DownloadController(
-        val fileService: FileService,
+    val fileService: FileService,
 ) {
     @GetMapping
     fun downloadBinaryFile(@RequestParam fileName: String, response: HttpServletResponse): ByteArray {
@@ -19,7 +19,7 @@ class DownloadController(
         response.status = HttpServletResponse.SC_OK
         response.addHeader("Content-Disposition", "attachment; filename=\"TobSecretFile.zib\"")
 
-        if (!file.isBinaryFile){
+        if (!file.isBinaryFile) {
             throw FileNotFoundException()
         }
 

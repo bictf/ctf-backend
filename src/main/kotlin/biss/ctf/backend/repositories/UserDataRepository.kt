@@ -3,12 +3,11 @@ package biss.ctf.back.repositories
 import biss.ctf.back.entities.UserDataEntity
 import biss.ctf.back.services.PasswordService
 import org.springframework.stereotype.Repository
-import java.util.*
 
 @Repository
-class UserDataRepository (
+class UserDataRepository(
     val passwordService: PasswordService
-){
+) {
 
     private val users = HashMap<String, UserDataEntity>()
 
@@ -44,7 +43,7 @@ class UserDataRepository (
         return user.hasLoggedIn
     }
 
-    fun userCompletedLevel(uuid: String, levelId: String, answer: Boolean){
+    fun userCompletedLevel(uuid: String, levelId: String, answer: Boolean) {
         val user = get(uuid)
 
         user.path[levelId] = answer
