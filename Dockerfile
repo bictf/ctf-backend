@@ -1,10 +1,9 @@
-FROM maven AS build
+FROM gradle AS build
 WORKDIR /app
-COPY pom.xml /app
-COPY src/main /app/src/main
-RUN mvn package
+COPY . /app
+RUN gradle build --no-daemon
 
-FROM openjdk:17-slim
+FROM openjdk:17-slim AS runner
 WORKDIR /app
-COPY --from=build /app/target /app
-CMD ["java", "-jar", "biss-ctf-back-release.jar"]
+COPY --from=build /app/build/libs/backend-LATEST.jar /app/app.jar
+CMD ["java", "-jar", "app.jar"]
