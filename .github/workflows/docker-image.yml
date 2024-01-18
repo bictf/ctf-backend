@@ -1,0 +1,29 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag ctf-backend:$(date +%s)
+    - name: Save the docker image
+      run: docker save ctf-backend:$(date +%s) -o backend.tar
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v4.2.0
+      with:
+        name: backend-image
+        path: backend.tar
+        if-no-files-found: fail
+        retention-days: 90
+              
+      
