@@ -19,6 +19,10 @@ jobs:
     - name: Save the docker image
       run: docker save ctf-backend:$(date +%s) -o backend.tar
                 - name: Upload a Build Artifact
+
+  upload:
+
+    runs-on: ubuntu-latest    
     - uses: actions/upload-artifact@v4.2.0
       with:
         name: backend-image
