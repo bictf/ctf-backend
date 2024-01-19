@@ -1,13 +1,15 @@
 package biss.ctf.back.controllers
 
 import biss.ctf.back.objects.apiObjects.toUser.LoginResponseToUser
-import biss.ctf.back.services.EncryptService
 import biss.ctf.back.services.PasswordService
 import biss.ctf.back.services.UserDataService
+import biss.ctf.backend.utils.EncryptUtils
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.client.HttpServerErrorException
 import java.util.*
 import kotlin.concurrent.schedule
 
@@ -16,11 +18,12 @@ import kotlin.concurrent.schedule
 class LoginController(
     @Autowired val userDataService: UserDataService,
     @Autowired val passwordService: PasswordService,
-    @Autowired val encryptService: EncryptService
 ) {
     companion object {
         private val logger = KotlinLogging.logger(LoginController::class.java.name)
-        private val TIME_TO_RESET_PASSWORD_IN_MIN: Long = 1
+        private val MINUTES_TO_RESET_PASSWORD: Long = 1
+        private val SECONDS_TO_RESET_PASSWORD: Long = MINUTES_TO_RESET_PASSWORD * 60
+        private val MILLISECONDS_TO_RESET_PASSWORD: Long = SECONDS_TO_RESET_PASSWORD * 1000
     }
 
     @GetMapping
@@ -29,8 +32,10 @@ class LoginController(
         @RequestParam password: String,
         @RequestParam uuid: String
     ): LoginResponseToUser {
+        logger.info { "Got login request from UUID '$uuid' '$username' : '$password'" }
+
         if (username != "muhammad") {
-            throw Exception("User name is invalid")
+            throw HttpServerErrorException(HttpStatus.UNAUTHORIZED, "Username does not exist")
         }
 
         val user = userDataService.getUserByUUID(uuid)
@@ -39,19 +44,26 @@ class LoginController(
 
         var cookie = "{}"
         if (isPasswordTrue) {
-            cookie = encryptService.encrypt("""{"username":"muhammad", "isAdmin":false}""")
+            cookie = EncryptUtils.encrypt("""{"username":"muhammad", "isAdmin":false}""")
             userDataService.userLoggedIn(uuid)
 
             logger.info("Logging in for user \"${user.UUID}\" and password \"${user.password}\"")
         } else {
-            Timer().schedule((TIME_TO_RESET_PASSWORD_IN_MIN * 60 * 1000)) {
-                if (!userDataService.doesUserLoggedIn(uuid)) {
-                    userDataService.userLoggedOut(uuid)
-                }
-            }
+            createLogoutTask(uuid)
         }
 
-        return LoginResponseToUser(isPasswordTrue, passwordDiff, cookie, TIME_TO_RESET_PASSWORD_IN_MIN)
+        return LoginResponseToUser(isPasswordTrue, passwordDiff, cookie, MINUTES_TO_RESET_PASSWORD)
+    }
+
+    /**
+     * Creates a task to log a user out in [SECONDS_TO_RESET_PASSWORD]
+     */
+    private fun createLogoutTask(uuid: String) {
+        Timer().schedule(MILLISECONDS_TO_RESET_PASSWORD) {
+            if (!userDataService.doesUserLoggedIn(uuid)) {
+                userDataService.userLoggedOut(uuid)
+            }
+        }
     }
 
     @GetMapping("/doesUserLoggedIn")
