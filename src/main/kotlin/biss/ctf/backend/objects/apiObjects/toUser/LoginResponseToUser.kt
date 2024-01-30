@@ -1,4 +1,4 @@
-package biss.ctf.back.objects.apiObjects.toUser
+package biss.ctf.backend.objects.apiObjects.toUser
 
 data class LoginResponseToUser(
     val success: Boolean,

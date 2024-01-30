@@ -1,11 +1,11 @@
-package biss.ctf.back.controllers
+package biss.ctf.backend.controllers
 
-import biss.ctf.back.objects.apiObjects.toUser.LevelResponseToUser
-import biss.ctf.back.objects.apiObjects.toUser.LootResponseToUser
-import biss.ctf.back.objects.apiObjects.toUser.NextLevelResponseToUser
-import biss.ctf.back.objects.apiObjects.toUser.TrashResponseToUser
-import biss.ctf.back.services.MazeService
-import biss.ctf.back.services.UserDataService
+import biss.ctf.backend.objects.apiObjects.toUser.LevelResponseToUser
+import biss.ctf.backend.objects.apiObjects.toUser.LootResponseToUser
+import biss.ctf.backend.objects.apiObjects.toUser.NextLevelResponseToUser
+import biss.ctf.backend.objects.apiObjects.toUser.TrashResponseToUser
+import biss.ctf.backend.services.MazeService
+import biss.ctf.backend.services.UserDataService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 

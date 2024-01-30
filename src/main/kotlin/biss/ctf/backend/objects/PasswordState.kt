@@ -1,4 +1,4 @@
-package biss.ctf.back.objects
+package biss.ctf.backend.objects
 
 enum class PasswordCharState {
     IncorrectChar,

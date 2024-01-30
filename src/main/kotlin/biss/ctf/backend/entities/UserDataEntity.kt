@@ -1,4 +1,4 @@
-package biss.ctf.back.entities
+package biss.ctf.backend.entities
 
 data class UserDataEntity(
     val UUID: String,

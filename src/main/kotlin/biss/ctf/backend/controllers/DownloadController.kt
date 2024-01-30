@@ -1,4 +1,4 @@
-package biss.ctf.back.controllers
+package biss.ctf.backend.controllers
 
 import biss.ctf.back.services.FileService
 import jakarta.servlet.http.HttpServletResponse

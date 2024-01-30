@@ -1,6 +1,6 @@
-package biss.ctf.back.DB
+package biss.ctf.backend.DB
 
-import biss.ctf.back.entities.FileEntity
+import biss.ctf.backend.entities.FileEntity
 import java.io.File
 
 val FILES_DB = arrayOf(

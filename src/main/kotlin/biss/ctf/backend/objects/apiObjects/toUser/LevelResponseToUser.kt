@@ -1,6 +1,6 @@
-package biss.ctf.back.objects.apiObjects.toUser
+package biss.ctf.backend.objects.apiObjects.toUser
 
-import biss.ctf.back.entities.MazeLevelEntity
+import biss.ctf.backend.entities.MazeLevelEntity
 
 data class LevelResponseToUser(
     val levelId: String,

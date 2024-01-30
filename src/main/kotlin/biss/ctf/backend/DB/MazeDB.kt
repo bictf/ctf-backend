@@ -1,6 +1,6 @@
-package biss.ctf.back.DB
+package biss.ctf.backend.DB
 
-import biss.ctf.back.entities.MazeLevelEntity
+import biss.ctf.backend.entities.MazeLevelEntity
 
 val MAZE_LEVELS_DB = arrayOf(
     MazeLevelEntity(

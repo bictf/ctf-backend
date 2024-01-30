@@ -1,7 +1,7 @@
-package biss.ctf.back.services
+package biss.ctf.backend.services
 
-import biss.ctf.back.entities.MazeLevelEntity
-import biss.ctf.back.repositories.MazeRepository
+import biss.ctf.backend.entities.MazeLevelEntity
+import biss.ctf.backend.repositories.MazeRepository
 import org.springframework.stereotype.Service
 
 @Service

@@ -1,4 +1,4 @@
-package biss.ctf.back
+package biss.ctf.backend
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
