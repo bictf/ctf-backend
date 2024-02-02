@@ -1,7 +1,7 @@
-package biss.ctf.back.repositories
+package biss.ctf.backend.repositories
 
-import biss.ctf.back.entities.UserDataEntity
-import biss.ctf.back.services.PasswordService
+import biss.ctf.backend.entities.UserDataEntity
+import biss.ctf.backend.services.PasswordService
 import org.springframework.stereotype.Repository
 
 @Repository

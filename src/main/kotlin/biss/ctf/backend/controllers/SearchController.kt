@@ -1,22 +1,22 @@
-package biss.ctf.back.controllers
+package biss.ctf.backend.controllers
 
-import biss.ctf.back.objects.apiObjects.toUser.SearchResponseToUser
-import biss.ctf.back.services.FileService
+import biss.ctf.backend.objects.apiObjects.toUser.SearchResponseToUser
+import biss.ctf.backend.services.IntelligenceService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/search")
 class SearchController(
-    val fileService: FileService
+    val intelligenceService: IntelligenceService
 ) {
 
     @GetMapping
     fun login(@RequestParam text: String): SearchResponseToUser {
-        val numberOfMatchFiles = fileService.countFilesWithRegex(text)
-        val firstMatchFile = fileService.findFileWithRegex(text)
+        val numberOfMatchFiles = intelligenceService.countFilesWithRegex(text)
+        val firstMatchFile = intelligenceService.findFileWithRegex(text)
 
-        return SearchResponseToUser(numberOfMatchFiles, firstMatchFile)
+        return SearchResponseToUser(numberOfMatchFiles.toLong(), firstMatchFile)
     }
 
     @ExceptionHandler(Exception::class)

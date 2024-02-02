@@ -1,20 +1,20 @@
-package biss.ctf.back.controllers
+package biss.ctf.backend.controllers
 
-import biss.ctf.back.services.FileService
+import biss.ctf.backend.services.IntelligenceService
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.io.*
+import java.io.FileNotFoundException
 
 
 @RestController
 @RequestMapping("/download")
 class DownloadController(
-    val fileService: FileService,
+    val intelligenceService: IntelligenceService,
 ) {
     @GetMapping
     fun downloadBinaryFile(@RequestParam fileName: String, response: HttpServletResponse): ByteArray {
-        val file = fileService.findBinaryFileByName(fileName)
+        val file = intelligenceService.findBinaryFileByName(fileName)
 
         response.status = HttpServletResponse.SC_OK
         response.addHeader("Content-Disposition", "attachment; filename=\"TobSecretFile.zib\"")
@@ -23,7 +23,7 @@ class DownloadController(
             throw FileNotFoundException()
         }
 
-        return fileService.findBinaryFileByName(fileName).file.readBytes()
+        return intelligenceService.findBinaryFileByName(fileName).file.readBytes()
     }
 
     @ExceptionHandler(Exception::class)

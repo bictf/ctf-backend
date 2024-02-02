@@ -1,6 +1,6 @@
-package biss.ctf.back.objects.apiObjects.toUser
+package biss.ctf.backend.objects.apiObjects.toUser
 
-import biss.ctf.back.entities.FileEntity
+import biss.ctf.backend.entities.FileEntity
 
 data class SearchResponseToUser(
     var totalResults: Long,

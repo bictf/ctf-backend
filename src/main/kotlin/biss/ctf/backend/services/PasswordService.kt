@@ -1,6 +1,6 @@
-package biss.ctf.back.services
+package biss.ctf.backend.services
 
-import biss.ctf.back.objects.PasswordCharState
+import biss.ctf.backend.objects.PasswordCharState
 import org.springframework.stereotype.Service
 import kotlin.random.Random
 

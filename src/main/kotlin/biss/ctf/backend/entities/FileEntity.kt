@@ -1,4 +1,4 @@
-package biss.ctf.back.entities
+package biss.ctf.backend.entities
 
 import java.io.File
 

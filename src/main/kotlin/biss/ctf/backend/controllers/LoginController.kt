@@ -1,11 +1,10 @@
-package biss.ctf.back.controllers
+package biss.ctf.backend.controllers
 
-import biss.ctf.back.objects.apiObjects.toUser.LoginResponseToUser
-import biss.ctf.back.services.PasswordService
-import biss.ctf.back.services.UserDataService
+import biss.ctf.backend.objects.apiObjects.toUser.LoginResponseToUser
+import biss.ctf.backend.services.PasswordService
+import biss.ctf.backend.services.UserDataService
 import biss.ctf.backend.utils.EncryptUtils
 import mu.KotlinLogging
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -16,8 +15,8 @@ import kotlin.concurrent.schedule
 @RestController
 @RequestMapping("/login")
 class LoginController(
-    @Autowired val userDataService: UserDataService,
-    @Autowired val passwordService: PasswordService,
+    val userDataService: UserDataService,
+    val passwordService: PasswordService,
 ) {
     companion object {
         private val logger = KotlinLogging.logger(LoginController::class.java.name)
@@ -39,6 +38,7 @@ class LoginController(
         }
 
         val user = userDataService.getUserByUUID(uuid)
+        logger.info { "Retrieved password '${user.password}' for UUID: $uuid" }
         val passwordDiff = passwordService.checkPasswordsDiff(user.password, password)
         val isPasswordTrue = passwordService.isPasswordTrue(passwordDiff)
 

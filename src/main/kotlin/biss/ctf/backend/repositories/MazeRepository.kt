@@ -1,7 +1,7 @@
-package biss.ctf.back.repositories
+package biss.ctf.backend.repositories
 
-import biss.ctf.back.DB.MAZE_LEVELS_DB
-import biss.ctf.back.entities.MazeLevelEntity
+import biss.ctf.backend.DB.MAZE_LEVELS_DB
+import biss.ctf.backend.entities.MazeLevelEntity
 import org.springframework.stereotype.Repository
 
 @Repository
