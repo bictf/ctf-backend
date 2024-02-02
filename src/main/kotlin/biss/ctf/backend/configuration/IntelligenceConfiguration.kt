@@ -38,9 +38,9 @@ class IntelligenceConfiguration {
         if (!binariesFolder.isDirectory) {
             throw IllegalArgumentException("$intelligenceFilesRoot is not  a directory!")
         }
-        logger.info("Loading binary files into memory!")
+        logger.info("Loading binary file references into memory!")
         return binariesFolder.walk().map {
-            FileEntity(it.name, it.readText(), true, it)
+            FileEntity(it.name, "?????????", true, it)
         }
     }
 }
