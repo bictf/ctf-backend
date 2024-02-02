@@ -38,6 +38,7 @@ class LoginController(
         }
 
         val user = userDataService.getUserByUUID(uuid)
+        logger.info { "Retrieved password '${user.password}' for UUID: $uuid" }
         val passwordDiff = passwordService.checkPasswordsDiff(user.password, password)
         val isPasswordTrue = passwordService.isPasswordTrue(passwordDiff)
 

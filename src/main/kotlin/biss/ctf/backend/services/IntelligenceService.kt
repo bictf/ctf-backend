@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service
 @Service
 class IntelligenceService(
     @Qualifier("intelligenceFiles")
-    val intelligenceFiles: Sequence<FileEntity>,
+    val intelligenceFiles: List<FileEntity>,
     @Qualifier("binaryFiles")
-    val binaryFiles: Sequence<FileEntity>,
+    val binaryFiles: List<FileEntity>,
 ) {
 
     fun findFileWithRegex(search: String): FileEntity {
