@@ -31,9 +31,7 @@ class CaptchaController(
     }
 
     @GetMapping("/questions")
-    fun getAllCaptchaQuestions() {
-        TODO("Not yet implemented")
-    }
+    fun getAllCaptchaQuestions() = captchaQuestionService.getAllCaptcha()
 
     @GetMapping("/pictures")
     fun getAllCaptchaPictures() {
