@@ -1,0 +1,220 @@
+openapi: "3.0.3"
+info:
+  title: "backend API"
+  description: "backend API"
+  version: "1.0.0"
+servers:
+  - url: "https://backend"
+paths:
+  /login:
+    get:
+      summary: "GET login"
+      operationId: "login"
+      parameters:
+        - name: "username"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "password"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "uuid"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LoginResponseToUser"
+  /login/doesUserLoggedIn:
+    get:
+      summary: "GET login/doesUserLoggedIn"
+      operationId: "doesUserLoggedIn"
+      parameters:
+        - name: "uuid"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "boolean"
+  /download:
+    get:
+      summary: "GET download"
+      operationId: "downloadBinaryFile"
+      parameters:
+        - name: "fileName"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "user"
+          in: "cookie"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  type: "string"
+                  format: "byte"
+  /captcha/cG9zdCBoZXJlIHRvIGZsaXAgd2hldGhlciB0aGUgY2FwdGNoYSBzaG91bGQgcGFzcyBvciBub3Q:
+    post:
+      summary: "POST captcha/cG9zdCBoZXJlIHRvIGZsaXAgd2hldGhlciB0aGUgY2FwdGNoYSBzaG91bGQgcGFzcyBvciBub3Q"
+      operationId: "flipCaptcha"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "boolean"
+  /captcha/is-blocked:
+    get:
+      summary: "GET captcha/is-blocked"
+      operationId: "canSkipCaptcha"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "boolean"
+  /search:
+    get:
+      summary: "GET search"
+      operationId: "login"
+      parameters:
+        - name: "text"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/SearchResponseToUser"
+  /maze/level:
+    post:
+      summary: "POST maze/level"
+      operationId: "submitAnswer"
+      parameters:
+        - name: "uuid"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "id"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "answer"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "password"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/NextLevelResponseToUser"
+    get:
+      summary: "GET maze/level"
+      operationId: "gelLevel"
+      parameters:
+        - name: "id"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LevelResponseToUser"
+components:
+  schemas:
+    LoginResponseToUser:
+      type: "object"
+      properties:
+        success:
+          type: "boolean"
+        passwordDiff:
+          type: "integer"
+          format: "int32"
+        cookie:
+          type: "string"
+        time:
+          type: "integer"
+          format: "int64"
+      required:
+        - "passwordDiff"
+        - "cookie"
+    SearchResponseToUser:
+      type: "object"
+      properties:
+        totalResults:
+          type: "integer"
+          format: "int64"
+        title:
+          type: "string"
+        content:
+          type: "string"
+      required:
+        - "title"
+        - "content"
+    NextLevelResponseToUser:
+      type: "object"
+      properties:
+        nextLevelId:
+          type: "string"
+      required:
+        - "nextLevelId"
+    LevelResponseToUser:
+      type: "object"
+      properties:
+        levelId:
+          type: "string"
+        question:
+          type: "string"
+        answers:
+          type: "array"
+          items:
+            type: "string"
+        passwordPlace:
+          type: "string"
+      required:
+        - "levelId"
+        - "question"
+        - "answers"
+        - "passwordPlace"
