@@ -2,22 +2,25 @@ package biss.ctf.backend.controllers
 
 import biss.ctf.backend.services.captchas.CaptchaImageService
 import biss.ctf.backend.services.captchas.CaptchaQuestionService
+import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
+
 
 @RestController
 @RequestMapping("/captcha")
 class CaptchaController(
-        @Value("\${captcha.init.should_block}")
-        var shouldBlockCaptcha: Boolean,
-        val captchaImageService: CaptchaImageService,
-        val captchaQuestionService: CaptchaQuestionService
+    @Value("\${captcha.init.should_block}")
+    var shouldBlockCaptcha: Boolean,
+    val captchaImageService: CaptchaImageService,
+    val captchaQuestionService: CaptchaQuestionService
 ) {
+
+    companion object {
+        private val logger = KotlinLogging.logger(CaptchaController::class.java.name)
+    }
 
     @GetMapping("/is-blocked")
     fun canSkipCaptcha(): ResponseEntity<Boolean> {
@@ -34,7 +37,20 @@ class CaptchaController(
     fun getAllCaptchaQuestions() = captchaQuestionService.getAllCaptcha()
 
     @GetMapping("/pictures")
-    fun getAllCaptchaPictures() {
-        TODO("Not yet implemented")
+    @ResponseBody
+    fun getAllCaptchaPictures(): ResponseEntity<List<Any>> {
+        return ResponseEntity(captchaImageService.getAllCaptcha(), HttpStatus.OK)
     }
+
+    @GetMapping("/pictures/paged")
+    @ResponseBody
+    fun getSomePictures(@RequestParam amount: Int): ResponseEntity<List<Any>> {
+        logger.info { "Retrieving $amount CAPTCHA${if (amount > 1) "s" else ""}" }
+        val captchas = ArrayList<CaptchaImageService.ImageDataDTO>()
+        for (i in 0 until amount) {
+            captchas.add(captchaImageService.getNextCaptcha())
+        }
+        return ResponseEntity(captchas, HttpStatus.OK)
+    }
+
 }
