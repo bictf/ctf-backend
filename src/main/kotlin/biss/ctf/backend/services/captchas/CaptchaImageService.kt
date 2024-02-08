@@ -1,13 +1,12 @@
 package biss.ctf.backend.services.captchas
 
-import org.springframework.cache.annotation.Caching
 import org.springframework.stereotype.Service
 import java.io.File
 
 @Service
 class CaptchaImageService(
     val captchaImages: List<ImageData>
-) : CaptchaService {
+) {
     var currentIndex = 0
 
     /**
@@ -45,8 +44,7 @@ class CaptchaImageService(
         }
     }
 
-    @Caching
-    override fun getAllCaptcha(): List<Any> = captchaImages.map { it.toDTO() }
+    fun getAllCaptcha() = captchaImages
 
     /**
      * Cycles over CAPTCHAs and returns the next one.

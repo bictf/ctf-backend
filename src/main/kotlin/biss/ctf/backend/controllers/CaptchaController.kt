@@ -38,13 +38,13 @@ class CaptchaController(
 
     @GetMapping("/pictures")
     @ResponseBody
-    fun getAllCaptchaPictures(): ResponseEntity<List<Any>> {
+    fun getAllCaptchaPictures(): ResponseEntity<List<CaptchaImageService.ImageData>> {
         return ResponseEntity(captchaImageService.getAllCaptcha(), HttpStatus.OK)
     }
 
     @GetMapping("/pictures/paged")
     @ResponseBody
-    fun getSomePictures(@RequestParam amount: Int): ResponseEntity<List<Any>> {
+    fun getSomePictures(@RequestParam amount: Int): ResponseEntity<List<CaptchaImageService.ImageData>> {
         logger.info { "Retrieving $amount CAPTCHA${if (amount > 1) "s" else ""}" }
         val captchas = ArrayList<CaptchaImageService.ImageDataDTO>()
         for (i in 0 until amount) {

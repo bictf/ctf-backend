@@ -9,7 +9,7 @@ import org.springframework.validation.annotation.Validated
 @Service
 class CaptchaQuestionService(
     val questions: List<QuestionData>
-) : CaptchaService {
+) {
 
     /**
      * A data class for the question based CAPTCHAs.
@@ -27,5 +27,5 @@ class CaptchaQuestionService(
         val correctAnswer: Int
     )
 
-    override fun getAllCaptcha(): List<QuestionData> = questions
+    fun getAllCaptcha(): List<QuestionData> = questions
 }
