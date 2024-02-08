@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import kotlin.io.path.readBytes
 
 
 @RestController
@@ -38,19 +39,29 @@ class CaptchaController(
 
     @GetMapping("/pictures")
     @ResponseBody
-    fun getAllCaptchaPictures(): ResponseEntity<List<Any>> {
-        return ResponseEntity(captchaImageService.getAllCaptcha(), HttpStatus.OK)
-    }
-
-    @GetMapping("/pictures/paged")
-    @ResponseBody
-    fun getSomePictures(@RequestParam amount: Int): ResponseEntity<List<Any>> {
+    fun getSomePictures(@RequestParam amount: Int?): ResponseEntity<List<String>> {
+        if (amount == null) {
+            logger.info { "Retrieving all CAPTCHAs" }
+            return ResponseEntity(captchaImageService.getAllCaptchaNames(), HttpStatus.OK)
+        }
         logger.info { "Retrieving $amount CAPTCHA${if (amount > 1) "s" else ""}" }
-        val captchas = ArrayList<CaptchaImageService.ImageDataDTO>()
+        val captchas = ArrayList<String>()
         for (i in 0 until amount) {
-            captchas.add(captchaImageService.getNextCaptcha())
+            captchas.add(captchaImageService.getNextCaptcha().imageName)
         }
         return ResponseEntity(captchas, HttpStatus.OK)
     }
 
+    @GetMapping("/pictures/by_name")
+    @ResponseBody
+    fun getPicture(@RequestParam name: String): ResponseEntity<ByteArray> {
+        val captcha = captchaImageService.getAllCaptcha().find {
+            it.imageName == name
+        }
+        if (captcha == null) {
+            return ResponseEntity(HttpStatus.NOT_FOUND)
+        }
+        val imageFile = captcha.image
+        return ResponseEntity(imageFile.readBytes(), HttpStatus.OK)
+    }
 }

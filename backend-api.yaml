@@ -4,7 +4,7 @@ info:
   description: "backend API"
   version: "1.0.0"
 servers:
-  - url: "https://backend"
+  - url: "http://localhost:8080"
 paths:
   /login:
     get:
@@ -97,6 +97,59 @@ paths:
             '*/*':
               schema:
                 type: "boolean"
+  /captcha/questions:
+    get:
+      summary: "GET captcha/questions"
+      operationId: "getAllCaptchaQuestions"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/QuestionData"
+  /captcha/pictures:
+    get:
+      summary: "GET captcha/pictures"
+      operationId: "getSomePictures"
+      parameters:
+        - name: "amount"
+          in: "query"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  type: "string"
+  /captcha/pictures/by_name:
+    get:
+      summary: "GET captcha/pictures/by_name"
+      operationId: "getPicture"
+      parameters:
+        - name: "name"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  type: "string"
+                  format: "byte"
   /search:
     get:
       summary: "GET search"
@@ -114,54 +167,6 @@ paths:
             '*/*':
               schema:
                 $ref: "#/components/schemas/SearchResponseToUser"
-  /maze/level:
-    post:
-      summary: "POST maze/level"
-      operationId: "submitAnswer"
-      parameters:
-        - name: "uuid"
-          in: "query"
-          required: true
-          schema:
-            type: "string"
-        - name: "id"
-          in: "query"
-          required: true
-          schema:
-            type: "string"
-        - name: "answer"
-          in: "query"
-          required: true
-          schema:
-            type: "string"
-        - name: "password"
-          in: "query"
-          required: true
-          schema:
-            type: "string"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/NextLevelResponseToUser"
-    get:
-      summary: "GET maze/level"
-      operationId: "gelLevel"
-      parameters:
-        - name: "id"
-          in: "query"
-          required: true
-          schema:
-            type: "string"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/LevelResponseToUser"
 components:
   schemas:
     LoginResponseToUser:
@@ -180,6 +185,21 @@ components:
       required:
         - "passwordDiff"
         - "cookie"
+    QuestionData:
+      type: "object"
+      properties:
+        title:
+          type: "string"
+        answers:
+          type: "array"
+          items:
+            type: "string"
+        correctAnswer:
+          type: "integer"
+          format: "int32"
+      required:
+        - "title"
+        - "answers"
     SearchResponseToUser:
       type: "object"
       properties:
@@ -193,28 +213,3 @@ components:
       required:
         - "title"
         - "content"
-    NextLevelResponseToUser:
-      type: "object"
-      properties:
-        nextLevelId:
-          type: "string"
-      required:
-        - "nextLevelId"
-    LevelResponseToUser:
-      type: "object"
-      properties:
-        levelId:
-          type: "string"
-        question:
-          type: "string"
-        answers:
-          type: "array"
-          items:
-            type: "string"
-        passwordPlace:
-          type: "string"
-      required:
-        - "levelId"
-        - "question"
-        - "answers"
-        - "passwordPlace"
