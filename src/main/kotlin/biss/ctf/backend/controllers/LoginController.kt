@@ -1,9 +1,9 @@
 package biss.ctf.backend.controllers
 
 import biss.ctf.backend.objects.apiObjects.toUser.LoginResponseToUser
-import biss.ctf.backend.services.PasswordService
 import biss.ctf.backend.services.UserDataService
 import biss.ctf.backend.utils.EncryptUtils
+import biss.ctf.backend.utils.PasswordUtils
 import mu.KotlinLogging
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -15,8 +15,7 @@ import kotlin.concurrent.schedule
 @RestController
 @RequestMapping("/login")
 class LoginController(
-    val userDataService: UserDataService,
-    val passwordService: PasswordService,
+    val userDataService: UserDataService
 ) {
     companion object {
         private val logger = KotlinLogging.logger(LoginController::class.java.name)
@@ -39,8 +38,8 @@ class LoginController(
 
         val user = userDataService.getUserByUUID(uuid)
         logger.info { "Retrieved password '${user.password}' for UUID: $uuid" }
-        val passwordDiff = passwordService.checkPasswordsDiff(user.password, password)
-        val isPasswordTrue = passwordService.isPasswordTrue(passwordDiff)
+        val passwordDiff = PasswordUtils.checkPasswordsDiff(user.password, password)
+        val isPasswordTrue = PasswordUtils.isPasswordTrue(passwordDiff)
 
         var cookie = "{}"
         if (isPasswordTrue) {

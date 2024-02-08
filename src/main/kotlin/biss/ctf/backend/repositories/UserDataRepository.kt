@@ -1,13 +1,11 @@
 package biss.ctf.backend.repositories
 
 import biss.ctf.backend.entities.UserDataEntity
-import biss.ctf.backend.services.PasswordService
+import biss.ctf.backend.utils.PasswordUtils
 import org.springframework.stereotype.Repository
 
 @Repository
-class UserDataRepository(
-    val passwordService: PasswordService
-) {
+class UserDataRepository {
 
     private val users = HashMap<String, UserDataEntity>()
 
@@ -16,7 +14,7 @@ class UserDataRepository(
     }
 
     fun get(uuid: String): UserDataEntity {
-        users.putIfAbsent(uuid, UserDataEntity(uuid, passwordService.generateNewPassword(), false, hashMapOf()))
+        users.putIfAbsent(uuid, UserDataEntity(uuid, PasswordUtils.generateNewPassword(), false))
         return users[uuid]!!
     }
 
@@ -31,7 +29,7 @@ class UserDataRepository(
     fun userLoggedOut(uuid: String) {
         val user = get(uuid)
 
-        user.password = passwordService.generateNewPassword()
+        user.password = PasswordUtils.generateNewPassword()
         user.hasLoggedIn = false
 
         set(user)
@@ -43,16 +41,4 @@ class UserDataRepository(
         return user.hasLoggedIn
     }
 
-    fun userCompletedLevel(uuid: String, levelId: String, answer: Boolean) {
-        val user = get(uuid)
-
-        user.path[levelId] = answer
-
-        set(user)
-    }
-
-    fun doesUserCompletedLevels(uuid: String): Boolean {
-        val user = get(uuid)
-        return user.isTruePath()
-    }
 }
