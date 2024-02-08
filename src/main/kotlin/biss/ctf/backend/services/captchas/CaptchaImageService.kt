@@ -14,37 +14,14 @@ class CaptchaImageService(
      */
     data class ImageData(
         val image: Path, val imageName: String
-    ) {
-        fun toDTO() = ImageDataDTO(image.toFile().inputStream().readAllBytes(), imageName)
-    }
-
-    /**
-     * A data class used for the actual picture transfers.
-     * **NOTE:** INTELLIJ was angry, so I added the [equals] and [hashCode] functions
-     */
-    data class ImageDataDTO(
-        val image: ByteArray, val imageName: String
-    ) {
-        override fun equals(other: Any?): Boolean {
-            if (this === other) return true
-            if (javaClass != other?.javaClass) return false
-
-            other as ImageDataDTO
-
-            if (!image.contentEquals(other.image)) return false
-            if (imageName != other.imageName) return false
-
-            return true
-        }
-
-        override fun hashCode(): Int {
-            var result = image.contentHashCode()
-            result = 31 * result + imageName.hashCode()
-            return result
-        }
-    }
+    )
 
     fun getAllCaptcha() = captchaImages
+
+    /**
+     * Retrieves all the image names.
+     */
+    fun getAllCaptchaNames() = captchaImages.map { it.imageName }
 
     /**
      * Cycles over CAPTCHAs and returns the next one.

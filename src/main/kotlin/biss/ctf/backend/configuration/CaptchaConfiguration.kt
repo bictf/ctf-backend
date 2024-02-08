@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.PropertySource
 import java.io.FileNotFoundException
-import kotlin.io.path.Path
+import java.nio.file.Paths
 import kotlin.io.path.exists
 import kotlin.io.path.isDirectory
 
@@ -28,7 +28,7 @@ class CaptchaConfiguration {
 
     @Bean
     fun getCaptchaImages(): List<CaptchaImageService.ImageData> {
-        val imagesFolder = Path(imageFolder)
+        val imagesFolder = Paths.get(imageFolder)
         if (!imagesFolder.exists() || !imagesFolder.isDirectory()) {
             throw FileNotFoundException("'$imageFolder' does not exist or is not a directory!")
         }

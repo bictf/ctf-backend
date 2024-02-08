@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.io.FileNotFoundException
+import kotlin.io.path.readBytes
 
 
 @RestController
@@ -39,32 +39,29 @@ class CaptchaController(
 
     @GetMapping("/pictures")
     @ResponseBody
-    fun getAllCaptchaPictures(): ResponseEntity<List<CaptchaImageService.ImageData>> {
-        return ResponseEntity(captchaImageService.getAllCaptcha(), HttpStatus.OK)
-    }
-
-    @GetMapping("/pictures/paged")
-    @ResponseBody
-    fun getSomePictures(@RequestParam amount: Int): ResponseEntity<List<CaptchaImageService.ImageData>> {
+    fun getSomePictures(@RequestParam amount: Int?): ResponseEntity<List<String>> {
+        if (amount == null) {
+            logger.info { "Retrieving all CAPTCHAs" }
+            return ResponseEntity(captchaImageService.getAllCaptchaNames(), HttpStatus.OK)
+        }
         logger.info { "Retrieving $amount CAPTCHA${if (amount > 1) "s" else ""}" }
-        val captchas = ArrayList<CaptchaImageService.ImageData>()
+        val captchas = ArrayList<String>()
         for (i in 0 until amount) {
-            captchas.add(captchaImageService.getNextCaptcha())
+            captchas.add(captchaImageService.getNextCaptcha().imageName)
         }
         return ResponseEntity(captchas, HttpStatus.OK)
     }
 
-    @GetMapping("/picture")
+    @GetMapping("/pictures/by_name")
     @ResponseBody
-    fun getSomePictures(@RequestParam name: String): ResponseEntity<CaptchaImageService.ImageDataDTO> {
+    fun getPicture(@RequestParam name: String): ResponseEntity<ByteArray> {
         val captcha = captchaImageService.getAllCaptcha().find {
             it.imageName == name
         }
         if (captcha == null) {
-            throw FileNotFoundException("Could not find image with name: '$name'")
+            return ResponseEntity(HttpStatus.NOT_FOUND)
         }
-
-        return ResponseEntity(captcha.toDTO(), HttpStatus.OK)
+        val imageFile = captcha.image
+        return ResponseEntity(imageFile.readBytes(), HttpStatus.OK)
     }
-
 }
