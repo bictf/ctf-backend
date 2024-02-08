@@ -35,7 +35,7 @@ class CaptchaConfiguration {
 
         logger.info("Loading picture references into memory!")
         return imagesFolder.toFile().listFiles()?.map {
-            CaptchaImageService.ImageData(it, it.name)
+            CaptchaImageService.ImageData(it.toPath(), it.name)
         } ?: emptyList()
     }
 }

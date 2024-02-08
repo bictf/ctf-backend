@@ -1,7 +1,7 @@
 package biss.ctf.backend.services.captchas
 
 import org.springframework.stereotype.Service
-import java.io.File
+import java.nio.file.Path
 
 @Service
 class CaptchaImageService(
@@ -13,9 +13,9 @@ class CaptchaImageService(
      * A data class to hold picture data for the picture CAPTCHAs
      */
     data class ImageData(
-        val image: File, val imageName: String
+        val image: Path, val imageName: String
     ) {
-        fun toDTO() = ImageDataDTO(image.inputStream().readAllBytes(), imageName)
+        fun toDTO() = ImageDataDTO(image.toFile().inputStream().readAllBytes(), imageName)
     }
 
     /**
@@ -49,8 +49,8 @@ class CaptchaImageService(
     /**
      * Cycles over CAPTCHAs and returns the next one.
      */
-    fun getNextCaptcha(): ImageDataDTO {
-        val captcha = captchaImages[currentIndex].toDTO()
+    fun getNextCaptcha(): ImageData {
+        val captcha = captchaImages[currentIndex]
         currentIndex += 1
         if (currentIndex >= captchaImages.size) {
             currentIndex = 0

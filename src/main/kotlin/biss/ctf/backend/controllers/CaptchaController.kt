@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.io.FileNotFoundException
 
 
 @RestController
@@ -46,11 +47,24 @@ class CaptchaController(
     @ResponseBody
     fun getSomePictures(@RequestParam amount: Int): ResponseEntity<List<CaptchaImageService.ImageData>> {
         logger.info { "Retrieving $amount CAPTCHA${if (amount > 1) "s" else ""}" }
-        val captchas = ArrayList<CaptchaImageService.ImageDataDTO>()
+        val captchas = ArrayList<CaptchaImageService.ImageData>()
         for (i in 0 until amount) {
             captchas.add(captchaImageService.getNextCaptcha())
         }
         return ResponseEntity(captchas, HttpStatus.OK)
+    }
+
+    @GetMapping("/picture")
+    @ResponseBody
+    fun getSomePictures(@RequestParam name: String): ResponseEntity<CaptchaImageService.ImageDataDTO> {
+        val captcha = captchaImageService.getAllCaptcha().find {
+            it.imageName == name
+        }
+        if (captcha == null) {
+            throw FileNotFoundException("Could not find image with name: '$name'")
+        }
+
+        return ResponseEntity(captcha.toDTO(), HttpStatus.OK)
     }
 
 }
