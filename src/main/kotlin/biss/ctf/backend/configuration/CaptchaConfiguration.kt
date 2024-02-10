@@ -1,7 +1,8 @@
 package biss.ctf.backend.configuration
 
-import biss.ctf.backend.services.captchas.CaptchaImageService
-import biss.ctf.backend.services.captchas.CaptchaQuestionService
+import biss.ctf.backend.entities.ChoiceQuestionData
+import biss.ctf.backend.entities.ImageData
+import biss.ctf.backend.entities.OpenQuestionData
 import mu.KotlinLogging
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -16,7 +17,9 @@ import kotlin.io.path.isDirectory
 @ConfigurationProperties(prefix = "captcha.data")
 @PropertySource("classpath:captcha.properties")
 class CaptchaConfiguration {
-    lateinit var captchaQuestions: List<CaptchaQuestionService.QuestionData>
+    lateinit var choiceCaptchaQuestions: List<ChoiceQuestionData>
+    lateinit var openCaptchaQuestions: List<OpenQuestionData>
+
     lateinit var imageFolder: String
 
     companion object {
@@ -24,10 +27,13 @@ class CaptchaConfiguration {
     }
 
     @Bean
-    fun getAllCaptchaQuestions() = captchaQuestions
+    fun getAllChoiceCaptchaQuestions() = choiceCaptchaQuestions
 
     @Bean
-    fun getCaptchaImages(): List<CaptchaImageService.ImageData> {
+    fun getAllOpenCaptchaQuestions() = openCaptchaQuestions
+
+    @Bean
+    fun getCaptchaImages(): List<ImageData> {
         val imagesFolder = Paths.get(imageFolder)
         if (!imagesFolder.exists() || !imagesFolder.isDirectory()) {
             throw FileNotFoundException("'$imageFolder' does not exist or is not a directory!")
@@ -35,7 +41,7 @@ class CaptchaConfiguration {
 
         logger.info("Loading picture references into memory!")
         return imagesFolder.toFile().listFiles()?.map {
-            CaptchaImageService.ImageData(it.toPath(), it.name)
+            ImageData(it.toPath(), it.name)
         } ?: emptyList()
     }
 }

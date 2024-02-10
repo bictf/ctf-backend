@@ -34,8 +34,12 @@ class CaptchaController(
         return ResponseEntity(shouldBlockCaptcha, HttpStatus.OK)
     }
 
-    @GetMapping("/questions")
-    fun getAllCaptchaQuestions() = captchaQuestionService.getAllCaptcha()
+    @GetMapping("/questions/choice")
+    fun getAllChoiceCaptchaQuestions() = captchaQuestionService.getAllChoiceCaptcha()
+
+    @GetMapping("/questions/open")
+    fun getAllOpenCaptchaQuestions() = captchaQuestionService.getAllOpenCaptcha()
+
 
     @GetMapping("/pictures")
     @ResponseBody
