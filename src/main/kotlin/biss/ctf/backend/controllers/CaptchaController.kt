@@ -1,5 +1,6 @@
 package biss.ctf.backend.controllers
 
+import biss.ctf.backend.entities.TextCaptcha
 import biss.ctf.backend.services.captchas.CaptchaImageService
 import biss.ctf.backend.services.captchas.CaptchaQuestionService
 import mu.KotlinLogging
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import kotlin.io.path.nameWithoutExtension
 import kotlin.io.path.readBytes
 
 
@@ -16,7 +18,8 @@ class CaptchaController(
     @Value("\${captcha.init.should_block}")
     var shouldBlockCaptcha: Boolean,
     val captchaImageService: CaptchaImageService,
-    val captchaQuestionService: CaptchaQuestionService
+    val captchaQuestionService: CaptchaQuestionService,
+    val textCaptchas: List<TextCaptcha>
 ) {
 
     companion object {
@@ -67,5 +70,20 @@ class CaptchaController(
         }
         val imageFile = captcha.image
         return ResponseEntity(imageFile.readBytes(), HttpStatus.OK)
+    }
+
+    @GetMapping("/text_captchas")
+    @ResponseBody
+    fun getTextCaptcha(): ResponseEntity<List<String>> {
+        return ResponseEntity(textCaptchas.map { it.image.nameWithoutExtension }, HttpStatus.OK)
+    }
+
+    @GetMapping("/text_captchas/by_name")
+    @ResponseBody
+    fun getTextCaptcha(@RequestParam captchaName: String): ResponseEntity<ByteArray?> {
+        return ResponseEntity(
+            textCaptchas.find { it.image.nameWithoutExtension == captchaName }?.image?.readBytes(),
+            HttpStatus.OK
+        )
     }
 }
