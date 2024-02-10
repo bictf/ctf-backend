@@ -14,12 +14,12 @@ class IntelligenceService(
 
     fun findFileWithRegex(search: String): FileEntity {
         val regex = search.toRegex()
-        return intelligenceFiles.find { regex.matches(it.title) } ?: FileEntity("", "")
+        return intelligenceFiles.find { regex.matches(it.title) } ?: findBinaryFileByName(search)
     }
 
     fun countFilesWithRegex(search: String): Int {
         val regex = search.toRegex()
-        return intelligenceFiles.count { regex.matches(it.title) }
+        return intelligenceFiles.count { regex.matches(it.title) } + binaryFiles.count { regex.matches(it.title) }
     }
 
     fun findBinaryFileByName(fileName: String): FileEntity {
