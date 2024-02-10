@@ -153,7 +153,7 @@ paths:
   /search:
     get:
       summary: "GET search"
-      operationId: "login"
+      operationId: "search"
       parameters:
         - name: "text"
           in: "query"
@@ -210,6 +210,8 @@ components:
           type: "string"
         content:
           type: "string"
+        isBinaryFile:
+          type: "boolean"
       required:
         - "title"
         - "content"
