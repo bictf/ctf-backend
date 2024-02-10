@@ -78,9 +78,9 @@ class CaptchaController(
         return ResponseEntity(textCaptchas.map { it.image.nameWithoutExtension }, HttpStatus.OK)
     }
 
-    @GetMapping("/text_captchas/{captchaName}")
+    @GetMapping("/text_captchas/by_name")
     @ResponseBody
-    fun getTextCaptcha(@PathVariable captchaName: String): ResponseEntity<ByteArray?> {
+    fun getTextCaptcha(@RequestParam captchaName: String): ResponseEntity<ByteArray?> {
         return ResponseEntity(
             textCaptchas.find { it.image.nameWithoutExtension == captchaName }?.image?.readBytes(),
             HttpStatus.OK
