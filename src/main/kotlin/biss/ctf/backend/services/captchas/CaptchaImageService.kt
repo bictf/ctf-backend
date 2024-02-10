@@ -1,20 +1,13 @@
 package biss.ctf.backend.services.captchas
 
+import biss.ctf.backend.entities.ImageData
 import org.springframework.stereotype.Service
-import java.nio.file.Path
 
 @Service
 class CaptchaImageService(
     val captchaImages: List<ImageData>
 ) {
     var currentIndex = 0
-
-    /**
-     * A data class to hold picture data for the picture CAPTCHAs
-     */
-    data class ImageData(
-        val image: Path, val imageName: String
-    )
 
     fun getAllCaptcha() = captchaImages
 
