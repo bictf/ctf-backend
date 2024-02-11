@@ -46,17 +46,9 @@ class CaptchaController(
 
     @GetMapping("/pictures")
     @ResponseBody
-    fun getSomePictures(@RequestParam amount: Int?): ResponseEntity<List<String>> {
-        if (amount == null) {
-            logger.info { "Retrieving all CAPTCHAs" }
-            return ResponseEntity(captchaImageService.getAllCaptchaNames(), HttpStatus.OK)
-        }
-        logger.info { "Retrieving $amount CAPTCHA${if (amount > 1) "s" else ""}" }
-        val captchas = ArrayList<String>()
-        for (i in 0 until amount) {
-            captchas.add(captchaImageService.getNextCaptcha().imageName)
-        }
-        return ResponseEntity(captchas, HttpStatus.OK)
+    fun getSomePictures(): ResponseEntity<List<String>> {
+        logger.info { "Retrieving all CAPTCHAs" }
+        return ResponseEntity(captchaImageService.getAllCaptchaNames(), HttpStatus.OK)
     }
 
     @GetMapping("/pictures/by_name")
