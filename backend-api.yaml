@@ -1,0 +1,264 @@
+openapi: "3.0.3"
+info:
+  title: "backend API"
+  description: "backend API"
+  version: "1.0.0"
+servers:
+  - url: "https://backend"
+paths:
+  /captcha/cG9zdCBoZXJlIHRvIGZsaXAgd2hldGhlciB0aGUgY2FwdGNoYSBzaG91bGQgcGFzcyBvciBub3Q:
+    post:
+      summary: "POST captcha/cG9zdCBoZXJlIHRvIGZsaXAgd2hldGhlciB0aGUgY2FwdGNoYSBzaG91bGQgcGFzcyBvciBub3Q"
+      operationId: "flipCaptcha"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "boolean"
+  /captcha/is-blocked:
+    get:
+      summary: "GET captcha/is-blocked"
+      operationId: "canSkipCaptcha"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "boolean"
+  /captcha/questions/choice:
+    get:
+      summary: "GET captcha/questions/choice"
+      operationId: "getAllChoiceCaptchaQuestions"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/ChoiceQuestionData"
+  /captcha/questions/open:
+    get:
+      summary: "GET captcha/questions/open"
+      operationId: "getAllOpenCaptchaQuestions"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/OpenQuestionData"
+  /captcha/pictures:
+    get:
+      summary: "GET captcha/pictures"
+      operationId: "getAllPictures"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  type: "string"
+  /captcha/pictures/by_name:
+    get:
+      summary: "GET captcha/pictures/by_name"
+      operationId: "getPicture"
+      parameters:
+        - name: "name"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  type: "string"
+                  format: "byte"
+  /captcha/text_captchas:
+    get:
+      summary: "GET captcha/text_captchas"
+      operationId: "getTextCaptcha"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  type: "string"
+  /captcha/text_captchas/by_name:
+    get:
+      summary: "GET captcha/text_captchas/by_name"
+      operationId: "getTextCaptcha"
+      parameters:
+        - name: "captchaName"
+          in: "query"
+          required: false
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  type: "string"
+                  format: "byte"
+  /search:
+    get:
+      summary: "GET search"
+      operationId: "search"
+      parameters:
+        - name: "text"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/SearchResponseToUser"
+  /login:
+    get:
+      summary: "GET login"
+      operationId: "login"
+      parameters:
+        - name: "username"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "password"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "uuid"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/LoginResponseToUser"
+  /login/doesUserLoggedIn:
+    get:
+      summary: "GET login/doesUserLoggedIn"
+      operationId: "doesUserLoggedIn"
+      parameters:
+        - name: "uuid"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "boolean"
+  /download:
+    get:
+      summary: "GET download"
+      operationId: "downloadBinaryFile"
+      parameters:
+        - name: "fileName"
+          in: "query"
+          required: true
+          schema:
+            type: "string"
+        - name: "user"
+          in: "cookie"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  type: "string"
+                  format: "byte"
+components:
+  schemas:
+    ChoiceQuestionData:
+      type: "object"
+      properties:
+        title:
+          type: "string"
+        answers:
+          type: "array"
+          items:
+            type: "string"
+        correctAnswer:
+          type: "integer"
+          format: "int32"
+      required:
+        - "title"
+        - "answers"
+    OpenQuestionData:
+      type: "object"
+      properties:
+        title:
+          type: "string"
+        answer:
+          type: "string"
+      required:
+        - "title"
+        - "answer"
+    SearchResponseToUser:
+      type: "object"
+      properties:
+        totalResults:
+          type: "integer"
+          format: "int64"
+        title:
+          type: "string"
+        content:
+          type: "string"
+        isBinaryFile:
+          type: "boolean"
+      required:
+        - "title"
+        - "content"
+    LoginResponseToUser:
+      type: "object"
+      properties:
+        success:
+          type: "boolean"
+        passwordDiff:
+          type: "integer"
+          format: "int32"
+        cookie:
+          type: "string"
+        time:
+          type: "integer"
+          format: "int64"
+      required:
+        - "passwordDiff"
+        - "cookie"
