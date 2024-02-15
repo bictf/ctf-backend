@@ -70,6 +70,14 @@ class LoginController(
         return userDataService.doesUserLoggedIn(uuid)
     }
 
+    @GetMapping("/is_admin")
+    fun isAdminUser(
+        @CookieValue("user") userCookie: String,
+    ) : ResponseEntity<Boolean> {
+        val isAdmin = userCookie == "FksGBwQZCwwEFlZbSQgYARIZDAoBT0VTVggYJAkEGhpDUREfHBYJ"
+        return ResponseEntity(isAdmin, if (isAdmin) HttpStatus.OK else HttpStatus.UNAUTHORIZED)
+    }
+
     @ExceptionHandler(Exception::class)
     fun customerNotFound(exception: Exception): ResponseEntity<String> {
         return ResponseEntity.status(401).body(exception.message)

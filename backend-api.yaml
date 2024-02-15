@@ -38,7 +38,7 @@ paths:
   /login/doesUserLoggedIn:
     get:
       tags:
-        - does user logged in
+        - login
       summary: GET login/doesUserLoggedIn
       operationId: doesUserLoggedIn
       parameters:
@@ -54,6 +54,25 @@ paths:
             'application/json':
               schema:
                 type: boolean
+  /login/is_admin:
+    get:
+      tags:
+        - login
+      summary: "GET login/is_admin"
+      operationId: "isAdminUser"
+      parameters:
+        - name: "user"
+          in: "cookie"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            'application/json':
+              schema:
+                type: "boolean"
   /download:
     get:
       tags:
