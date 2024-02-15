@@ -1,11 +1,26 @@
 services:
   biss-ctf-back:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      no_cache: true
     image: biss-ctf-back:latest
     restart: always
-    ports:
-      - "8080:8080"
+    volumes:
+      - type: bind
+        source: src/main/resources
+        target: /mnt/resources
+    environment:
+      SPRING_CONFIG_LOCATION: file:///mnt/resources
+#    Enable this for backend only
+#    ports:
+#      - "8080:8080"
   biss-ctf-front:
+    build:
+      context: ../ctf-front
+      dockerfile: Dockerfile
     image: biss-ctf-front:latest
     restart: always
-    ports:
-      - "80:80"
+#    Enable this for frontend only
+#    ports:
+#      - "80:80"
