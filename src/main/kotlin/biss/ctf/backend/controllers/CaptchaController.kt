@@ -54,14 +54,16 @@ class CaptchaController(
     @GetMapping("/pictures/by_name")
     @ResponseBody
     fun getPicture(@RequestParam name: String): ResponseEntity<ByteArray> {
-        val captcha = captchaImageService.getAllCaptcha().find {
-            it.imageName == name
+        val regularCaptcha = captchaImageService.getAllCaptcha().find { it.imageName == name }
+        val textRecognitionCaptcha = textCaptchas.find { it.image.nameWithoutExtension == name }
+
+        return if (regularCaptcha != null) {
+            ResponseEntity(regularCaptcha.image.readBytes(), HttpStatus.OK)
+        } else if (textRecognitionCaptcha != null) {
+            ResponseEntity(textRecognitionCaptcha.image.readBytes(), HttpStatus.OK)
+        } else {
+            ResponseEntity(HttpStatus.NOT_FOUND)
         }
-        if (captcha == null) {
-            return ResponseEntity(HttpStatus.NOT_FOUND)
-        }
-        val imageFile = captcha.image
-        return ResponseEntity(imageFile.readBytes(), HttpStatus.OK)
     }
 
     @GetMapping("/text_captchas")

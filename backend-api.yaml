@@ -168,12 +168,10 @@ paths:
         200:
           description: OK
           content:
-            'application/json':
+            image/*: # Media type
               schema:
-                type: array
-                items:
-                  type: string
-                  format: byte
+                type: string
+                format: binary
   /captcha/text_captchas:
     get:
       tags:
@@ -209,19 +207,6 @@ paths:
                 items:
                   type: string
                   format: byte
-#  /captcha/open_questions:
-#    get:
-#      tags:
-#        - open question captcha
-#      summary: GET captcha/open_questions
-#      operationId: getOpenQuestions
-#      responses:
-#        200:
-#          description: OK
-#          content:
-#            'application/json':
-#              schema:
-#                $ref: #/components/schemas/OpenQuestionData
   /search:
     get:
       tags:
