@@ -15,8 +15,8 @@ import kotlin.io.path.readBytes
 @RestController
 @RequestMapping("/captcha")
 class CaptchaController(
-    @Value("\${captcha.init.should_block}")
-    var shouldBlockCaptcha: Boolean,
+    @Value("\${captcha.init.should_skip}")
+    var shouldSkip: Boolean,
     val captchaImageService: CaptchaImageService,
     val captchaQuestionService: CaptchaQuestionService,
     val textCaptchas: List<TextCaptcha>
@@ -26,15 +26,15 @@ class CaptchaController(
         private val logger = KotlinLogging.logger(CaptchaController::class.java.name)
     }
 
-    @GetMapping("/is-blocked")
+    @GetMapping("/can_skip")
     fun canSkipCaptcha(): ResponseEntity<Boolean> {
-        return ResponseEntity(shouldBlockCaptcha, HttpStatus.OK)
+        return ResponseEntity(shouldSkip, HttpStatus.OK)
     }
 
     @PostMapping("/cG9zdCBoZXJlIHRvIGZsaXAgd2hldGhlciB0aGUgY2FwdGNoYSBzaG91bGQgcGFzcyBvciBub3Q")
     fun flipCaptcha(): ResponseEntity<Boolean> {
-        shouldBlockCaptcha = !shouldBlockCaptcha
-        return ResponseEntity(shouldBlockCaptcha, HttpStatus.OK)
+        shouldSkip = !shouldSkip
+        return ResponseEntity(shouldSkip, HttpStatus.OK)
     }
 
     @GetMapping("/questions/choice")
