@@ -1,8 +1,11 @@
 package biss.ctf.backend.controllers
 
+import biss.ctf.backend.entities.PicturePairs
 import biss.ctf.backend.entities.TextCaptcha
 import biss.ctf.backend.services.captchas.CaptchaImageService
 import biss.ctf.backend.services.captchas.CaptchaQuestionService
+import biss.ctf.backend.utils.EncryptUtils
+import jakarta.annotation.PostConstruct
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
@@ -21,6 +24,14 @@ class CaptchaController(
     val captchaQuestionService: CaptchaQuestionService,
     val textCaptchas: List<TextCaptcha>
 ) {
+    @PostConstruct
+    fun postInit() {
+        if (shouldSkip) {
+            logger.warn { "The service is configured to skip all CAPTCHAs!" }
+        } else {
+            logger.info { "Not skipping CAPTCHAs!" }
+        }
+    }
 
     companion object {
         private val logger = KotlinLogging.logger(CaptchaController::class.java.name)
@@ -55,7 +66,7 @@ class CaptchaController(
     @ResponseBody
     fun getPicture(@RequestParam name: String): ResponseEntity<ByteArray> {
         val regularCaptcha = captchaImageService.getAllCaptcha().find { it.imageName == name }
-        val textRecognitionCaptcha = textCaptchas.find { it.image.nameWithoutExtension == name }
+        val textRecognitionCaptcha = textCaptchas.find {  EncryptUtils.encrypt(it.image.nameWithoutExtension) ==name }
 
         return if (regularCaptcha != null) {
             ResponseEntity(regularCaptcha.image.readBytes(), HttpStatus.OK)
@@ -68,8 +79,10 @@ class CaptchaController(
 
     @GetMapping("/text_captchas")
     @ResponseBody
-    fun getTextCaptcha(): ResponseEntity<List<String>> {
-        return ResponseEntity(textCaptchas.map { it.image.nameWithoutExtension }, HttpStatus.OK)
+    fun getTextCaptcha(): List<PicturePairs> {
+        val pictureAndEncryptedNamePairs =
+            textCaptchas.map { PicturePairs(EncryptUtils.encrypt(it.image.nameWithoutExtension), it.image.nameWithoutExtension) }
+        return pictureAndEncryptedNamePairs
     }
 
     @GetMapping("/text_captchas/by_name")

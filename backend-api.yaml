@@ -113,7 +113,7 @@ paths:
             'application/json':
               schema:
                 type: boolean
-  /captcha/is-blocked:
+  /captcha/can_skip:
     get:
       tags:
         - can skip captcha
@@ -198,14 +198,18 @@ paths:
       summary: GET captcha/text_captchas
       operationId: getTextCaptcha
       responses:
-        200:
-          description: OK
+        "200":
+          description: "OK"
           content:
             'application/json':
               schema:
-                type: array
+                type: "array"
                 items:
-                  type: string
+                  properties:
+                    encryptedName:
+                      type: "string"
+                    solution:
+                      type: string
   /captcha/text_captchas/by_name:
     get:
       tags:
