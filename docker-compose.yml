@@ -11,10 +11,10 @@ services:
         source: src/main/resources
         target: /mnt/resources
     environment:
-      SPRING_CONFIG_LOCATION: file:///mnt/resources
+      SPRING_CONFIG_LOCATION: file:///mnt/resources/
 #    Enable this for backend only
-#    ports:
-#      - "8080:8080"
+    ports:
+      - "8080:8080"
   biss-ctf-front:
     build:
       context: ../ctf-front
