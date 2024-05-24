@@ -36,7 +36,7 @@ class LoginController(
             throw HttpServerErrorException(HttpStatus.UNAUTHORIZED, "Username does not exist")
         }
 
-        val user = userDataService.getUserByUUID(uuid)
+        val user = userDataService.findOrSaveUserByUuid(uuid)
         logger.info { "Retrieved password '${user.password}' for UUID: $uuid" }
         val passwordDiff = PasswordUtils.checkPasswordsDiff(user.password, password)
         val isPasswordTrue = PasswordUtils.isPasswordTrue(passwordDiff)
@@ -44,7 +44,7 @@ class LoginController(
         var cookie = "{}"
         if (isPasswordTrue) {
             cookie = EncryptUtils.encrypt("""{"username":"muhammad", "isAdmin":false}""")
-            userDataService.userLoggedIn(uuid)
+            userDataService.setUserLoggedIn(uuid)
 
             logger.info("Logging in for user \"${user.UUID}\" and password \"${user.password}\"")
         } else {
@@ -59,15 +59,15 @@ class LoginController(
      */
     private fun createLogoutTask(uuid: String) {
         Timer().schedule(MILLISECONDS_TO_RESET_PASSWORD) {
-            if (!userDataService.doesUserLoggedIn(uuid)) {
-                userDataService.userLoggedOut(uuid)
+            if (!userDataService.isUserLoggedIn(uuid)) {
+                userDataService.setUserLoggedOut(uuid)
             }
         }
     }
 
     @GetMapping("/doesUserLoggedIn")
     fun doesUserLoggedIn(@RequestParam uuid: String): Boolean {
-        return userDataService.doesUserLoggedIn(uuid)
+        return userDataService.isUserLoggedIn(uuid)
     }
 
     @GetMapping("/is_admin")
