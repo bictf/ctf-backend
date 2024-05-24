@@ -16,7 +16,7 @@ import kotlin.io.path.isDirectory
 
 @Configuration
 @ConfigurationProperties(prefix = "captcha.data")
-@PropertySource("\${captcha_properties.path}")
+@PropertySource("\${CAPTCHA_PROPERTIES_LOCATION}")
 class CaptchaConfiguration {
     lateinit var choiceCaptchaQuestions: List<ChoiceQuestionData>
     lateinit var openCaptchaQuestions: List<OpenQuestionData>
