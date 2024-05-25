@@ -1,6 +1,5 @@
 package biss.ctf.backend.controllers
 
-import biss.ctf.backend.exceptions.UnauthorizedException
 import biss.ctf.backend.objects.apiObjects.UserCookieData
 import biss.ctf.backend.services.IntelligenceService
 import biss.ctf.backend.services.UserDataService
@@ -38,10 +37,5 @@ class DownloadController(
         }
 
         return ResponseEntity<ByteArray>(intelligenceService.findBinaryFileByName(fileName).file.readBytes(), HttpStatus.OK)
-    }
-
-    @ExceptionHandler(UnauthorizedException::class)
-    fun unauthorizedHandler(exception: UnauthorizedException): ResponseEntity<String> {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value()).body("User is unauthorized!!")
     }
 }

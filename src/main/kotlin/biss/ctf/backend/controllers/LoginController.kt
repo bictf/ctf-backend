@@ -81,9 +81,4 @@ class LoginController(
         val isAdmin = cookieData.isAdmin
         return ResponseEntity(isAdmin, if (isAdmin) HttpStatus.OK else HttpStatus.UNAUTHORIZED)
     }
-
-    @ExceptionHandler(Exception::class)
-    fun customerNotFound(exception: Exception): ResponseEntity<String> {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(exception.message)
-    }
 }

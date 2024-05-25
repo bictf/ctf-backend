@@ -4,7 +4,6 @@ import biss.ctf.backend.objects.apiObjects.UserCookieData
 import biss.ctf.backend.objects.apiObjects.toUser.SearchResponseToUser
 import biss.ctf.backend.services.IntelligenceService
 import biss.ctf.backend.services.UserDataService
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -22,10 +21,5 @@ class SearchController(
         val firstMatchFile = intelligenceService.findFileWithRegex(text)
 
         return SearchResponseToUser(numberOfMatchFiles.toLong(), firstMatchFile)
-    }
-
-    @ExceptionHandler(Exception::class)
-    fun customerNotFound(exception: Exception): ResponseEntity<String> {
-        return ResponseEntity.badRequest().body(exception.message)
     }
 }
