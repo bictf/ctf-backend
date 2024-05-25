@@ -1,8 +1,8 @@
 package biss.ctf.backend.controllers
 
+import biss.ctf.backend.objects.apiObjects.UserCookieData
 import biss.ctf.backend.objects.apiObjects.toUser.LoginResponseToUser
 import biss.ctf.backend.services.UserDataService
-import biss.ctf.backend.utils.EncryptUtils
 import biss.ctf.backend.utils.PasswordUtils
 import mu.KotlinLogging
 import org.springframework.http.HttpStatus
@@ -15,13 +15,24 @@ import kotlin.concurrent.schedule
 @RestController
 @RequestMapping("/login")
 class LoginController(
-    val userDataService: UserDataService
+    val userDataService: UserDataService,
 ) {
     companion object {
         private val logger = KotlinLogging.logger(LoginController::class.java.name)
-        private val MINUTES_TO_RESET_PASSWORD: Long = 1
-        private val SECONDS_TO_RESET_PASSWORD: Long = MINUTES_TO_RESET_PASSWORD * 60
-        private val MILLISECONDS_TO_RESET_PASSWORD: Long = SECONDS_TO_RESET_PASSWORD * 1000
+        private const val MINUTES_TO_RESET_PASSWORD: Long = 1
+        private const val SECONDS_TO_RESET_PASSWORD: Long = MINUTES_TO_RESET_PASSWORD * 60
+        private const val MILLISECONDS_TO_RESET_PASSWORD: Long = SECONDS_TO_RESET_PASSWORD * 1000
+    }
+
+    /**
+     * Creates a task to log a user out in [SECONDS_TO_RESET_PASSWORD]
+     */
+    private fun createLogoutTask(uuid: String) {
+        Timer().schedule(MILLISECONDS_TO_RESET_PASSWORD) {
+            if (!userDataService.isUserLoggedIn(uuid)) {
+                userDataService.expireUserPassword(uuid)
+            }
+        }
     }
 
     @GetMapping
@@ -41,28 +52,19 @@ class LoginController(
         val passwordDiff = PasswordUtils.checkPasswordsDiff(user.password, password)
         val isPasswordTrue = PasswordUtils.isPasswordTrue(passwordDiff)
 
-        var cookie = "{}"
         if (isPasswordTrue) {
-            cookie = EncryptUtils.encrypt("""{"username":"muhammad", "isAdmin":false}""")
             userDataService.setUserLoggedIn(uuid)
-
             logger.info("Logging in for user \"${user.UUID}\" and password \"${user.password}\"")
         } else {
             createLogoutTask(uuid)
         }
 
-        return LoginResponseToUser(isPasswordTrue, passwordDiff, cookie, MINUTES_TO_RESET_PASSWORD)
-    }
-
-    /**
-     * Creates a task to log a user out in [SECONDS_TO_RESET_PASSWORD]
-     */
-    private fun createLogoutTask(uuid: String) {
-        Timer().schedule(MILLISECONDS_TO_RESET_PASSWORD) {
-            if (!userDataService.isUserLoggedIn(uuid)) {
-                userDataService.setUserLoggedOut(uuid)
-            }
-        }
+        return LoginResponseToUser(
+            isPasswordTrue,
+            passwordDiff,
+            UserCookieData(uuid, false, "muhammad").toEncryptedJson(),
+            MINUTES_TO_RESET_PASSWORD
+        )
     }
 
     @GetMapping("/doesUserLoggedIn")
@@ -74,7 +76,9 @@ class LoginController(
     fun isAdminUser(
         @CookieValue("user") userCookie: String,
     ): ResponseEntity<Boolean> {
-        val isAdmin = userCookie == "FksGBwQZCwwEFlZbSQgYARIZDAoBT0VTVggYJAkEGhpDUREfHBYJ"
+        val cookieData = UserCookieData.fromEncryptedJson(userCookie)
+        userDataService.assertIsLoggedIn(cookieData.uuid)
+        val isAdmin = cookieData.isAdmin
         return ResponseEntity(isAdmin, if (isAdmin) HttpStatus.OK else HttpStatus.UNAUTHORIZED)
     }
 

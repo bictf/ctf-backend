@@ -6,6 +6,7 @@ plugins {
     kotlin("jvm") version "1.9.21"
     kotlin("plugin.spring") version "1.9.21"
     kotlin("plugin.jpa") version "1.9.21"
+    kotlin("plugin.serialization") version "2.0.0-RC3"
 }
 
 group = "biss.ctf"
@@ -32,6 +33,7 @@ dependencies {
     implementation("org.springframework.session:spring-session-jdbc")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("io.github.microutils:kotlin-logging-jvm:2.0.11")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.0-RC")
 
     runtimeOnly("org.postgresql:postgresql")
     runtimeOnly("com.h2database:h2")

@@ -1,6 +1,7 @@
 package biss.ctf.backend.services
 
 import biss.ctf.backend.entities.UserDataEntity
+import biss.ctf.backend.exceptions.UnauthorizedException
 import biss.ctf.backend.repositories.UserDataRepository
 import biss.ctf.backend.utils.PasswordUtils
 import org.springframework.stereotype.Service
@@ -39,7 +40,7 @@ class UserDataService(
      *
      * @param uuid The UUID of the user to set as logged out.
      */
-    fun setUserLoggedOut(uuid: String) {
+    fun expireUserPassword(uuid: String) {
         val user = findOrSaveUserByUuid(uuid)
         user.password = PasswordUtils.generateNewPassword()
         user.hasLoggedIn = false
@@ -57,4 +58,11 @@ class UserDataService(
         return user.hasLoggedIn
     }
 
+    /**
+     * Asserts that a user is logged in.
+     * @throws UnauthorizedException if the user is not logged in.
+     */
+    fun assertIsLoggedIn(uuid: String) {
+        if (!isUserLoggedIn(uuid)) throw UnauthorizedException(uuid) else return
+    }
 }
