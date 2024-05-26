@@ -17,4 +17,9 @@ class ControllerExceptionHandler {
     fun nullPointerHandler(exception: NullPointerException): ResponseEntity<String> {
         return ResponseEntity.status(HttpStatus.NOT_FOUND.value()).body(exception.message)
     }
+
+    @ExceptionHandler(Exception::class)
+    fun exceptionHandler(exception: Exception): ResponseEntity<String> {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value()).body(exception.message)
+    }
 }
