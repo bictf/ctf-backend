@@ -1,0 +1,26 @@
+package biss.ctf.backend.controllers
+
+import biss.ctf.backend.objects.apiObjects.PasswordGameLevelDto
+import biss.ctf.backend.objects.apiObjects.UserCookieData
+import biss.ctf.backend.services.PasswordGameService
+import biss.ctf.backend.services.UserDataService
+import org.springframework.web.bind.annotation.CookieValue
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
+
+@RestController
+class PasswordGameController(
+    private val passwordGameService: PasswordGameService,
+    private val userDataService: UserDataService
+) {
+    @GetMapping("/next_password_level")
+    fun getNextPasswordLevel(
+        @RequestParam password: String,
+        @CookieValue("user") userCookie: String
+    ): PasswordGameLevelDto {
+        val cookieData = UserCookieData.fromEncryptedJson(userCookie)
+        userDataService.assertIsLoggedIn(cookieData.uuid)
+        return PasswordGameLevelDto.fromPasswordGameLevel(passwordGameService.getNextUserLevel(cookieData.uuid, password)!!)
+    }
+}

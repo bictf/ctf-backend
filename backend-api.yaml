@@ -243,6 +243,11 @@ paths:
           required: true
           schema:
             type: string
+        - name: "user"
+          in: "cookie"
+          required: true
+          schema:
+            type: "string"
       responses:
         200:
           description: OK

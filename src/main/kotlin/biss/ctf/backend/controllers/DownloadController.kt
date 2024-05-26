@@ -1,6 +1,8 @@
 package biss.ctf.backend.controllers
 
+import biss.ctf.backend.objects.apiObjects.UserCookieData
 import biss.ctf.backend.services.IntelligenceService
+import biss.ctf.backend.services.UserDataService
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -12,6 +14,7 @@ import java.io.FileNotFoundException
 @RequestMapping("/download")
 class DownloadController(
     val intelligenceService: IntelligenceService,
+    val userDataService: UserDataService
 ) {
     @GetMapping
     fun downloadBinaryFile(
@@ -19,7 +22,9 @@ class DownloadController(
         @RequestParam fileName: String,
         response: HttpServletResponse
     ): ResponseEntity<ByteArray> {
-        if (userCookie != "FksGBwQZCwwEFlZbSQgYARIZDAoBT0VTVggYJAkEGhpDUREfHBYJ") {
+        val userDecryptedCookie = UserCookieData.fromEncryptedJson(userCookie)
+        userDataService.assertIsLoggedIn(userDecryptedCookie.uuid)
+        if (userDecryptedCookie.isAdmin) {
             return ResponseEntity<ByteArray>("User is unauthorized!".toByteArray(), HttpStatus.UNAUTHORIZED)
         }
         val file = intelligenceService.findBinaryFileByName(fileName)
@@ -32,10 +37,5 @@ class DownloadController(
         }
 
         return ResponseEntity<ByteArray>(intelligenceService.findBinaryFileByName(fileName).file.readBytes(), HttpStatus.OK)
-    }
-
-    @ExceptionHandler(Exception::class)
-    fun customerNotFound(exception: Exception): ResponseEntity<String> {
-        return ResponseEntity.badRequest().body(exception.message)
     }
 }

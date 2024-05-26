@@ -8,19 +8,42 @@ services:
     restart: always
     volumes:
       - type: bind
-        source: src/main/resources
+        source: "[ABSOLUTE_PATH]"
         target: /mnt/resources
     environment:
       SPRING_CONFIG_LOCATION: file:///mnt/resources/
-#    Enable this for backend only
-    ports:
-      - "8080:8080"
+      CAPTCHA_PROPERTIES_LOCATION: file:///mnt/resources/captcha.properties
+      SPRING_PROFILES_ACTIVE: container
+#    Enable this for backend
+#    ports:
+#      - "8080:8080"
   biss-ctf-front:
     build:
       context: ../ctf-front
       dockerfile: Dockerfile
     image: biss-ctf-front:latest
     restart: always
-#    Enable this for frontend only
-#    ports:
-#      - "80:80"
+#    Enable this for frontend
+    ports:
+      - "80:80"
+
+# --- DB STUFF HERE ###
+  db:
+    image: postgres
+    restart: always
+    volumes:
+      - db-volume:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: YoudThinkItsAdminToo
+    ports:
+      - "5432:5432"
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: YoudThinkItsAdmin@admin.admin
+      PGADMIN_DEFAULT_PASSWORD: YoudThinkItsAdminToo
+    ports:
+      - "8090:80"
+
+volumes:
+  db-volume:
