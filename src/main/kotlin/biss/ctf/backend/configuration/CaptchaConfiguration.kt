@@ -8,6 +8,7 @@ import mu.KotlinLogging
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 import org.springframework.context.annotation.PropertySource
 import java.io.FileNotFoundException
 import java.nio.file.Paths
@@ -17,6 +18,7 @@ import kotlin.io.path.isDirectory
 @Configuration
 @ConfigurationProperties(prefix = "captcha.data")
 @PropertySource("\${CAPTCHA_PROPERTIES_LOCATION}")
+@Profile("!password-test")
 class CaptchaConfiguration {
     lateinit var choiceCaptchaQuestions: List<ChoiceQuestionData>
     lateinit var openCaptchaQuestions: List<OpenQuestionData>

@@ -8,6 +8,7 @@ import biss.ctf.backend.utils.EncryptUtils
 import jakarta.annotation.PostConstruct
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -17,6 +18,7 @@ import kotlin.io.path.readBytes
 
 @RestController
 @RequestMapping("/captcha")
+@Profile("!password-test")
 class CaptchaController(
     @Value("\${captcha.init.should_skip}")
     var shouldSkip: Boolean,
@@ -66,7 +68,7 @@ class CaptchaController(
     @ResponseBody
     fun getPicture(@RequestParam name: String): ResponseEntity<ByteArray> {
         val regularCaptcha = captchaImageService.getAllCaptcha().find { it.imageName == name }
-        val textRecognitionCaptcha = textCaptchas.find {  EncryptUtils.encrypt(it.image.nameWithoutExtension) ==name }
+        val textRecognitionCaptcha = textCaptchas.find { EncryptUtils.encrypt(it.image.nameWithoutExtension) == name }
 
         return if (regularCaptcha != null) {
             ResponseEntity(regularCaptcha.image.readBytes(), HttpStatus.OK)
@@ -81,7 +83,12 @@ class CaptchaController(
     @ResponseBody
     fun getTextCaptcha(): List<PicturePairs> {
         val pictureAndEncryptedNamePairs =
-            textCaptchas.map { PicturePairs(EncryptUtils.encrypt(it.image.nameWithoutExtension), it.image.nameWithoutExtension) }
+            textCaptchas.map {
+                PicturePairs(
+                    EncryptUtils.encrypt(it.image.nameWithoutExtension),
+                    it.image.nameWithoutExtension
+                )
+            }
         return pictureAndEncryptedNamePairs
     }
 

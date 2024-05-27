@@ -1,0 +1,29 @@
+package biss.ctf.backend
+
+import biss.ctf.backend.services.passwordlevels.PasswordGameLevel
+import mu.KotlinLogging
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ActiveProfiles
+
+@SpringBootTest
+@ActiveProfiles(profiles = ["password-test"])
+class PasswordGameTest {
+    companion object {
+        private const val MASTER_PASSWORD = "password"
+        private val logger = KotlinLogging.logger(PasswordGameTest::class.java.name)
+    }
+
+    @Autowired
+    lateinit var levels: List<PasswordGameLevel>
+
+
+    @Test
+    fun `Given all password levels, A solution is available`() {
+        assert(levels.count {
+            logger.info { "Testing '$MASTER_PASSWORD' for '${it::class.java.name}'" }
+            !it.doesAnswerLevel(MASTER_PASSWORD)
+        } == 0)
+    }
+}
