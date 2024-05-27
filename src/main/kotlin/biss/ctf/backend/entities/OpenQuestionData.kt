@@ -7,6 +7,7 @@ package biss.ctf.backend.entities
  */
 data class OpenQuestionData(
     val title: String,
-    val answer: String
+    val answer: String,
+    val image: String? = null
 )
 

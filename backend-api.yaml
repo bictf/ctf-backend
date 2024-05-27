@@ -299,6 +299,8 @@ components:
           type: string
         answer:
           type: string
+        image:
+          type: string
       required:
         - title
         - answer

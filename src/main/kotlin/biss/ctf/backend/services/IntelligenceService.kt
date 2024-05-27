@@ -23,6 +23,8 @@ class IntelligenceService(
     }
 
     fun findBinaryFileByName(fileName: String): FileEntity {
-        return binaryFiles.find { it.isBinaryFile && it.title == fileName } ?: FileEntity("", "")
+        val nonRegexSearch = binaryFiles.find { it.isBinaryFile && it.title == fileName }
+        val regexSearch = binaryFiles.find { fileName.toRegex().matches(it.title) }
+        return nonRegexSearch ?: regexSearch ?: FileEntity("", "")
     }
 }
