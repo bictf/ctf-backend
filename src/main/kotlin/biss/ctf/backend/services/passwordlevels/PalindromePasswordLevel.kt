@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component
 class PalindromePasswordLevel: PasswordGameLevel {
     override fun getLevelDescription(): String {
         return "Password must not contain any sequence that is a palindrom." +
-                "Except for a certain letter that can appear only twice in a row."
+                "You can have single character appear twice in a row."
     }
 
     override fun getLevelHint(): String {
