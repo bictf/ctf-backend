@@ -15,9 +15,8 @@ class PalindromePasswordLevel: PasswordGameLevel {
 
     override fun doesAnswerLevel(password: String): Boolean {
         val length = password.length
-
         for (start in 0 until length) {
-            for (end in start + 2..length) {
+            for (end in (start + 2)..length) {
                 val substring = password.substring(start, end)
                 if (isPalindrome(substring) && substring != "ff") {
                     return false
