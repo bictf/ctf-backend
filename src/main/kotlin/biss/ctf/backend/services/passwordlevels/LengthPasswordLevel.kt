@@ -16,6 +16,6 @@ class LengthPasswordLevel: PasswordGameLevel {
     }
 
     override fun doesAnswerLevel(password: String): Boolean {
-        return password.length == MINIMUM_PASSWORD_LENGTH
+        return password.length >= MINIMUM_PASSWORD_LENGTH
     }
 }
