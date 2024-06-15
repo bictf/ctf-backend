@@ -12,7 +12,7 @@ class CoolestStateInAfricaPasswordLevel: PasswordGameLevel {
     }
 
     override fun getLevelHint(): String {
-        return "you can figure this out."
+        return "Who is cool?"
     }
 
     override fun doesAnswerLevel(password: String): Boolean {
