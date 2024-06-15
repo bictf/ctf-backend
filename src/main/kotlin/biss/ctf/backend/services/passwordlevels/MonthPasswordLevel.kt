@@ -11,7 +11,7 @@ class MonthPasswordLevel: PasswordGameLevel {
         )
     }
     override fun getLevelDescription(): String {
-        return "Password must a month in it"
+        return "Password must contain the name of a month"
     }
 
     override fun getLevelHint(): String {
