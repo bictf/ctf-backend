@@ -10,7 +10,7 @@ class CapitalCharacterPasswordLevel: PasswordGameLevel {
     }
 
     override fun getLevelHint(): String {
-        return "seriously?"
+        return "Ggez1234"
     }
 
     override fun doesAnswerLevel(password: String): Boolean {
