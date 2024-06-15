@@ -3,19 +3,19 @@ package biss.ctf.backend.services.passwordlevels
 import org.springframework.stereotype.Component
 
 @Component
-class LengthPasswordLevel: PasswordGameLevel {
+class HeartachePasswordLevel: PasswordGameLevel {
     companion object {
-        private const val MINIMUM_PASSWORD_LENGTH = 8
+        private const val KEY_WORD = "heartache"
     }
     override fun getLevelDescription(): String {
-        return "Password must be at least $MINIMUM_PASSWORD_LENGTH characters long"
+        return "Password must contain the 44th word of our favorite song!"
     }
 
     override fun getLevelHint(): String {
-        return "Gg123456"
+        return "Believe, when I say..."
     }
 
     override fun doesAnswerLevel(password: String): Boolean {
-        return password.length >= MINIMUM_PASSWORD_LENGTH
+        return password.lowercase().contains(KEY_WORD)
     }
 }
