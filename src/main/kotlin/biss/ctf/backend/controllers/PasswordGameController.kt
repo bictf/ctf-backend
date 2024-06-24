@@ -21,6 +21,22 @@ class PasswordGameController(
     ): PasswordGameLevelDto {
         val cookieData = UserCookieData.fromEncryptedJson(userCookie)
         userDataService.assertIsLoggedIn(cookieData.uuid)
-        return PasswordGameLevelDto.fromPasswordGameLevel(passwordGameService.getNextUserLevel(cookieData.uuid, password)!!)
+        return PasswordGameLevelDto(passwordGameService.getNextUserLevel(cookieData.uuid, password)!!.getLevelDescription(), false)
     }
+
+    @GetMapping("/password_levels/solve")
+    fun getSolvePasswordLevel(
+        @RequestParam password: String,
+        @RequestParam levels: Int,
+        @CookieValue("user") userCookie: String
+    ): List<PasswordGameLevelDto> {
+        val cookieData = UserCookieData.fromEncryptedJson(userCookie)
+        userDataService.assertIsLoggedIn(cookieData.uuid)
+        val levelsToCheck = passwordGameService.getAllLevels().subList(0, levels).toMutableList()
+        if(levelsToCheck.all{it.doesAnswerLevel(password)}) {
+            levelsToCheck +=  passwordGameService.getNextLevel(password)
+        }
+        return levelsToCheck.map { PasswordGameLevelDto(it.getLevelDescription(), it.doesAnswerLevel(password)) }
+    }
+
 }

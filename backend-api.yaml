@@ -255,6 +255,30 @@ paths:
             application/json:
               schema:
                 $ref: #/components/schemas/SearchResponseToUser
+
+  /password_levels/solve:
+    get:
+      parameters:
+        - name: password
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: levels
+          required: true
+          in: query
+          schema:
+            type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: #/components/schemas/PasswordGameLevel
+
 components:
   schemas:
     LoginResponseToUser:
@@ -324,3 +348,10 @@ components:
       required:
         - title
         - content
+    PasswordGameLevel:
+      type: object
+      properties:
+        description:
+          type: string
+        isCorrect:
+          type: boolean
