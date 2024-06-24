@@ -4,7 +4,11 @@ import biss.ctf.backend.objects.apiObjects.PasswordGameLevelDto
 import biss.ctf.backend.objects.apiObjects.UserCookieData
 import biss.ctf.backend.services.PasswordGameService
 import biss.ctf.backend.services.UserDataService
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.CookieValue
+import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -21,7 +25,7 @@ class PasswordGameController(
     ): PasswordGameLevelDto {
         val cookieData = UserCookieData.fromEncryptedJson(userCookie)
         userDataService.assertIsLoggedIn(cookieData.uuid)
-        return PasswordGameLevelDto(passwordGameService.getNextUserLevel(cookieData.uuid, password)!!.getLevelDescription(), false)
+        return PasswordGameLevelDto(passwordGameService.getNextLevel(password).getLevelDescription(), false)
     }
 
     @GetMapping("/password_levels/solve")
@@ -39,4 +43,6 @@ class PasswordGameController(
         return levelsToCheck.map { PasswordGameLevelDto(it.getLevelDescription(), it.doesAnswerLevel(password)) }
     }
 
+    @ExceptionHandler(NoSuchElementException::class)
+    fun handleNoSuchElementException(e: NoSuchElementException) = ResponseEntity<String>(HttpStatus.NOT_FOUND)
 }
