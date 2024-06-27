@@ -4,21 +4,15 @@ import biss.ctf.backend.objects.apiObjects.PasswordGameLevelDto
 import biss.ctf.backend.objects.apiObjects.UserCookieData
 import biss.ctf.backend.services.PasswordGameService
 import biss.ctf.backend.services.UserDataService
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.ControllerAdvice
-import org.springframework.web.bind.annotation.CookieValue
-import org.springframework.web.bind.annotation.ExceptionHandler
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
+@RequestMapping("/password-game")
 class PasswordGameController(
     private val passwordGameService: PasswordGameService,
     private val userDataService: UserDataService
 ) {
-    @GetMapping("/next_password_level")
+    @GetMapping("/next_level")
     fun getNextPasswordLevel(
         @RequestParam password: String,
         @CookieValue("user") userCookie: String
@@ -28,7 +22,7 @@ class PasswordGameController(
         return PasswordGameLevelDto(passwordGameService.getNextLevel(password).getLevelDescription(), false)
     }
 
-    @GetMapping("/password_levels/solve")
+    @GetMapping("/solve")
     fun getSolvePasswordLevel(
         @RequestParam password: String,
         @RequestParam levels: Int,
@@ -36,13 +30,33 @@ class PasswordGameController(
     ): List<PasswordGameLevelDto> {
         val cookieData = UserCookieData.fromEncryptedJson(userCookie)
         userDataService.assertIsLoggedIn(cookieData.uuid)
-        val levelsToCheck = passwordGameService.getAllLevels().subList(0, levels).toMutableList()
-        if(levelsToCheck.all{it.doesAnswerLevel(password)}) {
-            levelsToCheck +=  passwordGameService.getNextLevel(password)
+
+        if (levels > passwordGameService.getLevelCount()) {
+            throw IllegalArgumentException("Requested $levels levels, which exceeded levels available (${passwordGameService.getLevelCount()})")
         }
+
+        val levelsToCheck = passwordGameService.getAllLevels().subList(0, levels).toMutableList()
+        if (levelsToCheck.all { it.doesAnswerLevel(password) }) {
+            levelsToCheck += passwordGameService.getNextLevel(password)
+        }
+
         return levelsToCheck.map { PasswordGameLevelDto(it.getLevelDescription(), it.doesAnswerLevel(password)) }
     }
 
-    @ExceptionHandler(NoSuchElementException::class)
-    fun handleNoSuchElementException(e: NoSuchElementException) = ResponseEntity<String>(HttpStatus.NOT_FOUND)
+    @GetMapping("/does_solve_all")
+    fun checkIfSolvedAllLevels(@RequestParam password: String, @CookieValue("user") userCookie: String): Boolean {
+        val cookieData = UserCookieData.fromEncryptedJson(userCookie)
+        userDataService.assertIsLoggedIn(cookieData.uuid)
+
+        return passwordGameService.getAllLevels().all { it.doesAnswerLevel(password) }
+    }
+
+    @GetMapping("/remaining_levels")
+    fun getRemainingLevels(@RequestParam password: String, @CookieValue("user") userCookie: String): Int {
+        val cookieData = UserCookieData.fromEncryptedJson(userCookie)
+        userDataService.assertIsLoggedIn(cookieData.uuid)
+
+        return passwordGameService.getAllLevels().size - passwordGameService.getAllLevels()
+            .filter { !it.doesAnswerLevel(password) }.size
+    }
 }
