@@ -7,9 +7,7 @@ import org.springframework.stereotype.Service
 class PasswordGameService(
     private val passwordLevels: List<PasswordGameLevel>
 ) {
-    fun getAllLevels() = passwordLevels
-
-    fun getNextLevel(currentPassword: String) = getAllLevels().first { !it.doesAnswerLevel(currentPassword) }
+    fun getAllLevels(from: Int = 0, upTo: Int? = null) = passwordLevels.subList(from, upTo ?: passwordLevels.size)
 
     fun getLevelCount() = passwordLevels.size
 

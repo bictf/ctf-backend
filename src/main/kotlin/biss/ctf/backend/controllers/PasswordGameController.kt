@@ -4,7 +4,6 @@ import biss.ctf.backend.objects.apiObjects.PasswordGameLevelDto
 import biss.ctf.backend.objects.apiObjects.UserCookieData
 import biss.ctf.backend.services.PasswordGameService
 import biss.ctf.backend.services.UserDataService
-import biss.ctf.backend.services.passwordlevels.PasswordGameLevel
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -12,8 +11,6 @@ import org.springframework.web.bind.annotation.*
 class PasswordGameController(
     private val passwordGameService: PasswordGameService, private val userDataService: UserDataService
 ) {
-    private val allLevels: List<PasswordGameLevel>
-        get() = passwordGameService.getAllLevels()
 
     /**
      * This endpoint checks the requested number of levels, to see whether the password is correct for them.
@@ -30,18 +27,17 @@ class PasswordGameController(
         if (levels > passwordGameService.getLevelCount()) {
             throw IllegalArgumentException("Requested $levels levels, which exceeded levels available (${passwordGameService.getLevelCount()})")
         }
-        val levelsToCheck = allLevels
-            .subList(0, levels)
+        val levelsToCheck = passwordGameService.getAllLevels(upTo = levels)
             .map { PasswordGameLevelDto(it.getLevelDescription(), it.doesAnswerLevel(password)) }
             .toMutableList()
 
-        val firstIncorrectIndex = allLevels
-            .subList(levels, allLevels.size)
+        val firstIncorrectIndex = passwordGameService.getAllLevels(from = levels)
             .indexOfFirst { !it.doesAnswerLevel(password) }
 
         if (firstIncorrectIndex > levels) {
-            levelsToCheck.addAll(allLevels.subList(levels, firstIncorrectIndex + 1)
-                .map { PasswordGameLevelDto(it.getLevelDescription(), it.doesAnswerLevel(password)) })
+            levelsToCheck.addAll(
+                passwordGameService.getAllLevels(from = levels, upTo = firstIncorrectIndex + 1)
+                    .map { PasswordGameLevelDto(it.getLevelDescription(), it.doesAnswerLevel(password)) })
         }
 
         return levelsToCheck
@@ -55,6 +51,6 @@ class PasswordGameController(
         val cookieData = UserCookieData.fromEncryptedJson(userCookie)
         userDataService.assertIsLoggedIn(cookieData.uuid)
 
-        return allLevels.all { it.doesAnswerLevel(password) }
+        return passwordGameService.getAllLevels().all { it.doesAnswerLevel(password) }
     }
 }
