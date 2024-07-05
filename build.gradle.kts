@@ -1,5 +1,4 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     id("org.springframework.boot") version "3.0.0"
@@ -15,6 +14,10 @@ version = "LATEST"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
+}
+
+kotlin {
+    jvmToolchain(17)
 }
 
 repositories {
@@ -45,7 +48,6 @@ dependencies {
 tasks.compileKotlin {
     compilerOptions {
         freeCompilerArgs.add("-Xjsr305=strict")
-        jvmTarget = JvmTarget.JVM_17
     }
 }
 
