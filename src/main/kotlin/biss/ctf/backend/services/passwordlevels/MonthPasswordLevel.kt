@@ -15,7 +15,7 @@ class MonthPasswordLevel: PasswordGameLevel {
     }
 
     override fun getLevelHint(): String {
-        return "no hint."
+        return "may_I_have_some_help"
     }
 
     override fun doesAnswerLevel(password: String): Boolean {
