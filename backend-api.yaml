@@ -256,7 +256,7 @@ paths:
               schema:
                 $ref: #/components/schemas/SearchResponseToUser
 
-  /password_levels/solve:
+  /password_game/solve:
     get:
       parameters:
         - name: password
@@ -269,6 +269,11 @@ paths:
           in: query
           schema:
             type: integer
+        - name: user
+          required: true
+          in: cookie
+          schema:
+            type: string
       responses:
         200:
           description: OK
@@ -278,6 +283,27 @@ paths:
                 type: array
                 items:
                   $ref: #/components/schemas/PasswordGameLevel
+
+  /password_game/does_solve_all:
+    get:
+      parameters:
+        - name: password
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: user
+          required: true
+          in: cookie
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: boolean
 
 components:
   schemas:
