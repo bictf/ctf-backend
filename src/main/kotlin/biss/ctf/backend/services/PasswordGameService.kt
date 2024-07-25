@@ -7,15 +7,9 @@ import org.springframework.stereotype.Service
 class PasswordGameService(
     private val passwordLevels: List<PasswordGameLevel>
 ) {
-    private val userLevelMap = HashMap<String, List<PasswordGameLevel>>()
+    fun getAllLevels(from: Int = 0, upTo: Int? = null) = passwordLevels.subList(from, upTo ?: passwordLevels.size)
 
-    fun getUserLevels(uuid: String): List<PasswordGameLevel> {
-        return userLevelMap.computeIfAbsent(uuid) { _ -> passwordLevels.shuffled() }
-    }
-
-    fun getNextUserLevel(uuid: String, currentPassword: String): PasswordGameLevel? {
-        return runCatching {  getUserLevels(uuid).first { !it.doesAnswerLevel(currentPassword) } }.getOrNull()
-    }
+    fun getLevelCount() = passwordLevels.size
 
     // TODO implement game ending logic. **IMPORTANT** the above wil return null also if the answer is correct for all the levels.
 }

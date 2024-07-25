@@ -5,20 +5,20 @@ import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 
 @Component
-@Order(Ordered.HIGHEST_PRECEDENCE)
-class LengthPasswordLevel: PasswordGameLevel {
+@Order(Ordered.HIGHEST_PRECEDENCE + 4)
+class CoolestStateInAfricaPasswordLevel: PasswordGameLevel {
     companion object {
-        private const val MINIMUM_PASSWORD_LENGTH = 8
+        private const val STATE = "chad"
     }
     override fun getLevelDescription(): String {
-        return "Password must be at least $MINIMUM_PASSWORD_LENGTH characters long"
+        return "Password must include the coolest state in Africa"
     }
 
     override fun getLevelHint(): String {
-        return "Gg123456"
+        return "Who is cool?"
     }
 
     override fun doesAnswerLevel(password: String): Boolean {
-        return password.length >= MINIMUM_PASSWORD_LENGTH
+        return password.lowercase().contains(STATE)
     }
 }
