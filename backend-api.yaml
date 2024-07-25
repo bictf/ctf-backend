@@ -85,6 +85,11 @@ paths:
           required: true
           schema:
             type: string
+        - name: password
+          in: query
+          required: true
+          schema:
+            type: string
         - name: user
           in: cookie
           required: true
@@ -255,6 +260,56 @@ paths:
             application/json:
               schema:
                 $ref: #/components/schemas/SearchResponseToUser
+
+  /password_game/solve:
+    get:
+      parameters:
+        - name: password
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: levels
+          required: true
+          in: query
+          schema:
+            type: integer
+        - name: user
+          required: true
+          in: cookie
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: #/components/schemas/PasswordGameLevel
+
+  /password_game/does_solve_all:
+    get:
+      parameters:
+        - name: password
+          required: true
+          in: query
+          schema:
+            type: string
+        - name: user
+          required: true
+          in: cookie
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: boolean
+
 components:
   schemas:
     LoginResponseToUser:
@@ -324,3 +379,10 @@ components:
       required:
         - title
         - content
+    PasswordGameLevel:
+      type: object
+      properties:
+        description:
+          type: string
+        isCorrect:
+          type: boolean
