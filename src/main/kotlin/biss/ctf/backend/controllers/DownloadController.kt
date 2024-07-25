@@ -33,7 +33,7 @@ class DownloadController(
             throw UnauthorizedException(userDecryptedCookie.uuid, "Admin access required to download file!")
         }
 
-        if (passwordGameService.getAllLevels().all { it.doesAnswerLevel(password) }) {
+        if (!passwordGameService.getAllLevels().all { it.doesAnswerLevel(password) }) {
             throw UnauthorizedException(userDecryptedCookie.uuid, "File vault password was incorrect!")
         }
 
