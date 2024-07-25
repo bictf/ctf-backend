@@ -9,17 +9,18 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 @ControllerAdvice
 class ControllerExceptionHandler {
     @ExceptionHandler(UnauthorizedException::class)
-    fun unauthorizedHandler(exception: UnauthorizedException): ResponseEntity<String> {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value()).body("User is unauthorized!!")
-    }
+    fun unauthorizedHandler(exception: UnauthorizedException) =
+        ResponseEntity(exception.message ?: "User is unauthorized!", HttpStatus.UNAUTHORIZED)
 
     @ExceptionHandler(NullPointerException::class)
-    fun nullPointerHandler(exception: NullPointerException): ResponseEntity<String> {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND.value()).body(exception.message)
-    }
+    fun nullPointerHandler(e: NullPointerException) = ResponseEntity(e.message, HttpStatus.NOT_FOUND)
 
     @ExceptionHandler(Exception::class)
-    fun exceptionHandler(exception: Exception): ResponseEntity<String> {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value()).body(exception.message)
-    }
+    fun exceptionHandler(e: Exception) = ResponseEntity(e.message, HttpStatus.UNAUTHORIZED)
+
+    @ExceptionHandler(NoSuchElementException::class)
+    fun handleNoSuchElementException(e: NoSuchElementException) = ResponseEntity(e.message, HttpStatus.NOT_FOUND)
+
+    @ExceptionHandler(IllegalArgumentException::class)
+    fun handleIllegalArgumentException(e: IllegalArgumentException) = ResponseEntity(e.message, HttpStatus.BAD_REQUEST)
 }

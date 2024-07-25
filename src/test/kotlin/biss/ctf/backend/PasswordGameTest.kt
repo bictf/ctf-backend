@@ -11,7 +11,7 @@ import org.springframework.test.context.ActiveProfiles
 @ActiveProfiles(profiles = ["password-test"])
 class PasswordGameTest {
     companion object {
-        private const val MASTER_PASSWORD = "heartacheChad1234!8"
+        private const val MASTER_PASSWORD = "heartacheChadolga2palindRome34hufflepuff!May18COMETCORAL"
         private val logger = KotlinLogging.logger(PasswordGameTest::class.java.name)
     }
 
@@ -21,9 +21,9 @@ class PasswordGameTest {
 
     @Test
     fun `Given all password levels, A solution is available`() {
-        assert(levels.count {
+        levels.forEach {
             logger.info { "Testing '$MASTER_PASSWORD' for '${it::class.java.name}'" }
-            !it.doesAnswerLevel(MASTER_PASSWORD)
-        } == 0)
+            assert(it.doesAnswerLevel(MASTER_PASSWORD))
+        }
     }
 }
