@@ -29,7 +29,7 @@ class DownloadController(
         val userDecryptedCookie = UserCookieData.fromEncryptedJson(userCookie)
         userDataService.assertIsLoggedIn(userDecryptedCookie.uuid)
 
-        if (userDecryptedCookie.isAdmin) {
+        if (!userDecryptedCookie.isAdmin) {
             throw UnauthorizedException(userDecryptedCookie.uuid, "Admin access required to download file!")
         }
 
