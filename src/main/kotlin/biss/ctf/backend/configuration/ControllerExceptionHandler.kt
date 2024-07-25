@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 class ControllerExceptionHandler {
     @ExceptionHandler(UnauthorizedException::class)
     fun unauthorizedHandler(exception: UnauthorizedException) =
-        ResponseEntity("User is unauthorized!", HttpStatus.UNAUTHORIZED)
+        ResponseEntity(exception.message ?: "User is unauthorized!", HttpStatus.UNAUTHORIZED)
 
     @ExceptionHandler(NullPointerException::class)
     fun nullPointerHandler(e: NullPointerException) = ResponseEntity(e.message, HttpStatus.NOT_FOUND)
