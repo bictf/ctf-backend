@@ -1,5 +1,6 @@
 package biss.ctf.backend.controllers
 
+import biss.ctf.backend.exceptions.UnauthorizedException
 import biss.ctf.backend.objects.apiObjects.PasswordGameLevelDto
 import biss.ctf.backend.objects.apiObjects.UserCookieData
 import biss.ctf.backend.services.PasswordGameService
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/password_game")
 class PasswordGameController(
-    private val passwordGameService: PasswordGameService, private val userDataService: UserDataService
+        private val passwordGameService: PasswordGameService, private val userDataService: UserDataService
 ) {
 
     /**
@@ -19,25 +20,29 @@ class PasswordGameController(
      */
     @GetMapping("/solve")
     fun solvePasswordLevels(
-        @RequestParam password: String, @RequestParam levels: Int, @CookieValue("user") userCookie: String
+            @RequestParam password: String, @RequestParam levels: Int, @CookieValue("user") userCookie: String
     ): List<PasswordGameLevelDto> {
-        val cookieData = UserCookieData.fromEncryptedJson(userCookie)
-        userDataService.assertIsLoggedIn(cookieData.uuid)
+        val decryptedCookieData = UserCookieData.fromEncryptedJson(userCookie)
+        userDataService.assertIsLoggedIn(decryptedCookieData.uuid)
+
+        if (!decryptedCookieData.isAdmin) {
+            throw UnauthorizedException(decryptedCookieData.uuid, "Admin access required to play password game!")
+        }
 
         if (levels > passwordGameService.getLevelCount()) {
             throw IllegalArgumentException("Requested $levels levels, which exceeded levels available (${passwordGameService.getLevelCount()})")
         }
         val levelsToCheck = passwordGameService.getAllLevels(upTo = levels)
-            .map { PasswordGameLevelDto(it.getLevelDescription(), it.doesAnswerLevel(password)) }
-            .toMutableList()
+                .map { PasswordGameLevelDto(it.getLevelDescription(), it.doesAnswerLevel(password)) }
+                .toMutableList()
 
         val firstIncorrectIndex = passwordGameService.getAllLevels(from = levels)
-            .indexOfFirst { !it.doesAnswerLevel(password) }
+                .indexOfFirst { !it.doesAnswerLevel(password) }
 
         if (firstIncorrectIndex > levels) {
             levelsToCheck.addAll(
-                passwordGameService.getAllLevels(from = levels, upTo = firstIncorrectIndex + 1)
-                    .map { PasswordGameLevelDto(it.getLevelDescription(), it.doesAnswerLevel(password)) })
+                    passwordGameService.getAllLevels(from = levels, upTo = firstIncorrectIndex + 1)
+                            .map { PasswordGameLevelDto(it.getLevelDescription(), it.doesAnswerLevel(password)) })
         }
 
         return levelsToCheck
@@ -45,11 +50,14 @@ class PasswordGameController(
 
     @GetMapping("/does_solve_all")
     fun checkIfSolvedAllLevels(
-        @RequestParam password: String,
-        @CookieValue("user") userCookie: String
+            @RequestParam password: String,
+            @CookieValue("user") userCookie: String
     ): Boolean {
-        val cookieData = UserCookieData.fromEncryptedJson(userCookie)
-        userDataService.assertIsLoggedIn(cookieData.uuid)
+        val decryptedCookieData = UserCookieData.fromEncryptedJson(userCookie)
+        userDataService.assertIsLoggedIn(decryptedCookieData.uuid)
+        if (!decryptedCookieData.isAdmin) {
+            throw UnauthorizedException(decryptedCookieData.uuid, "Admin access required to play password game!")
+        }
 
         return passwordGameService.getAllLevels().all { it.doesAnswerLevel(password) }
     }
