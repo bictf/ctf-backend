@@ -26,7 +26,7 @@ class PasswordGameController(
         userDataService.assertIsLoggedIn(decryptedCookieData.uuid)
 
         if (!decryptedCookieData.isAdmin) {
-            throw UnauthorizedException(decryptedCookieData.uuid, "Admin access required to play password game!")
+            throw UnauthorizedException(decryptedCookieData.uuid, "Admin access required to restore password!")
         }
 
         if (levels > passwordGameService.getLevelCount()) {
