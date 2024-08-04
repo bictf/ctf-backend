@@ -30,6 +30,6 @@ class PalindromePasswordLevel: PasswordGameLevel {
 
 
     fun isAlphanumericPalindrome(s: String): Boolean {
-        return s == s.reversed() and !s.matches(Regex("^[a-zA-Z0-9]*$"))
+        return s == s.reversed() && !s.matches(Regex("^[a-zA-Z0-9]*$"))
     }
 }
