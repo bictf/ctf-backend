@@ -5,7 +5,7 @@ import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
 
 @Component
-@Order(Ordered.HIGHEST_PRECEDENCE + 7)
+@Order(Ordered.LOWEST_PRECEDENCE)
 class PalindromePasswordLevel: PasswordGameLevel {
     override fun getLevelDescription(): String {
         return "Password must not contain any sequence that is a palindrome of length 3 or more."
