@@ -9,7 +9,7 @@ class PalindromePasswordLevel: PasswordGameLevel {
     }
 
     override fun getLevelHint(): String {
-        return "abcd1234"
+        return "aabb1234"
     }
 
     override fun doesAnswerLevel(password: String): Boolean {
