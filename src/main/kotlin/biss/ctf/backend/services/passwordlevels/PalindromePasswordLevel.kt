@@ -1,8 +1,11 @@
 package biss.ctf.backend.services.passwordlevels
 
 import org.springframework.stereotype.Component
+import org.springframework.core.Ordered
+import org.springframework.core.annotation.Order
 
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE + 7)
 class PalindromePasswordLevel: PasswordGameLevel {
     override fun getLevelDescription(): String {
         return "Password must not contain any sequence that is a palindrome of length 3 or more."
