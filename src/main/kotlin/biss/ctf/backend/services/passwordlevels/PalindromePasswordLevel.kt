@@ -19,7 +19,7 @@ class PalindromePasswordLevel: PasswordGameLevel {
         for (start in 0 until (length - 3)) {
             for (end in (start + 3) until length) {
                 val substring = password.substring(start, end)
-                if (isPalindrome(substring)) {
+                if (isAlphanumericPalindrome(substring)) {
                     return false
                 }
             }
@@ -29,7 +29,7 @@ class PalindromePasswordLevel: PasswordGameLevel {
     }
 
 
-    fun isPalindrome(s: String): Boolean {
-        return s == s.reversed()
+    fun isAlphanumericPalindrome(s: String): Boolean {
+        return s == s.reversed() and !s.matches(Regex("^[a-zA-Z0-9]*$"))
     }
 }
