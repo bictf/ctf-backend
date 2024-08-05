@@ -11,7 +11,7 @@ import org.springframework.test.context.ActiveProfiles
 @ActiveProfiles(profiles = ["password-test"])
 class PasswordGameTest {
     companion object {
-        private const val MASTER_PASSWORD = "12394heartacheChadolga3palindRome338hufflepuff!May18COMETCORALrtcClg3inm!yETAL33"
+        private const val MASTER_PASSWORD = "123942394heartacheChadolga3palindRome338hufflepuff!May18COMETCORALrtcClg3inm!yETAL33"
         private val logger = KotlinLogging.logger(PasswordGameTest::class.java.name)
     }
 
