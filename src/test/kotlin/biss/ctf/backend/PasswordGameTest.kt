@@ -12,7 +12,7 @@ import org.springframework.test.context.ActiveProfiles
 class PasswordGameTest {
     companion object {
         private const val MASTER_PASSWORD =
-            "c💪🏿1heartache⭐⭐⭐⭐⭐olgaChadpalindRome338hufflepuff!⭐May18COMETCORALrtcClg3inm!💪🏿y00ETALc33elmoelmo3"
+            "cLi1heartacheLi⭐⭐⭐⭐⭐Chadolga3palindRomeCa338CahufflepuffSn!Sn⭐May18COMETCORALrtcClg3inm!yFmETALFm33"
         private val logger = KotlinLogging.logger(PasswordGameTest::class.java.name)
     }
 
