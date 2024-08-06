@@ -1,8 +1,8 @@
 package biss.ctf.backend.services.passwordlevels
 
-import org.springframework.stereotype.Component
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
+import org.springframework.stereotype.Component
 
 @Component
 @Order(Ordered.LOWEST_PRECEDENCE)
@@ -33,6 +33,6 @@ class PalindromePasswordLevel: PasswordGameLevel {
 
 
     fun isAlphanumericPalindrome(s: String): Boolean {
-        return s == s.reversed() && !s.matches(Regex("^[a-zA-Z0-9]*$"))
+        return s == s.reversed() && s.matches(Regex("^[a-zA-Z0-9]*$"))
     }
 }
