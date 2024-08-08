@@ -1,6 +1,6 @@
 package biss.ctf.backend.entities
 
 data class CompilationResponse(
-    val doesCompile: Boolean,
-    val errorMessage: String
+    val isValid: Boolean,
+    val output: String
 )
