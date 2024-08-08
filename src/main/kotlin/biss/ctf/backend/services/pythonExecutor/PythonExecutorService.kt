@@ -1,8 +1,7 @@
 package biss.ctf.backend.services.pythonExecutor
 
 import biss.ctf.backend.entities.CompilationResponse
-import org.springframework.core.Ordered
-import org.springframework.core.annotation.Order
+import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 
@@ -13,7 +12,7 @@ import org.springframework.web.reactive.function.client.WebClient
  * @property webClient WebClient instance for making HTTP requests to the Python executor service.
  */
 @Service
-@Order(Ordered.LOWEST_PRECEDENCE)
+@Profile("!password-test")
 class PythonExecutorService(
     private val webClient: WebClient
 ) {
