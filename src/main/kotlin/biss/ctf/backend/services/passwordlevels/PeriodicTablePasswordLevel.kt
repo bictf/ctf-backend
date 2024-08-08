@@ -21,7 +21,6 @@ class PeriodicTablePasswordLevel : PasswordGameLevel {
                 sum += atomicNumber
             }
         }
-        println("++++++++++++++++++++++++++++++++++++++$sum")
         return sum == SUM_OF_ATOMIC_ELEMENTS
     }
 
