@@ -5,16 +5,7 @@ import org.springframework.stereotype.Component
 @Component
 class HexMirrorPasswordLevel : PasswordGameLevel {
     companion object {
-        private val MIRROR_PAIRS = mapOf(
-            '0' to 'f', 'f' to '0',
-            '1' to 'e', 'e' to '1',
-            '2' to 'd', 'd' to '2',
-            '3' to 'c', 'c' to '3',
-            '4' to 'b', 'b' to '4',
-            '5' to 'a', 'a' to '5',
-            '6' to '9', '9' to '6',
-            '7' to '8', '8' to '7'
-        )
+        const val HEX_BASE = 16
     }
 
     override fun getLevelDescription(): String {
@@ -27,8 +18,16 @@ class HexMirrorPasswordLevel : PasswordGameLevel {
 
     override fun doesAnswerLevel(password: String): Boolean {
         if (password.isEmpty()) return false
+
         val firstChar = password.first().lowercaseChar()
         val lastChar = password.last().lowercaseChar()
-        return MIRROR_PAIRS[firstChar] == lastChar
+
+        return firstChar.getMirrorInBase(HEX_BASE) == lastChar
+    }
+
+    fun Char.getMirrorInBase(base: Int = 10): Char {
+        val base10Value = this.digitToInt(base)
+        val mirrorValue = (base - 1) - base10Value
+        return mirrorValue.digitToChar(base)
     }
 }
