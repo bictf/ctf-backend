@@ -3,7 +3,7 @@ package biss.ctf.backend.services.passwordlevels
 import org.springframework.stereotype.Component
 
 @Component
-class LeapYearPasswordLevel: PasswordGameLevel {
+class LeapYearPasswordLevel : PasswordGameLevel {
     override fun getLevelDescription(): String {
         return "Password must include the a leap year"
     }
@@ -13,19 +13,17 @@ class LeapYearPasswordLevel: PasswordGameLevel {
     }
 
     override fun doesAnswerLevel(password: String): Boolean {
-        for (start in 0 until (password.length - 1)) {
-            for (end in (start + 1) until password.length) {
-                val potentialYear = password.substring(start, end).toIntOrNull()
-                if (isLeapYear(potentialYear)) {
-                    return false
-                }
-            }
-        }
+        return getNumberSequences(password).any{isLeapYear(it.toInt())}
+    }
 
-        return true
+    fun getNumberSequences(text: String): List<String> {
+        val getNumberSequencesPattern = "\\d+"
+
+        return Regex(getNumberSequencesPattern).findAll(text).map {it.value}.toList()
+    }
+
+    fun isLeapYear(year: Int): Boolean {
+        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
     }
 }
 
-fun isLeapYear(year: Int): Boolean {
-    return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
-}
