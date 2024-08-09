@@ -10,7 +10,7 @@ class StaffHeightPasswordLevel : PasswordGameLevel {
     }
 
     override fun getLevelDescription(): String {
-        return "Password must include the sum of heights of the Lahav commanders (not including Ramagim and Makas)."
+        return "Password must include the sum of heights of the Lahav commanders (not including Ramagim and Makas) in cm."
     }
 
     override fun getLevelHint(): String {
@@ -18,6 +18,16 @@ class StaffHeightPasswordLevel : PasswordGameLevel {
     }
 
     override fun doesAnswerLevel(password: String): Boolean {
-        return password.contains(STAFF_TOTAL_HEIGHT)
+        val numberSequences = getNumberSequences(password)
+
+        return numberSequences.reduce { x, y ->
+            x + y
+        } in (STAFF_TOTAL_HEIGHT_IN_CM - ALLOWED_ERROR_MARGIN_IN_CM)..(STAFF_TOTAL_HEIGHT_IN_CM + ALLOWED_ERROR_MARGIN_IN_CM)
+    }
+
+    fun getNumberSequences(text: String): List<Int> {
+        val getNumberSequencesPattern = "\\d+"
+
+        return Regex(getNumberSequencesPattern).findAll(text).map { it.value.toInt() }.toList()
     }
 }
