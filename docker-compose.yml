@@ -17,6 +17,8 @@ services:
 #    Enable this for backend
 #    ports:
 #      - "8080:8080"
+    depends_on:
+      - python-executor
   biss-ctf-front:
     build:
       context: ../ctf-front
@@ -26,6 +28,13 @@ services:
 #    Enable this for frontend
     ports:
       - "80:80"
+    depends_on:
+      - biss-ctf-back
+  python-executor:
+    image: python-runner
+  #    Enable this for testing the python server
+  #    ports:
+  #      - "8000:8000"
 
 # --- DB STUFF HERE ###
   db:
