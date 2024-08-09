@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component
 class WebsiteRatingPasswordLevel : PasswordGameLevel {
     companion object {
         const val FIVE_STAR_RATING: String = "⭐⭐⭐⭐⭐"
+        const val FUCKED_UP_FIVE_STAR_RATING: String = "⭐\uFE0F⭐\uFE0F⭐\uFE0F⭐\uFE0F⭐\uFE0F"
     }
 
     override fun getLevelDescription(): String {
@@ -17,6 +18,6 @@ class WebsiteRatingPasswordLevel : PasswordGameLevel {
     }
 
     override fun doesAnswerLevel(password: String): Boolean {
-        return password.contains(FIVE_STAR_RATING)
+        return password.contains(FIVE_STAR_RATING) || password.contains(FUCKED_UP_FIVE_STAR_RATING)
     }
 }

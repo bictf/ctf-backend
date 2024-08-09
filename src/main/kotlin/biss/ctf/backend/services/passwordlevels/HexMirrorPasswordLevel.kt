@@ -22,10 +22,16 @@ class HexMirrorPasswordLevel : PasswordGameLevel {
         val firstChar = password.first().lowercaseChar()
         val lastChar = password.last().lowercaseChar()
 
-        return firstChar.getMirrorInBase(HEX_BASE) == lastChar
+        return try {
+            firstChar.getMirrorInBase(HEX_BASE) == lastChar
+        } catch (e: Exception) {
+            // Happens when the character is not legal for this base
+            false
+        }
+        
     }
 
-    fun Char.getMirrorInBase(base: Int = 10): Char {
+    fun Char.getMirrorInBase(base: Int = 10): Char? {
         val base10Value = this.digitToInt(base)
         val mirrorValue = (base - 1) - base10Value
         return mirrorValue.digitToChar(base)
