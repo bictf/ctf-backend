@@ -7,6 +7,7 @@ import io.mockk.mockk
 import io.mockk.slot
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString
 import kotlin.io.path.writeText
