@@ -32,6 +32,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
     implementation("org.springframework.session:spring-session-jdbc")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("io.github.microutils:kotlin-logging-jvm:2.0.11")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.0-RC")
@@ -40,6 +41,7 @@ dependencies {
     runtimeOnly("com.h2database:h2")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("io.mockk:mockk:1.9.3")
 }
 
 tasks.compileKotlin {
