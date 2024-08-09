@@ -1,11 +1,13 @@
 package biss.ctf.backend.controllers
 
 import biss.ctf.backend.exceptions.UnauthorizedException
-import biss.ctf.backend.objects.apiObjects.UserCookieData
+import biss.ctf.backend.objects.apiObjects.SecretUserCookie
 import biss.ctf.backend.services.IntelligenceService
 import biss.ctf.backend.services.PasswordGameService
 import biss.ctf.backend.services.UserDataService
 import jakarta.servlet.http.HttpServletResponse
+import kotlinx.serialization.SerializationException
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -17,7 +19,8 @@ import java.io.FileNotFoundException
 class DownloadController(
     val intelligenceService: IntelligenceService,
     val userDataService: UserDataService,
-    val passwordGameService: PasswordGameService
+    val passwordGameService: PasswordGameService,
+    @Value("\${secret_cookie_value:}") val secretCookieFieldValue: String
 ) {
     @GetMapping
     fun downloadBinaryFile(
@@ -26,7 +29,16 @@ class DownloadController(
         @RequestParam password: String,
         response: HttpServletResponse
     ): ResponseEntity<ByteArray> {
-        val userDecryptedCookie = UserCookieData.fromEncryptedJson(userCookie)
+        val userDecryptedCookie: SecretUserCookie = try {
+            SecretUserCookie.fromEncryptedJson(userCookie)
+        } catch (serializationException: SerializationException) {
+            if ("secret" in serializationException.message!!) {
+                throw Exception("Missing secret Field In Cookie")
+            } else {
+                throw serializationException
+            }
+        }
+
         userDataService.assertIsLoggedIn(userDecryptedCookie.uuid)
 
         if (!userDecryptedCookie.isAdmin) {
@@ -37,8 +49,11 @@ class DownloadController(
             throw UnauthorizedException(userDecryptedCookie.uuid, "File vault password was incorrect!")
         }
 
-        val file = intelligenceService.findBinaryFileByName(fileName)
+        if (secretCookieFieldValue != userDecryptedCookie.secret) {
+            throw Exception("Secret cookie field is incorrect!")
+        }
 
+        val file = intelligenceService.findBinaryFileByName(fileName)
         response.status = HttpServletResponse.SC_OK
         response.addHeader("Content-Disposition", "attachment; filename=\"TobSecretFile.zib\"")
 
