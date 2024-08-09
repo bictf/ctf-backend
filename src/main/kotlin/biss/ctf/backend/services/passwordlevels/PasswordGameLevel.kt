@@ -1,6 +1,6 @@
 package biss.ctf.backend.services.passwordlevels
 
-interface PasswordGameLevel {
+sealed interface PasswordGameLevel {
     /**
      * The description of the level.
      * Used when explaining to the user what the requirement for the password is.

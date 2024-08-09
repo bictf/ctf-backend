@@ -1,6 +1,10 @@
 intelligence.root_folder=[PROJECT_ABSOLUTE_PATH]/src/main/resources/intelligence
 binaries.root_folder=[PROJECT_ABSOLUTE_PATH]/src/main/resources/loot
 
+python-executor.route=[PYTHON_EXECUTOR_ROUTE]
+python-executor.endpoints.compile=/compile
+python-executor.endpoints.execute=/execute
+
 # --- Captcha Settings ---
 captcha.init.should_skip=false
 
