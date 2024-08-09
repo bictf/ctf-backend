@@ -20,9 +20,9 @@ class StaffHeightPasswordLevel : PasswordGameLevel {
     override fun doesAnswerLevel(password: String): Boolean {
         val numberSequences = getNumberSequences(password)
 
-        return numberSequences.reduce { x, y ->
-            x + y
-        } in (STAFF_TOTAL_HEIGHT_IN_CM - ALLOWED_ERROR_MARGIN_IN_CM)..(STAFF_TOTAL_HEIGHT_IN_CM + ALLOWED_ERROR_MARGIN_IN_CM)
+        return numberSequences.any {
+            it in (STAFF_TOTAL_HEIGHT_IN_CM - ALLOWED_ERROR_MARGIN_IN_CM)..(STAFF_TOTAL_HEIGHT_IN_CM + ALLOWED_ERROR_MARGIN_IN_CM)
+        }
     }
 
     fun getNumberSequences(text: String): List<Int> {
