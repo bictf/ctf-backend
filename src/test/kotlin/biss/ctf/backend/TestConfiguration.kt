@@ -11,6 +11,7 @@ import java.nio.file.Path
 import kotlin.io.path.absolutePathString
 import kotlin.io.path.writeText
 
+@Profile("password-test")
 @Configuration
 class TestConfiguration {
     @Bean
