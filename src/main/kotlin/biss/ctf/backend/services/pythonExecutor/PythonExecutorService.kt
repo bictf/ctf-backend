@@ -61,5 +61,6 @@ class PythonExecutorService(
             .retrieve()
             .bodyToMono(String::class.java)
             .block()
+            .takeIf { it?.isNotBlank() ?: false }
     }
 }

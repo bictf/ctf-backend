@@ -31,7 +31,7 @@ services:
     depends_on:
       - biss-ctf-back
   python-executor:
-    image: python-runner
+    image: python-executor
   #    Enable this for testing the python server
   #    ports:
   #      - "8000:8000"

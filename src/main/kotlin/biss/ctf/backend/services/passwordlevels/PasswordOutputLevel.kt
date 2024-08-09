@@ -7,14 +7,17 @@ import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 
 @Component
-@Order(Ordered.LOWEST_PRECEDENCE - 1)
-class CompilationPasswordLevel(val pythonExecutorService: PythonExecutorService) : ReactivePasswordLevel() {
+@Order(Ordered.LOWEST_PRECEDENCE)
+class PasswordOutputLevel(
+    val pythonExecutorService: PythonExecutorService
+) : ReactivePasswordLevel() {
     override fun execute(password: String): PasswordGameLevelDto? {
-        return pythonExecutorService.doesCodeCompile(password)
-            ?.let { PasswordGameLevelDto(it.output.ifEmpty { "exit code: 0" }, it.isValid) }
+        return pythonExecutorService.executeCode(password)?.let {
+            PasswordGameLevelDto(it, true)
+        } ?: PasswordGameLevelDto(getLevelHint(), false)
     }
 
     override fun getLevelHint(): String {
-        return "The programming language is a fan of Maccabi"
+        return "Check this folder!"
     }
 }
