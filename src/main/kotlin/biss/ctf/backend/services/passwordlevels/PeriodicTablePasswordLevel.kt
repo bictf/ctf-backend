@@ -1,8 +1,11 @@
 package biss.ctf.backend.services.passwordlevels
 
+import org.springframework.core.Ordered
+import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE + 12)
 class PeriodicTablePasswordLevel : PasswordGameLevel {
     override fun getLevelDescription(): String {
         return "It's chemistry o'clock! Elements in password must add up to $SUM_OF_ATOMIC_ELEMENTS..."

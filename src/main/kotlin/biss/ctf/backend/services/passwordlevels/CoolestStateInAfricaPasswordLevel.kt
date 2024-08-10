@@ -5,7 +5,7 @@ import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 
 @Component
-@Order(Ordered.HIGHEST_PRECEDENCE + 4)
+@Order(Ordered.HIGHEST_PRECEDENCE + 6)
 class CoolestStateInAfricaPasswordLevel: PasswordGameLevel {
     companion object {
         private const val STATE = "chad"

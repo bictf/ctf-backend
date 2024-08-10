@@ -1,8 +1,11 @@
 package biss.ctf.backend.services.passwordlevels
 
+import org.springframework.core.Ordered
+import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE + 14)
 class ShlubPasswordLevel: PasswordGameLevel {
     override fun getLevelDescription(): String {
         return "Password must include the gematric value of the word SHLUB"

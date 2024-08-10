@@ -1,8 +1,11 @@
 package biss.ctf.backend.services.passwordlevels
 
+import org.springframework.core.Ordered
+import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE + 16)
 class EvenAmountOfEveryCharPasswordLevel : PasswordGameLevel {
     override fun getLevelDescription(): String {
         return "Password must have an even amount of every character used."

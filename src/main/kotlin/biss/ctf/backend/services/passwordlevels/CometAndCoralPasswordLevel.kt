@@ -1,12 +1,15 @@
 package biss.ctf.backend.services.passwordlevels
 
+import org.springframework.core.Ordered
+import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 
 @Component
-class CometAndKoralPasswordLevel: PasswordGameLevel {
+@Order(Ordered.HIGHEST_PRECEDENCE + 4)
+class CometAndCoralPasswordLevel: PasswordGameLevel {
     companion object {
-        private const val COMET = "comet";
-        private const val CORAL = "coral";
+        private const val COMET = "comet"
+        private const val CORAL = "coral"
     }
     override fun getLevelDescription(): String {
         return "Password must contain the names of the website creators."

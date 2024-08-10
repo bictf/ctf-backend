@@ -1,8 +1,11 @@
 package biss.ctf.backend.services.passwordlevels
 
+import org.springframework.core.Ordered
+import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE + 17)
 class LeapYearPasswordLevel : PasswordGameLevel {
     override fun getLevelDescription(): String {
         return "Password must include the a leap year"

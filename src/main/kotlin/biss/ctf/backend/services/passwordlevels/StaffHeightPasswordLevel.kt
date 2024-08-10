@@ -1,8 +1,11 @@
 package biss.ctf.backend.services.passwordlevels
 
+import org.springframework.core.Ordered
+import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 
 @Component
+@Order(Ordered.HIGHEST_PRECEDENCE + 21)
 class StaffHeightPasswordLevel : PasswordGameLevel {
     companion object {
         private const val STAFF_TOTAL_HEIGHT_IN_CM = 1906
