@@ -11,9 +11,13 @@ import org.springframework.stereotype.Component
 class PasswordOutputLevel(
     val pythonExecutorService: PythonExecutorService
 ) : ReactivePasswordLevel() {
+    companion object {
+        private const val DESIRED_OUTPUT = "Sozin"
+    }
+
     override fun execute(password: String): PasswordGameLevelDto? {
         return pythonExecutorService.executeCode(password)?.let {
-            PasswordGameLevelDto(it, true)
+            PasswordGameLevelDto(it, it == DESIRED_OUTPUT)
         } ?: PasswordGameLevelDto(getLevelHint(), false)
     }
 
