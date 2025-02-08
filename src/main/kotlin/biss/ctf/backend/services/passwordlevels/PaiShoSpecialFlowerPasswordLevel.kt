@@ -6,12 +6,13 @@ import org.springframework.stereotype.Component
 
 @Order(Ordered.HIGHEST_PRECEDENCE + 3)
 @Component
-class BestHouseInHogwartsPasswordLevel: PasswordGameLevel {
+class PaiShoSpecialFlowerPasswordLevel: PasswordGameLevel {
     companion object {
-        private const val HOUSE = "hufflepuff"
+        private const val WHITE_LOTUS = "whitelotus"
+        private const val ORCHID = "orchid"
     }
     override fun getLevelDescription(): String {
-        return "Password must include the best house in Hogwarts."
+        return "Password must include the name of a special flower in the game of Pai Sho"
     }
 
     override fun getLevelHint(): String {
@@ -19,6 +20,6 @@ class BestHouseInHogwartsPasswordLevel: PasswordGameLevel {
     }
 
     override fun doesAnswerLevel(password: String): Boolean {
-        return password.lowercase().contains(HOUSE)
+        return password.lowercase().contains(WHITE_LOTUS) || password.lowercase().contains(ORCHID)
     }
 }
