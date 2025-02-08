@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 @Order(Ordered.HIGHEST_PRECEDENCE + 8)
 class IncludeCourseNumberPasswordLevel: PasswordGameLevel {
     companion object {
-        private const val COURSE_NUM = "18"
+        private const val COURSE_NUM = "19"
     }
     override fun getLevelDescription(): String {
         return "Password must include the biss number"
