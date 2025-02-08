@@ -4,6 +4,9 @@ import biss.ctf.backend.entities.CompilationResponse
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.util.UriComponentsBuilder
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 /**
  * Service class responsible for interacting with the Python code executor service.
@@ -52,11 +55,14 @@ class PythonExecutorService(
     fun executeCode(
         code: String
     ): String? {
+        val urlEncodedCode = URLEncoder.encode(code, StandardCharsets.UTF_8.toString())
         return webClient.get()
             .uri { uriBuilder ->
-                uriBuilder.path(EXECUTION_ENDPOINT)
-                    .queryParam("code", code)
-                    .build()
+                UriComponentsBuilder.fromUri(uriBuilder.build())
+                    .path(EXECUTION_ENDPOINT)
+                    .queryParam("code", urlEncodedCode)
+                    .build(true)
+                    .toUri()
             }
             .retrieve()
             .bodyToMono(String::class.java)
