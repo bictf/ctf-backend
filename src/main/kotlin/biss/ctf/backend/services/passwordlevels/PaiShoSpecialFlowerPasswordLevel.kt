@@ -16,7 +16,7 @@ class PaiShoSpecialFlowerPasswordLevel: PasswordGameLevel {
     }
 
     override fun getLevelHint(): String {
-        return "Who's the real best? the real real you know."
+        return ""
     }
 
     override fun doesAnswerLevel(password: String): Boolean {
