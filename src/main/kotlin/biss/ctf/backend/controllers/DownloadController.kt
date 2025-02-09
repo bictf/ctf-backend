@@ -33,7 +33,7 @@ class DownloadController(
             SecretUserCookie.fromEncryptedJson(userCookie)
         } catch (serializationException: SerializationException) {
             if ("secret" in serializationException.message!!) {
-                throw Exception("Missing secret Field In Cookie")
+                throw Exception("Missing secret Field In Cookie. Good Thing The Zionists Will Never Find It, I Keep It On My Bersonal Computer!")
             } else {
                 throw serializationException
             }
