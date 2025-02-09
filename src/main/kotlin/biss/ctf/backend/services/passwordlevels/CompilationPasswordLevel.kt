@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component
 class CompilationPasswordLevel(val pythonExecutorService: PythonExecutorService) : ReactivePasswordLevel() {
     override fun execute(password: String): PasswordGameLevelDto? {
         return pythonExecutorService.doesCodeCompile(password)
-            ?.let { PasswordGameLevelDto(it.output.ifEmpty { "exit code: 0" }, it.isValid) }
+            ?.let { PasswordGameLevelDto(if (it.isValid) "" else it.output, it.isValid) }
     }
 
     override fun getLevelHint(): String {
