@@ -21,61 +21,43 @@ class TestConfiguration {
         val mock = mockk<PythonExecutorService>()
         val codeFile = kotlin.io.path.createTempFile()
         val osName = System.getProperty("os.name").lowercase()
-        if ("windows" in osName) {
-            every { mock.executeCode(capture(slot)) } answers {
-                val (_, msg) = runWindowsPython(codeFile, slot.captured)
-                msg
-            }
-            every { mock.doesCodeCompile(capture(slot)) } answers {
-                val (wasSuccessful, msg) = runWindowsPython(codeFile, slot.captured)
-                CompilationResponse(wasSuccessful, msg)
-            }
-        } else {
-            every { mock.executeCode(capture(slot)) } answers {
-                val (_, msg) = runNixPython(codeFile, slot.captured)
-                msg
-            }
-            every { mock.doesCodeCompile(capture(slot)) } answers {
-                val (wasSuccessful, msg) = runNixPython(codeFile, slot.captured)
-                CompilationResponse(wasSuccessful, msg)
-            }
+
+        val runPython = if ("windows" in osName) ::runWindowsPythonWithUTF8 else ::runNixPythonWithUTF8
+
+        every { mock.executeCode(capture(slot)) } answers {
+            val (_, msg) = runPython(codeFile, slot.captured)
+            msg
         }
+        every { mock.doesCodeCompile(capture(slot)) } answers {
+            val (wasSuccessful, msg) = runPython(codeFile, slot.captured)
+            CompilationResponse(wasSuccessful, msg)
+        }
+
         return mock
     }
 
-    private fun runNixPython(codeFile: Path, code: String): Pair<Boolean, String> {
-        return codeFile.writeText(code).run {
-            val proc = nixProcessBuilder(codeFile).start()
-            proc.waitFor()
-            if (proc.exitValue() == 0) {
-                Pair(true, proc.inputStream.reader().readText())
-            } else {
-                Pair(
-                    false, proc.errorStream.reader()
-                        .readText()
-                )
-            }
-        }
+    private fun runWindowsPythonWithUTF8(codeFile: Path, code: String): Pair<Boolean, String> {
+        return executePython(codeFile, code, listOf("python"))
     }
 
-    private fun runWindowsPython(codeFile: Path, code: String): Pair<Boolean, String> {
-        return codeFile.writeText(code).run {
-            val proc = windowsProcessBuilder(codeFile).start()
-            proc.waitFor()
-            if (proc.exitValue() == 0) {
-                Pair(true, proc.inputStream.reader().readText())
-            } else {
-                Pair(
-                    false, proc.errorStream.reader()
-                        .readText()
-                )
-            }
-        }
+    private fun runNixPythonWithUTF8(codeFile: Path, code: String): Pair<Boolean, String> {
+        return executePython(codeFile, code, listOf("python3"))
     }
 
-    private fun windowsProcessBuilder(codeFile: Path): ProcessBuilder =
-        ProcessBuilder().command("python", codeFile.absolutePathString())
+    private fun executePython(codeFile: Path, code: String, command: List<String>): Pair<Boolean, String> {
+        codeFile.writeText(code, Charsets.UTF_8)
 
-    private fun nixProcessBuilder(codeFile: Path): ProcessBuilder =
-        ProcessBuilder().command("python3", codeFile.absolutePathString())
+        val processBuilder = ProcessBuilder(command + codeFile.absolutePathString())
+            .redirectErrorStream(true)
+
+        // 🔹 Set environment variable PYTHONUTF8=1 properly
+        processBuilder.environment()["PYTHONUTF8"] = "1"
+
+        val process = processBuilder.start()
+        val output = process.inputStream.bufferedReader(Charsets.UTF_8).readText()
+        val exitCode = process.waitFor()
+
+        return Pair(exitCode == 0, output)
+    }
+
 }
