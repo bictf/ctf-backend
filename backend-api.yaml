@@ -313,25 +313,74 @@ paths:
 components:
   schemas:
     LoginResponseToUser:
-      tags:
-        - login response to user
       type: object
       properties:
         success:
           type: boolean
-        passwordDiff:
-          type: array
-          items: number
         cookie:
           type: string
+        loginType:
+          $ref: '#/components/schemas/LoginCTFStage'
+        passwordData:
+          oneOf:
+            - $ref: '#/components/schemas/WordleResponseData'
+          discriminator:
+            propertyName: loginType
+            mapping:
+              LOGIN_WORDLE: '#/components/schemas/WordleResponseData'
+      required:
+        - cookie
+        - success
+        - loginType
+        - passwordData
+
+    CTFStage:
+      type: string
+      enum:
+        - LOGIN_WORDLE
+        - LOGIN_SIGNAL_GRAPH
+        - GOOLOOG
+        - PASSWORD_GAME
+        - END_OF_CTF
+      description: |
+        Full list of CTF stages in the game.
+
+    LoginCTFStage:
+      allOf:
+        - $ref: '#/components/schemas/CTFStage'
+      enum:
+        - LOGIN_WORDLE
+        - LOGIN_SIGNAL_GRAPH
+      description: |
+        Subset of CTF stages used for login-related challenges only.
+
+    WordleResponseData:
+      type: object
+      required:
+        - diff
+        - time
+      properties:
+        diff:
+          type: array
+          items:
+            $ref: '#/components/schemas/WordleCharState'
         time:
           type: integer
           format: int64
-      required:
-        - passwordDiff
-        - cookie
-        - success
-        - time
+          description: Minutes until password reset
+
+    WordleCharState:
+      type: integer
+      format: int32
+      enum:
+        - 0
+        - 1
+        - 2
+      description: |
+        Numeric representation of character state:
+        - `0`: IncorrectChar
+        - `1`: CorrectCharWrongPlace
+        - `2`: CorrectCharCorrectPlace
 
     ChoiceQuestionData:
       tags:

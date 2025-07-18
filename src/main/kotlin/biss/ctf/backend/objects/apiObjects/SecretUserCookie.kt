@@ -5,11 +5,13 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 
+//TODO(98) - merge this and [UserCookieData]
 @Serializable
 class SecretUserCookie(
     val uuid: String,
     val isAdmin: Boolean,
     val username: String,
+    val profession: String,
     val secret: String
 ) {
     companion object {

@@ -1,5 +1,6 @@
 package biss.ctf.backend.objects.apiObjects
 
+import biss.ctf.backend.objects.apiObjects.Megama
 import biss.ctf.backend.utils.EncryptUtils
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
@@ -10,6 +11,7 @@ class UserCookieData(
     val uuid: String,
     val isAdmin: Boolean,
     val username: String,
+    val profession: Megama
 ) {
     companion object {
         fun fromEncryptedJson(encryptedCookie: String) =

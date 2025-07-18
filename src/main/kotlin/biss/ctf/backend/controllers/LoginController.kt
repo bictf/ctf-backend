@@ -1,8 +1,10 @@
 package biss.ctf.backend.controllers
 
+import biss.ctf.backend.configuration.LoginConfiguration
 import biss.ctf.backend.objects.apiObjects.UserCookieData
 import biss.ctf.backend.objects.apiObjects.toUser.LoginResponseToUser
 import biss.ctf.backend.services.UserDataService
+import biss.ctf.backend.services.login.LoginPasswordServiceFactory
 import biss.ctf.backend.utils.PasswordUtils
 import mu.KotlinLogging
 import org.springframework.http.HttpStatus
@@ -14,25 +16,14 @@ import kotlin.concurrent.schedule
 
 @RestController
 @RequestMapping("/login")
+//TODO(98) - not SRP, split logic to service(s)
 class LoginController(
     val userDataService: UserDataService,
+    val loginConfiguration: LoginConfiguration,
+    val loginPasswordServiceFactory: LoginPasswordServiceFactory
 ) {
     companion object {
         private val logger = KotlinLogging.logger(LoginController::class.java.name)
-        private const val MINUTES_TO_RESET_PASSWORD: Long = 1
-        private const val SECONDS_TO_RESET_PASSWORD: Long = MINUTES_TO_RESET_PASSWORD * 60
-        private const val MILLISECONDS_TO_RESET_PASSWORD: Long = SECONDS_TO_RESET_PASSWORD * 1000
-    }
-
-    /**
-     * Creates a task to log a user out in [SECONDS_TO_RESET_PASSWORD]
-     */
-    private fun createLogoutTask(uuid: String) {
-        Timer().schedule(MILLISECONDS_TO_RESET_PASSWORD) {
-            if (!userDataService.isUserLoggedIn(uuid)) {
-                userDataService.expireUserPassword(uuid)
-            }
-        }
     }
 
     @GetMapping
@@ -43,27 +34,30 @@ class LoginController(
     ): LoginResponseToUser {
         logger.info { "Got login request from UUID '$uuid' '$username' : '$password'" }
 
-        if (username != "muhammad") {
+        if (username !in loginConfiguration.allowedUsers.keys) {
+            logger.debug { "username '$username' is not one of the allowed usernames" }
             throw HttpServerErrorException(HttpStatus.UNAUTHORIZED, "Username does not exist")
         }
 
-        val user = userDataService.findOrSaveUserByUuid(uuid)
-        logger.info { "Retrieved password '${user.password}' for UUID: $uuid" }
-        val passwordDiff = PasswordUtils.checkPasswordsDiff(user.password, password)
-        val isPasswordTrue = PasswordUtils.isPasswordTrue(passwordDiff)
+        val userMegama = loginConfiguration.allowedUsers[username]!!
+        logger.debug { "User '${uuid}' with username '${username} is attemting to log in profession path '${userMegama}'" }
 
-        if (isPasswordTrue) {
+        val user = userDataService.findOrSaveUserByUuid(uuid)
+        logger.debug { "Generated password '${user.password}' for UUID: $uuid" }
+
+        val loginPasswordService = loginPasswordServiceFactory.getLoginPasswordService(userMegama)
+
+        val (passwordResponseData, isPasswordCorrect) = loginPasswordService.handlePasswordAttempt(password, user.password)
+
+        if (isPasswordCorrect) {
             userDataService.setUserLoggedIn(uuid)
             logger.info("Logging in for user \"${user.UUID}\" and password \"${user.password}\"")
-        } else {
-            createLogoutTask(uuid)
         }
 
         return LoginResponseToUser(
-            isPasswordTrue,
-            passwordDiff,
-            UserCookieData(uuid, false, "muhammad").toEncryptedJson(),
-            MINUTES_TO_RESET_PASSWORD
+            isPasswordCorrect,
+            UserCookieData(uuid, false, username, userMegama).toEncryptedJson(),
+            passwordResponseData
         )
     }
 

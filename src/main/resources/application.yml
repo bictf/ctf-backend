@@ -1,0 +1,17 @@
+login:
+  allowed-users:
+    muhammad: DEVELOPMENT
+    fatma: DEVOPS
+    hamud: RESEARCH
+    fuad: FIRMWARE
+    osama: INTEGRATION
+    noor: VALIDATION
+    jamila: PLATFORM
+
+routing:
+  routing-paths:
+    DEVELOPMENT:
+      - LOGIN_WORDLE
+      - GOOLOOG
+      - PASSWORD_GAME
+      - END_OF_CTF
