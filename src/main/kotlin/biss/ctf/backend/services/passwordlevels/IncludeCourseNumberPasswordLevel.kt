@@ -1,11 +1,5 @@
 package biss.ctf.backend.services.passwordlevels
 
-import org.springframework.core.Ordered
-import org.springframework.core.annotation.Order
-import org.springframework.stereotype.Component
-
-@Component
-@Order(Ordered.HIGHEST_PRECEDENCE + 8)
 class IncludeCourseNumberPasswordLevel: PasswordGameLevel {
     companion object {
         private const val COURSE_NUM = "19"

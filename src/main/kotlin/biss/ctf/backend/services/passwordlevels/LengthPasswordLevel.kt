@@ -1,11 +1,5 @@
 package biss.ctf.backend.services.passwordlevels
 
-import org.springframework.core.Ordered
-import org.springframework.core.annotation.Order
-import org.springframework.stereotype.Component
-
-@Component
-@Order(Ordered.HIGHEST_PRECEDENCE)
 class LengthPasswordLevel: PasswordGameLevel {
     companion object {
         private const val MINIMUM_PASSWORD_LENGTH = 8

@@ -1,11 +1,5 @@
 package biss.ctf.backend.services.passwordlevels
 
-import org.springframework.core.Ordered
-import org.springframework.core.annotation.Order
-import org.springframework.stereotype.Component
-
-@Component
-@Order(Ordered.HIGHEST_PRECEDENCE + 18)
 class RomanNumeralPasswordLevel : PasswordGameLevel {
     companion object {
         const val ROMAN_NUMERAL_DIVISOR = 35
