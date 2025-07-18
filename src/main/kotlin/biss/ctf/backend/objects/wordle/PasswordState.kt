@@ -1,6 +1,6 @@
-package biss.ctf.backend.objects
+package biss.ctf.backend.objects.wordle
 
-enum class PasswordCharState {
+enum class WordleCharState {
     IncorrectChar,
     CorrectCharWrongPlace,
     CorrectCharCorrectPlace
