@@ -73,8 +73,11 @@ class TestConfiguration {
         }
     }
 
-    private fun windowsProcessBuilder(codeFile: Path): ProcessBuilder =
-        ProcessBuilder().command("python", codeFile.absolutePathString())
+    private fun windowsProcessBuilder(codeFile: Path): ProcessBuilder {
+        val processBuilder = ProcessBuilder().command("py", codeFile.absolutePathString())
+        processBuilder.environment()["PYTHONUTF8"] = "1"
+        return processBuilder
+    }
 
     private fun nixProcessBuilder(codeFile: Path): ProcessBuilder =
         ProcessBuilder().command("python3", codeFile.absolutePathString())
