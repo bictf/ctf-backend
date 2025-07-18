@@ -1,5 +1,6 @@
 package biss.ctf.backend.services.login
 
+import biss.ctf.backend.objects.routing.CTFStage
 import biss.ctf.backend.objects.wordle.WordleCharState
 import biss.ctf.backend.objects.wordle.WordleResponseData
 import biss.ctf.backend.services.UserDataService
@@ -17,6 +18,7 @@ private const val MILLISECONDS_TO_RESET_PASSWORD: Long = SECONDS_TO_RESET_PASSWO
 //TODO(98) - doc
 @Service
 class WordlePasswordService(private val userDataService: UserDataService) : LoginPasswordService() {
+    override val ctfStage: CTFStage = CTFStage.LOGIN_WORDLE
 
     override fun handlePasswordAttempt(
         passwordAttempt: String,
@@ -67,6 +69,7 @@ class WordlePasswordService(private val userDataService: UserDataService) : Logi
     private fun generateCorrectWordleDiff(characterCount: Int): WordleDiff =
         ArrayList(Collections.nCopies(characterCount, WordleCharState.CorrectCharCorrectPlace))
 
+    //TODO(98) - should this be here?
     /**
      * Creates a task to log a user out in [SECONDS_TO_RESET_PASSWORD]
      */
