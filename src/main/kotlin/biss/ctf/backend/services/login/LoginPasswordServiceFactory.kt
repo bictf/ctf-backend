@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class LoginPasswordServiceFactory(
-    private val loginPasswordServices: List<LoginPasswordService>,
+    loginPasswordServices: List<LoginPasswordService>,
     private val stageRouter: StageRouter
 ) {
     private val loginPasswordServicesMap: Map<CTFStage, LoginPasswordService> =

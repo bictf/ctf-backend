@@ -2,7 +2,7 @@ package biss.ctf.backend.controllers
 
 import biss.ctf.backend.exceptions.UnauthorizedException
 import biss.ctf.backend.objects.apiObjects.PasswordGameLevelDto
-import biss.ctf.backend.objects.apiObjects.UserCookieData
+import biss.ctf.backend.objects.apiObjects.SecretUserCookie
 import biss.ctf.backend.services.PasswordGameService
 import biss.ctf.backend.services.UserDataService
 import biss.ctf.backend.services.passwordlevels.PasswordGameLevel
@@ -24,7 +24,7 @@ class PasswordGameController(
     fun solvePasswordLevels(
         @RequestParam password: String, @RequestParam levels: Int, @CookieValue("user") userCookie: String
     ): List<PasswordGameLevelDto> {
-        val decryptedCookieData = UserCookieData.fromEncryptedJson(userCookie)
+        val decryptedCookieData = SecretUserCookie.fromEncryptedJson(userCookie)
         userDataService.assertIsLoggedIn(decryptedCookieData.uuid)
 
         if (!decryptedCookieData.isAdmin) {
@@ -57,7 +57,7 @@ class PasswordGameController(
         @RequestParam password: String,
         @CookieValue("user") userCookie: String
     ): Boolean {
-        val decryptedCookieData = UserCookieData.fromEncryptedJson(userCookie)
+        val decryptedCookieData = SecretUserCookie.fromEncryptedJson(userCookie)
         userDataService.assertIsLoggedIn(decryptedCookieData.uuid)
         if (!decryptedCookieData.isAdmin) {
             throw UnauthorizedException(decryptedCookieData.uuid, "Admin access required to play password game!")
