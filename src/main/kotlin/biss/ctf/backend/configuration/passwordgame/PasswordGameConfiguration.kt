@@ -1,4 +1,4 @@
-package biss.ctf.backend.configuration
+package biss.ctf.backend.configuration.passwordgame
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean

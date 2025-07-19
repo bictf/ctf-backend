@@ -1,10 +1,12 @@
-package biss.ctf.backend.configuration
+package biss.ctf.backend.configuration.passwordgame
 
+import biss.ctf.backend.services.passwordlevels.DigitsSumDivisibleByBissNumberPasswordLevel
+import biss.ctf.backend.services.passwordlevels.LengthPasswordLevel
+import biss.ctf.backend.services.passwordlevels.BissSpecificWordsPasswordLevel
 import biss.ctf.backend.services.passwordlevels.CapitalCharacterPasswordLevel
 import biss.ctf.backend.services.passwordlevels.CometAndCoralPasswordLevel
 import biss.ctf.backend.services.passwordlevels.CompilationPasswordLevel
 import biss.ctf.backend.services.passwordlevels.CoolestStateInAfricaPasswordLevel
-import biss.ctf.backend.services.passwordlevels.DigitsSumDivisibleBy18PasswordLevel
 import biss.ctf.backend.services.passwordlevels.EvenAmountOfEveryCharPasswordLevel
 import biss.ctf.backend.services.passwordlevels.HeartachePasswordLevel
 import biss.ctf.backend.services.passwordlevels.HexMirrorPasswordLevel
@@ -12,10 +14,8 @@ import biss.ctf.backend.services.passwordlevels.IncludeCourseNumberPasswordLevel
 import biss.ctf.backend.services.passwordlevels.IncludeSponsorPasswordLevel
 import biss.ctf.backend.services.passwordlevels.IncludeWordPalindromePasswordLevel
 import biss.ctf.backend.services.passwordlevels.LeapYearPasswordLevel
-import biss.ctf.backend.services.passwordlevels.LengthPasswordLevel
 import biss.ctf.backend.services.passwordlevels.MonthPasswordLevel
 import biss.ctf.backend.services.passwordlevels.NotIncludingPhrasePasswordLevel
-import biss.ctf.backend.services.passwordlevels.PaiShoSpecialFlowerPasswordLevel
 import biss.ctf.backend.services.passwordlevels.PalindromePasswordLevel
 import biss.ctf.backend.services.passwordlevels.PasswordGameLevel
 import biss.ctf.backend.services.passwordlevels.PasswordOutputLevel
@@ -27,31 +27,36 @@ import biss.ctf.backend.services.passwordlevels.StrengthPasswordLevel
 import biss.ctf.backend.services.passwordlevels.WebsiteRatingPasswordLevel
 import biss.ctf.backend.services.passwordlevels.WhoStartedTheFirePasswordLevel
 import biss.ctf.backend.services.pythonExecutor.PythonExecutorService
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class PasswordGameLevelsConfig {
+class PasswordGameLevelOrderConfig {
 
     @Bean
     fun passwordGameLevels(
         pythonExecutorService: PythonExecutorService,
+        @Qualifier("minimumPasswordLength") minimumPasswordLength: Int,
+        @Qualifier("bissSpecificWordsLevelDescription") bissSpecificWordsLevelDescription: String,
+        @Qualifier("bissSpecificWordList") bissSpecificWordList: List<String>,
+        @Qualifier("bissNumber") bissNumber: Int,
     ): List<PasswordGameLevel> = listOf(
-        LengthPasswordLevel(),
+        LengthPasswordLevel(minimumPasswordLength),
         CapitalCharacterPasswordLevel(),
         SpecialCharacterPasswordLevel(),
-        PaiShoSpecialFlowerPasswordLevel(),
+        BissSpecificWordsPasswordLevel(bissSpecificWordsLevelDescription, bissSpecificWordList),
         CometAndCoralPasswordLevel(),
         HeartachePasswordLevel(),
         CoolestStateInAfricaPasswordLevel(),
         StrengthPasswordLevel(),
-        IncludeCourseNumberPasswordLevel(),
+        IncludeCourseNumberPasswordLevel(bissNumber),
         IncludeSponsorPasswordLevel(),
         MonthPasswordLevel(),
         IncludeWordPalindromePasswordLevel(),
         PeriodicTablePasswordLevel(),
         WhoStartedTheFirePasswordLevel(),
-        DigitsSumDivisibleBy18PasswordLevel(),
+        DigitsSumDivisibleByBissNumberPasswordLevel(bissNumber),
         EvenAmountOfEveryCharPasswordLevel(),
         LeapYearPasswordLevel(),
         RomanNumeralPasswordLevel(),
