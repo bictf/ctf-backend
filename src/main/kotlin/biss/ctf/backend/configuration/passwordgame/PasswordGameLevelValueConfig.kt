@@ -1,18 +1,24 @@
 package biss.ctf.backend.configuration.passwordgame
 
 import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.PropertySource
 
 @Configuration
-@ConfigurationProperties(prefix = "password-game.values")
+@PropertySource("classpath:password-game.properties")
+@ConfigurationProperties(prefix = "password-game.value")
 class PasswordGameLevelValueConfig {
 
-    var minimumPasswordLength: Int = 0
-    var bissNumber: Int = 0
-    var sumOfAtomicElements: Int = 0
-    var romanNumeralDevisor: Int = 0
-    var staffTotalHeightInCm: Int = 0
-    lateinit var bissSponsor: String
-    lateinit var phraseNotToInclude: String
+    lateinit var minimumPasswordLength: String
     lateinit var bissSpecificWordsList: List<String>
+    lateinit var bissNumber: String
+
+    @Bean
+    fun minimumPasswordLength(): Int = minimumPasswordLength.toInt()
+    @Bean
+    fun bissSpecificWordList(): List<String> = bissSpecificWordsList
+    @Bean
+    fun bissNumber(): Int = bissNumber.toInt()
+
 }
