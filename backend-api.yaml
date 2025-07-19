@@ -382,6 +382,26 @@ components:
       description: |
         Subset of CTF stages used for login-related challenges only.
 
+    SignalChartResponseData:
+      type: object
+      required:
+        - signalGraphs
+        - passwordParts
+      properties:
+        signalGraphs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SignalGraph'
+        passwordParts:
+          type: array
+          items:
+            type: string
+
+    SignalGraph:
+      type: array
+      items:
+        type: boolean
+
     WordleResponseData:
       type: object
       required:
@@ -467,4 +487,3 @@ components:
       required:
         - description
         - isCorrect
-

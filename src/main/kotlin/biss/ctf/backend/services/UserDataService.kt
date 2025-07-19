@@ -1,10 +1,12 @@
 package biss.ctf.backend.services
 
 import biss.ctf.backend.entities.UserDataEntity
+import biss.ctf.backend.events.ExpirePasswordEvent
 import biss.ctf.backend.exceptions.UnauthorizedException
 import biss.ctf.backend.objects.apiObjects.Megama
 import biss.ctf.backend.repositories.UserDataRepository
 import biss.ctf.backend.services.login.LoginPasswordServiceFactory
+import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
 
 @Service
@@ -91,5 +93,10 @@ class UserDataService(
      */
     fun assertIsLoggedIn(uuid: String) {
         if (!isUserLoggedIn(uuid)) throw UnauthorizedException(uuid) else return
+    }
+
+    @EventListener
+    fun expirePasswordOnEvent(event: ExpirePasswordEvent) {
+        if (!isUserLoggedIn(event.uuid)) expireUserPassword(event.uuid)
     }
 }

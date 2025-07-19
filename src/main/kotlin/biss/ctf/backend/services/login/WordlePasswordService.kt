@@ -1,13 +1,13 @@
 package biss.ctf.backend.services.login
 
 import biss.ctf.backend.entities.UserDataEntity
+import biss.ctf.backend.events.ExpirePasswordEvent
 import biss.ctf.backend.objects.routing.CTFStage
 import biss.ctf.backend.objects.wordle.WordleCharState
 import biss.ctf.backend.objects.wordle.WordleResponseData
-import biss.ctf.backend.services.UserDataService
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
-import java.util.Collections
-import java.util.Timer
+import java.util.*
 import kotlin.concurrent.schedule
 import kotlin.random.Random
 
@@ -25,7 +25,7 @@ val PASSWORD_CHAR_POOL = ('0'..'9') + ('a'..'z') + ('A'..'Z')
  * A service responsible for the password validation and wordle game logic.
  */
 @Service
-class WordlePasswordService(private val userDataService: UserDataService) : LoginPasswordService() {
+class WordlePasswordService(private val eventPublisher: ApplicationEventPublisher) : LoginPasswordService() {
     override val ctfStage: CTFStage = CTFStage.LOGIN_WORDLE
 
     override fun handlePasswordAttempt(
@@ -114,9 +114,7 @@ class WordlePasswordService(private val userDataService: UserDataService) : Logi
      */
     private fun createLogoutTask(uuid: String) {
         Timer().schedule(MILLISECONDS_TO_RESET_PASSWORD) {
-            if (!userDataService.isUserLoggedIn(uuid)) {
-                userDataService.expireUserPassword(uuid)
-            }
+            eventPublisher.publishEvent(ExpirePasswordEvent(uuid))
         }
     }
 }
