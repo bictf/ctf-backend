@@ -1,6 +1,5 @@
 package biss.ctf.backend.objects.apiObjects
 
-import biss.ctf.backend.objects.apiObjects.Megama
 import biss.ctf.backend.utils.EncryptUtils
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString

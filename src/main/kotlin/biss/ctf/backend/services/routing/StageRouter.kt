@@ -2,9 +2,8 @@ package biss.ctf.backend.services.routing
 
 import biss.ctf.backend.configuration.CTFRoute
 import biss.ctf.backend.configuration.RoutingConfiguration
-import biss.ctf.backend.objects.routing.CTFStage
 import biss.ctf.backend.objects.apiObjects.Megama
-import biss.ctf.backend.repositories.UserDataRepository
+import biss.ctf.backend.objects.routing.CTFStage
 import biss.ctf.backend.repositories.UserStageRepository
 import biss.ctf.backend.services.UserDataService
 import jakarta.persistence.EntityNotFoundException
@@ -33,11 +32,13 @@ class StageRouter(
     }
 
     fun getUserNextStage(uuid: String): CTFStage {
-        val userMegama = userDataService.findUserByUuid(uuid)
+        val user = userDataService.findUserByUuid(uuid)
+            ?: throw NoSuchElementException("Attempted to find megama of user with uuid '$uuid', but the user doesn't exist")
+
         if (this.userStageRepository.existsById(uuid)) {
             val currentUserStage = this.userStageRepository.findById(uuid).get()
 
-            return currentUserStage.getNextStage(userDataService.findUserMegama(uuid))
+            return currentUserStage.getNextStage(user.megama)
         }
 
         logger.error("No current stage is saved for user with uuid $uuid!")
