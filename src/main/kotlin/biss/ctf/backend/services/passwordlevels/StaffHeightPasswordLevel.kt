@@ -1,13 +1,14 @@
 package biss.ctf.backend.services.passwordlevels
 
-class StaffHeightPasswordLevel : PasswordGameLevel {
+class StaffHeightPasswordLevel(
+    private val staffTotalHeightInCm: Int,
+) : PasswordGameLevel {
     companion object {
-        private const val STAFF_TOTAL_HEIGHT_IN_CM = 1906
         private const val ALLOWED_ERROR_MARGIN_IN_CM = 10
     }
 
     override fun getLevelDescription(): String {
-        return "Password must include the sum of heights of the Lahav commanders (not including Ramagim and Makas) in cm."
+        return "Password must include the sum of heights of all the commanders (not including Ramagim and Makas) in cm."
     }
 
     override fun getLevelHint(): String {
@@ -18,7 +19,7 @@ class StaffHeightPasswordLevel : PasswordGameLevel {
         val numberSequences = getNumberSequences(password)
 
         return numberSequences.any {
-            it in (STAFF_TOTAL_HEIGHT_IN_CM - ALLOWED_ERROR_MARGIN_IN_CM)..(STAFF_TOTAL_HEIGHT_IN_CM + ALLOWED_ERROR_MARGIN_IN_CM)
+            it in (staffTotalHeightInCm - ALLOWED_ERROR_MARGIN_IN_CM)..(staffTotalHeightInCm + ALLOWED_ERROR_MARGIN_IN_CM)
         }
     }
 

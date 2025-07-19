@@ -1,8 +1,10 @@
 package biss.ctf.backend.services.passwordlevels
 
-class PeriodicTablePasswordLevel : PasswordGameLevel {
+class PeriodicTablePasswordLevel(
+    private val sumOfAtomicElements: Int
+) : PasswordGameLevel {
     override fun getLevelDescription(): String {
-        return "It's chemistry o'clock! Elements in password must add up to $SUM_OF_ATOMIC_ELEMENTS..."
+        return "It's chemistry o'clock! Elements in password must add up to $sumOfAtomicElements..."
     }
 
     override fun getLevelHint(): String {
@@ -18,12 +20,10 @@ class PeriodicTablePasswordLevel : PasswordGameLevel {
                 sum += atomicNumber
             }
         }
-        return sum == SUM_OF_ATOMIC_ELEMENTS
+        return sum == sumOfAtomicElements
     }
 
     companion object {
-        const val SUM_OF_ATOMIC_ELEMENTS = 500
-
         //        THANKS CHATGPT
         val ELEMENT_MAPPING: Map<String, Int> = mapOf(
             "H" to 1,    // Hydrogen

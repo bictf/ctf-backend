@@ -14,10 +14,7 @@ class CometAndCoralPasswordLevel: PasswordGameLevel {
     }
 
     override fun doesAnswerLevel(password: String): Boolean {
-        if (password.lowercase().contains(COMET) &&
-            password.lowercase().contains(CORAL)) {
-            return true
-        }
-        return false
+        return password.lowercase().contains(COMET) &&
+                password.lowercase().contains(CORAL)
     }
 }
