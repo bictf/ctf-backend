@@ -18,9 +18,10 @@ abstract class LoginPasswordService {
      */
     abstract fun handlePasswordAttempt(
         passwordAttempt: String,
-        actualPassword: String,
         user: UserDataEntity
     ): Pair<Any, Boolean>
+
+    abstract fun generatePassword(uuid: String): String
 
     /**
      * Just checks whether the inputted password is equal to the actual password.
