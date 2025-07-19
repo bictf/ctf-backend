@@ -1,11 +1,5 @@
 package biss.ctf.backend.services.passwordlevels
 
-import org.springframework.core.Ordered
-import org.springframework.core.annotation.Order
-import org.springframework.stereotype.Component
-
-@Component
-@Order(Ordered.HIGHEST_PRECEDENCE + 2)
 class SpecialCharacterPasswordLevel: PasswordGameLevel {
     companion object {
         private val specialCharacters = arrayOf(

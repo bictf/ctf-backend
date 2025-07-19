@@ -1,11 +1,5 @@
 package biss.ctf.backend.services.passwordlevels
 
-import org.springframework.core.Ordered
-import org.springframework.core.annotation.Order
-import org.springframework.stereotype.Component
-
-@Order(Ordered.HIGHEST_PRECEDENCE + 3)
-@Component
 class PaiShoSpecialFlowerPasswordLevel: PasswordGameLevel {
     companion object {
         private const val WHITE_LOTUS = "whitelotus"

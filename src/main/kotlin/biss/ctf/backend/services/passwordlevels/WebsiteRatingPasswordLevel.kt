@@ -1,11 +1,5 @@
 package biss.ctf.backend.services.passwordlevels
 
-import org.springframework.core.Ordered
-import org.springframework.core.annotation.Order
-import org.springframework.stereotype.Component
-
-@Component
-@Order(Ordered.HIGHEST_PRECEDENCE + 20)
 class WebsiteRatingPasswordLevel : PasswordGameLevel {
     companion object {
         const val FIVE_STAR_RATING: String = "⭐⭐⭐⭐⭐"
