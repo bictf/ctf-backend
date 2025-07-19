@@ -22,6 +22,13 @@ class UserDataService(
         findUserByUuid(uuid) ?: saveUser(uuid, megama)
 
     /**
+     * Finds a user by their UUID.
+     * @param uuid The UUID of the user to search for.
+     * @return The user if found, null if not.
+     */
+    fun findUserByUuid(uuid: String): UserDataEntity? = userDataRepository.findById(uuid).orElse(null)
+
+    /**
      * Saves a new user to the user data storage.
      * @param uuid The UUID of the user to create.
      * @param megama The megama of the user to create.
@@ -34,14 +41,6 @@ class UserDataService(
             false
         )
     )
-
-
-    /**
-     * Finds a user by their UUID.
-     * @param uuid The UUID of the user to search for.
-     * @return The user if found, null if not.
-     */
-    fun findUserByUuid(uuid: String): UserDataEntity? = userDataRepository.findById(uuid).orElse(null)
 
     /**
      * Sets the user with the given UUID as logged in.
