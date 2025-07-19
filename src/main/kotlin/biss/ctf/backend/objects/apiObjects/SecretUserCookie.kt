@@ -11,7 +11,6 @@ class SecretUserCookie(
     val uuid: String,
     val isAdmin: Boolean,
     val username: String,
-    val profession: String,
     val secret: String
 ) {
     companion object {

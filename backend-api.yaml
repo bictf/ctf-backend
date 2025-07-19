@@ -73,6 +73,27 @@ paths:
             'application/json':
               schema:
                 type: "boolean"
+
+  /stage/next:
+    get:
+      tags:
+        - getNextStage
+      summary: GET next user CTF stage
+      operationId: getNextStage
+      parameters:
+        - name: user
+          in: cookie
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CTFStage'
+
   /download:
     get:
       tags:

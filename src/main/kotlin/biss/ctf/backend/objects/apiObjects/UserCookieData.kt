@@ -10,8 +10,7 @@ import kotlinx.serialization.json.Json
 class UserCookieData(
     val uuid: String,
     val isAdmin: Boolean,
-    val username: String,
-    val profession: Megama
+    val username: String
 ) {
     companion object {
         fun fromEncryptedJson(encryptedCookie: String) =

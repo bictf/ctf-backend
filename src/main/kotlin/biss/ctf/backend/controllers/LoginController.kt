@@ -5,14 +5,11 @@ import biss.ctf.backend.objects.apiObjects.UserCookieData
 import biss.ctf.backend.objects.apiObjects.toUser.LoginResponseToUser
 import biss.ctf.backend.services.UserDataService
 import biss.ctf.backend.services.login.LoginPasswordServiceFactory
-import biss.ctf.backend.utils.PasswordUtils
 import mu.KotlinLogging
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.client.HttpServerErrorException
-import java.util.*
-import kotlin.concurrent.schedule
 
 @RestController
 @RequestMapping("/login")
@@ -42,12 +39,15 @@ class LoginController(
         val userMegama = loginConfiguration.allowedUsers[username]!!
         logger.debug { "User '${uuid}' with username '${username} is attemting to log in profession path '${userMegama}'" }
 
-        val user = userDataService.findOrSaveUserByUuid(uuid)
+        val user = userDataService.findOrSaveUser(uuid, userMegama)
         logger.debug { "Generated password '${user.password}' for UUID: $uuid" }
 
         val loginPasswordService = loginPasswordServiceFactory.getLoginPasswordService(userMegama)
 
-        val (passwordResponseData, isPasswordCorrect) = loginPasswordService.handlePasswordAttempt(password, user.password)
+        val (passwordResponseData, isPasswordCorrect) = loginPasswordService.handlePasswordAttempt(
+            password,
+            user.password
+        )
 
         if (isPasswordCorrect) {
             userDataService.setUserLoggedIn(uuid)
@@ -56,7 +56,7 @@ class LoginController(
 
         return LoginResponseToUser(
             isPasswordCorrect,
-            UserCookieData(uuid, false, username, userMegama).toEncryptedJson(),
+            UserCookieData(uuid, false, username).toEncryptedJson(),
             passwordResponseData
         )
     }
