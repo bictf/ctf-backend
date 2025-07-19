@@ -366,7 +366,7 @@ components:
       type: string
       enum:
         - LOGIN_WORDLE
-        - LOGIN_SIGNAL_GRAPH
+        - LOGIN_SIGNAL_CHART
         - GOOLOOG
         - PASSWORD_GAME
         - END_OF_CTF
@@ -378,7 +378,7 @@ components:
         - $ref: '#/components/schemas/CTFStage'
       enum:
         - LOGIN_WORDLE
-        - LOGIN_SIGNAL_GRAPH
+        - LOGIN_SIGNAL_CHART
       description: |
         Subset of CTF stages used for login-related challenges only.
 

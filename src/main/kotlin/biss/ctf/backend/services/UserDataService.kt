@@ -4,12 +4,13 @@ import biss.ctf.backend.entities.UserDataEntity
 import biss.ctf.backend.exceptions.UnauthorizedException
 import biss.ctf.backend.objects.apiObjects.Megama
 import biss.ctf.backend.repositories.UserDataRepository
-import biss.ctf.backend.utils.PasswordUtils
+import biss.ctf.backend.services.login.LoginPasswordServiceFactory
 import org.springframework.stereotype.Service
 
 @Service
 class UserDataService(
-    private val userDataRepository: UserDataRepository
+    private val userDataRepository: UserDataRepository,
+    private val loginPasswordServiceFactory: LoginPasswordServiceFactory
 ) {
 
     /**
@@ -33,14 +34,19 @@ class UserDataService(
      * @param uuid The UUID of the user to create.
      * @param megama The megama of the user to create.
      */
-    private fun saveUser(uuid: String, megama: Megama): UserDataEntity = userDataRepository.save(
-        UserDataEntity(
-            uuid,
-            megama,
-            PasswordUtils.generateNewPassword(),
-            false
+    private fun saveUser(uuid: String, megama: Megama): UserDataEntity {
+        val loginPasswordService = loginPasswordServiceFactory.getLoginPasswordService(megama)
+
+        return userDataRepository.save(
+            UserDataEntity(
+                uuid,
+                megama,
+                loginPasswordService.generatePassword(uuid),
+                false
+            )
         )
-    )
+    }
+
 
     /**
      * Sets the user with the given UUID as logged in.
@@ -62,7 +68,10 @@ class UserDataService(
     fun expireUserPassword(uuid: String) {
         val user = findUserByUuid(uuid)
             ?: throw NoSuchElementException("Attempted to expire password of user with uuid '$uuid', but the user doesn't exist")
-        user.password = PasswordUtils.generateNewPassword()
+
+        val loginPasswordService = loginPasswordServiceFactory.getLoginPasswordService(user.megama)
+
+        user.password = loginPasswordService.generatePassword(uuid)
         user.hasLoggedIn = false
         userDataRepository.save(user)
     }

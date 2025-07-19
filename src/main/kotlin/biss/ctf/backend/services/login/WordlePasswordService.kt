@@ -9,12 +9,17 @@ import org.springframework.stereotype.Service
 import java.util.Collections
 import java.util.Timer
 import kotlin.concurrent.schedule
+import kotlin.random.Random
 
 typealias WordleDiff = ArrayList<WordleCharState>
 
 private const val MINUTES_TO_RESET_PASSWORD: Long = 1
 private const val SECONDS_TO_RESET_PASSWORD: Long = MINUTES_TO_RESET_PASSWORD * 60
 private const val MILLISECONDS_TO_RESET_PASSWORD: Long = SECONDS_TO_RESET_PASSWORD * 1000
+
+const val MINIMUM_PASSWORD_LENGTH = 24
+const val MAXIMUM_PASSWORD_LENGTH = 28
+val PASSWORD_CHAR_POOL = ('0'..'9') + ('a'..'z') + ('A'..'Z')
 
 /**
  * A service responsible for the password validation and wordle game logic.
@@ -25,10 +30,9 @@ class WordlePasswordService(private val userDataService: UserDataService) : Logi
 
     override fun handlePasswordAttempt(
         passwordAttempt: String,
-        actualPassword: String,
         user: UserDataEntity
     ): Pair<WordleResponseData, Boolean> {
-        if (validatePassword(passwordAttempt, actualPassword)) {
+        if (validatePassword(passwordAttempt, user.password)) {
             return Pair(
                 WordleResponseData(
                     wordleDiff = generateCorrectWordleDiff(passwordAttempt.length),
@@ -42,11 +46,24 @@ class WordlePasswordService(private val userDataService: UserDataService) : Logi
 
         return Pair(
             WordleResponseData(
-                wordleDiff = calculateWordleDiff(passwordAttempt, actualPassword),
+                wordleDiff = calculateWordleDiff(passwordAttempt, user.password),
                 time = MINUTES_TO_RESET_PASSWORD
             ),
             false
         )
+    }
+
+    override fun generatePassword(uuid: String): String {
+        val passwordLength = Random.nextInt(MINIMUM_PASSWORD_LENGTH, MAXIMUM_PASSWORD_LENGTH)
+        val charPool: MutableList<Char> = PASSWORD_CHAR_POOL.map { it } as MutableList<Char>
+
+        return (1..passwordLength).map {
+            Random.nextInt(0, charPool.size).let {
+                val temp = charPool[it]
+                charPool.removeAt(it)
+                temp
+            }
+        }.joinToString("")
     }
 
     /**
