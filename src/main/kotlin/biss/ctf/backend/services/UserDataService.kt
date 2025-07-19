@@ -84,9 +84,4 @@ class UserDataService(
     fun assertIsLoggedIn(uuid: String) {
         if (!isUserLoggedIn(uuid)) throw UnauthorizedException(uuid) else return
     }
-
-    fun findUserMegama(uuid: String): Megama {
-        return findUserByUuid(uuid)?.megama
-            ?: throw NoSuchElementException("Attempted to find megama of user with uuid '$uuid', but the user doesn't exist")
-    }
 }
