@@ -1,8 +1,9 @@
 package biss.ctf.backend.services.passwordlevels
 
-class RomanNumeralPasswordLevel : PasswordGameLevel {
+class RomanNumeralPasswordLevel(
+    private val romanNumeralDevisor: Int,
+) : PasswordGameLevel {
     companion object {
-        const val ROMAN_NUMERAL_DIVISOR = 35
         val ROMAN_NUMERAL_VALUES = mapOf(
             "I" to 1, "II" to 2, "III" to 3, "IV" to 4, "V" to 5, "VI" to 6, "VII" to 7,
             "VIII" to 8, "IX" to 9, "X" to 10, "XX" to 20, "XXX" to 30, "XL" to 40,
@@ -13,7 +14,7 @@ class RomanNumeralPasswordLevel : PasswordGameLevel {
     }
 
     override fun getLevelDescription(): String {
-        return "Roman numerals sum must be divisible by $ROMAN_NUMERAL_DIVISOR."
+        return "Roman numerals sum must be divisible by $romanNumeralDevisor."
     }
 
     override fun getLevelHint(): String {
@@ -30,6 +31,6 @@ class RomanNumeralPasswordLevel : PasswordGameLevel {
                     sum += value
                 }
             }
-        return sum % ROMAN_NUMERAL_DIVISOR == 0
+        return sum % romanNumeralDevisor == 0
     }
 }
