@@ -34,3 +34,9 @@ routing:
       - GOOLOOG
       - PASSWORD_GAME
       - END_OF_CTF
+
+    FIRMWARE:
+      - LOGIN_SIGNAL_CHART
+      - GOOLOOG
+      - PASSWORD_GAME
+      - END_OF_CTF
