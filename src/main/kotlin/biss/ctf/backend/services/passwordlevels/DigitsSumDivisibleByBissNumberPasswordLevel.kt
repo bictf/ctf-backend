@@ -1,11 +1,11 @@
 package biss.ctf.backend.services.passwordlevels
 
-class DigitsSumDivisibleBy18PasswordLevel: PasswordGameLevel {
-    companion object {
-        private const val DIVISIBLE_BY = 18
-    }
+class DigitsSumDivisibleByBissNumberPasswordLevel(
+    private val bissNumber: Int,
+): PasswordGameLevel {
+
     override fun getLevelDescription(): String {
-        return "Sum of digits in password must be divisible by $DIVISIBLE_BY."
+        return "Sum of digits in password must be divisible by $bissNumber."
     }
 
     override fun getLevelHint(): String {
@@ -17,7 +17,7 @@ class DigitsSumDivisibleBy18PasswordLevel: PasswordGameLevel {
         val sumOfDigits = password.filter { it.isDigit() }
             .map { Character.getNumericValue(it) }
             .sum()
-        // Check if the sum is divisible by 18
-        return sumOfDigits % DIVISIBLE_BY == 0
+        // Check if the sum is divisible by biss number
+        return sumOfDigits % bissNumber == 0
     }
 }

@@ -1,9 +1,9 @@
 package biss.ctf.backend.services.passwordlevels
 
-class IncludeCourseNumberPasswordLevel: PasswordGameLevel {
-    companion object {
-        private const val COURSE_NUM = "19"
-    }
+class IncludeCourseNumberPasswordLevel(
+    private val bissNumber: Int
+): PasswordGameLevel {
+
     override fun getLevelDescription(): String {
         return "Password must include the biss number"
     }
@@ -13,6 +13,6 @@ class IncludeCourseNumberPasswordLevel: PasswordGameLevel {
     }
 
     override fun doesAnswerLevel(password: String): Boolean {
-        return password.lowercase().contains(COURSE_NUM)
+        return password.lowercase().contains(bissNumber.toString())
     }
 }

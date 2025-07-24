@@ -1,9 +1,9 @@
 package biss.ctf.backend.services.passwordlevels
 
-class IncludeSponsorPasswordLevel: PasswordGameLevel {
-    companion object {
-        private const val SPONSOR = "olga"
-    }
+class IncludeSponsorPasswordLevel(
+    private val bissSponsor: String,
+) : PasswordGameLevel {
+
     override fun getLevelDescription(): String {
         return "Password must include the sponsor of the biss"
     }
@@ -13,6 +13,6 @@ class IncludeSponsorPasswordLevel: PasswordGameLevel {
     }
 
     override fun doesAnswerLevel(password: String): Boolean {
-        return password.lowercase().contains(SPONSOR)
+        return password.lowercase().contains(bissSponsor)
     }
 }

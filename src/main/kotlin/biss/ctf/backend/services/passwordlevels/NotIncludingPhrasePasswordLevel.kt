@@ -1,11 +1,11 @@
 package biss.ctf.backend.services.passwordlevels
 
-class NotIncludingPhrasePasswordLevel: PasswordGameLevel {
-    companion object {
-        private const val STATE = "y8"
-    }
+class NotIncludingPhrasePasswordLevel(
+    private val phrase: String,
+): PasswordGameLevel {
+
     override fun getLevelDescription(): String {
-        return "Password must not include the phrase \"y8\""
+        return "Password must not include the phrase \"$phrase\""
     }
 
     override fun getLevelHint(): String {
@@ -13,6 +13,6 @@ class NotIncludingPhrasePasswordLevel: PasswordGameLevel {
     }
 
     override fun doesAnswerLevel(password: String): Boolean {
-        return !password.lowercase().contains(STATE)
+        return !password.lowercase().contains(phrase)
     }
 }

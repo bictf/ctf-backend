@@ -49,11 +49,12 @@ class StageRouter(
     fun getUserNextStage(uuid: String): CTFStage {
         val user = userDataService.findUserByUuid(uuid)
             ?: throw NoSuchElementException("Attempted to find megama of user with uuid '$uuid', but the user doesn't exist")
-
-        return this.userStageService.findStageByUuid(uuid)?.getNextStage(user.megama) ?: run {
+        val nextStage = this.userStageService.findStageByUuid(uuid)?.getNextStage(user.megama) ?: run {
             logger.error("No current stage is saved for user with uuid $uuid!")
             throw EntityNotFoundException("No current stage is saved for user with uuid $uuid!")
         }
+
+        return this.userStageService.saveUserStage(uuid, nextStage)
     }
 
     /**
