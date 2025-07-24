@@ -27,7 +27,6 @@ import biss.ctf.backend.services.passwordlevels.StrengthPasswordLevel
 import biss.ctf.backend.services.passwordlevels.WebsiteRatingPasswordLevel
 import biss.ctf.backend.services.passwordlevels.WhoStartedTheFirePasswordLevel
 import biss.ctf.backend.services.pythonExecutor.PythonExecutorService
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -37,37 +36,33 @@ class PasswordGameLevelOrderConfig {
     @Bean
     fun passwordGameLevels(
         pythonExecutorService: PythonExecutorService,
-        @Qualifier("minimumPasswordLength") minimumPasswordLength: Int,
-        @Qualifier("bissSpecificWordsLevelDescription") bissSpecificWordsLevelDescription: String,
-        @Qualifier("bissSpecificWordList") bissSpecificWordList: List<String>,
-        @Qualifier("bissNumber") bissNumber: Int,
-        @Qualifier("bissSponsor") bissSponsor: String,
-        @Qualifier("sumOfAtomicElements") sumOfAtomicElements: Int,
-        @Qualifier("romanNumeralDevisor") romanNumeralDevisor: Int,
-        @Qualifier("phraseNotToInclude") phraseNotToInclude: String,
-        @Qualifier("staffTotalHeightInCm") staffTotalHeightInCm: Int,
+        passwordGameLevelValueConfig: PasswordGameLevelValueConfig,
+        passwordGameLevelDescriptionConfig: PasswordGameLevelDescriptionsConfig
     ): List<PasswordGameLevel> = listOf(
-        LengthPasswordLevel(minimumPasswordLength),
+        LengthPasswordLevel(passwordGameLevelValueConfig.minimumPasswordLength),
         CapitalCharacterPasswordLevel(),
         SpecialCharacterPasswordLevel(),
-        BissSpecificWordsPasswordLevel(bissSpecificWordsLevelDescription, bissSpecificWordList),
+        BissSpecificWordsPasswordLevel(
+            passwordGameLevelDescriptionConfig.bissSpecificWords,
+            passwordGameLevelValueConfig.bissSpecificWordsList
+        ),
         CometAndCoralPasswordLevel(),
         HeartachePasswordLevel(),
         CoolestStateInAfricaPasswordLevel(),
         StrengthPasswordLevel(),
-        IncludeCourseNumberPasswordLevel(bissNumber),
-        IncludeSponsorPasswordLevel(bissSponsor),
+        IncludeCourseNumberPasswordLevel(passwordGameLevelValueConfig.bissNumber),
+        IncludeSponsorPasswordLevel(passwordGameLevelValueConfig.bissSponsor),
         MonthPasswordLevel(),
         IncludeWordPalindromePasswordLevel(),
-        PeriodicTablePasswordLevel(sumOfAtomicElements),
+        PeriodicTablePasswordLevel(passwordGameLevelValueConfig.sumOfAtomicElements),
         WhoStartedTheFirePasswordLevel(),
-        DigitsSumDivisibleByBissNumberPasswordLevel(bissNumber),
+        DigitsSumDivisibleByBissNumberPasswordLevel(passwordGameLevelValueConfig.bissNumber),
         EvenAmountOfEveryCharPasswordLevel(),
         LeapYearPasswordLevel(),
-        RomanNumeralPasswordLevel(romanNumeralDevisor),
-        NotIncludingPhrasePasswordLevel(phraseNotToInclude),
+        RomanNumeralPasswordLevel(passwordGameLevelValueConfig.romanNumeralDevisor),
+        NotIncludingPhrasePasswordLevel(passwordGameLevelValueConfig.phraseNotToInclude),
         WebsiteRatingPasswordLevel(),
-        StaffHeightPasswordLevel(staffTotalHeightInCm),
+        StaffHeightPasswordLevel(passwordGameLevelValueConfig.staffTotalHeightInCm),
         HexMirrorPasswordLevel(),
         PalindromePasswordLevel(),
         CompilationPasswordLevel(pythonExecutorService),
