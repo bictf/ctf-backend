@@ -73,6 +73,27 @@ paths:
             'application/json':
               schema:
                 type: "boolean"
+
+  /stage/next:
+    get:
+      tags:
+        - stage
+      summary: GET next user CTF stage
+      operationId: getNextStage
+      parameters:
+        - name: user
+          in: cookie
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CTFStage'
+
   /download:
     get:
       tags:
@@ -99,12 +120,11 @@ paths:
         200:
           description: OK
           content:
-            '*/*':
+            'application/zip':
               schema:
-                type: array
-                items:
-                  type: string
-                  format: byte
+                type: string
+                format: binary
+
   /captcha/cG9zdCBoZXJlIHRvIGZsaXAgd2hldGhlciB0aGUgY2FwdGNoYSBzaG91bGQgcGFzcyBvciBub3Q:
     post:
       tags:
@@ -263,6 +283,10 @@ paths:
 
   /password_game/solve:
     get:
+      tags:
+        - password game
+      summary: Return rules password answers for
+      operationId: solve
       parameters:
         - name: password
           required: true
@@ -283,7 +307,7 @@ paths:
         200:
           description: OK
           content:
-            application/json:
+            'application/json':
               schema:
                 type: array
                 items:
@@ -291,6 +315,10 @@ paths:
 
   /password_game/does_solve_all:
     get:
+      tags:
+        - password game
+      summary: Return whether all rules were answered
+      operationId: doesSolveAll
       parameters:
         - name: password
           required: true
@@ -313,25 +341,74 @@ paths:
 components:
   schemas:
     LoginResponseToUser:
-      tags:
-        - login response to user
       type: object
       properties:
         success:
           type: boolean
-        passwordDiff:
-          type: array
-          items: number
         cookie:
           type: string
+        loginType:
+          $ref: '#/components/schemas/LoginCTFStage'
+        passwordData:
+          oneOf:
+            - $ref: '#/components/schemas/WordleResponseData'
+          discriminator:
+            propertyName: loginType
+            mapping:
+              LOGIN_WORDLE: '#/components/schemas/WordleResponseData'
+      required:
+        - cookie
+        - success
+        - loginType
+        - passwordData
+
+    CTFStage:
+      type: string
+      enum:
+        - LOGIN_WORDLE
+        - LOGIN_SIGNAL_GRAPH
+        - GOOLOOG
+        - PASSWORD_GAME
+        - END_OF_CTF
+      description: |
+        Full list of CTF stages in the game.
+
+    LoginCTFStage:
+      allOf:
+        - $ref: '#/components/schemas/CTFStage'
+      enum:
+        - LOGIN_WORDLE
+        - LOGIN_SIGNAL_GRAPH
+      description: |
+        Subset of CTF stages used for login-related challenges only.
+
+    WordleResponseData:
+      type: object
+      required:
+        - diff
+        - time
+      properties:
+        diff:
+          type: array
+          items:
+            $ref: '#/components/schemas/WordleCharState'
         time:
           type: integer
           format: int64
-      required:
-        - passwordDiff
-        - cookie
-        - success
-        - time
+          description: Minutes until password reset
+
+    WordleCharState:
+      type: integer
+      format: int32
+      enum:
+        - 0
+        - 1
+        - 2
+      description: |
+        Numeric representation of character state:
+        - `0`: IncorrectChar
+        - `1`: CorrectCharWrongPlace
+        - `2`: CorrectCharCorrectPlace
 
     ChoiceQuestionData:
       tags:
@@ -380,9 +457,14 @@ components:
         - title
         - content
     PasswordGameLevel:
+      tags: password level rule
       type: object
       properties:
         description:
           type: string
         isCorrect:
           type: boolean
+      required:
+        - description
+        - isCorrect
+

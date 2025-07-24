@@ -1,6 +1,6 @@
 package biss.ctf.backend.utils
 
-import biss.ctf.backend.objects.PasswordCharState
+import biss.ctf.backend.objects.wordle.WordleCharState
 import kotlin.random.Random
 
 const val MINIMUM_PASSWORD_LENGTH = 24
@@ -23,8 +23,8 @@ class PasswordUtils {
         }
 
         fun isPasswordTrue(passwordDiff: ArrayList<Int>): Boolean {
-            return !passwordDiff.contains(PasswordCharState.CorrectCharWrongPlace.ordinal) && !passwordDiff.contains(
-                PasswordCharState.IncorrectChar.ordinal
+            return !passwordDiff.contains(WordleCharState.CorrectCharWrongPlace.ordinal) && !passwordDiff.contains(
+                WordleCharState.IncorrectChar.ordinal
             )
         }
 
@@ -37,11 +37,11 @@ class PasswordUtils {
 
             for (i in password.indices) {
                 if (newPassword[i] == password[i]) {
-                    passwordDiff.add(PasswordCharState.CorrectCharCorrectPlace.ordinal)
+                    passwordDiff.add(WordleCharState.CorrectCharCorrectPlace.ordinal)
                 } else if (password.contains(newPassword[i])) {
-                    passwordDiff.add(PasswordCharState.CorrectCharWrongPlace.ordinal)
+                    passwordDiff.add(WordleCharState.CorrectCharWrongPlace.ordinal)
                 } else {
-                    passwordDiff.add(PasswordCharState.IncorrectChar.ordinal)
+                    passwordDiff.add(WordleCharState.IncorrectChar.ordinal)
                 }
             }
 

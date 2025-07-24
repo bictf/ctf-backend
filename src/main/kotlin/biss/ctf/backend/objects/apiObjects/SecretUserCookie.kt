@@ -3,6 +3,7 @@ package biss.ctf.backend.objects.apiObjects
 import biss.ctf.backend.utils.EncryptUtils
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 @Serializable
@@ -10,7 +11,7 @@ class SecretUserCookie(
     val uuid: String,
     val isAdmin: Boolean,
     val username: String,
-    val secret: String
+    val secret: String? = null
 ) {
     companion object {
         @Throws(SerializationException::class)
@@ -19,4 +20,6 @@ class SecretUserCookie(
             return Json.decodeFromString<SecretUserCookie>(decryptedCookieData)
         }
     }
+
+    fun toEncryptedJson() = EncryptUtils.encrypt(Json.encodeToString(this))
 }

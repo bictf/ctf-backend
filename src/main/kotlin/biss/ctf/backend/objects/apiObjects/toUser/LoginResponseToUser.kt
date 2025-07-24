@@ -1,8 +1,10 @@
 package biss.ctf.backend.objects.apiObjects.toUser
 
+import biss.ctf.backend.objects.routing.CTFStage
+
 data class LoginResponseToUser(
     val success: Boolean,
-    val passwordDiff: ArrayList<Int>,
     val cookie: String,
-    val time: Long
+    val loginType: CTFStage,
+    val passwordData: Any
 )
