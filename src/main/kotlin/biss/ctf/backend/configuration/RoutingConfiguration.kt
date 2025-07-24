@@ -1,7 +1,7 @@
 package biss.ctf.backend.configuration
 
-import biss.ctf.backend.objects.routing.CTFStage
 import biss.ctf.backend.objects.apiObjects.Megama
+import biss.ctf.backend.objects.routing.CTFStage
 import jakarta.validation.constraints.AssertTrue
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Configuration

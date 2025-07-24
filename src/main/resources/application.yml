@@ -8,10 +8,35 @@ login:
     noor: VALIDATION
     jamila: PLATFORM
 
+signal-chart:
+  password-parts:
+    - labane
+    - shawarma
+    - falafel
+    - malawah
+    - knafeh
+    - hummus
+    - zaatar
+    - kebab
+    - baklava
+    - bamya
+    - shakshukah
+    - arayes
+    - msabaha
+    - matbuha
+    - sabih
+    - mejadra
+
 routing:
   routing-paths:
     DEVELOPMENT:
       - LOGIN_WORDLE
+      - GOOLOOG
+      - PASSWORD_GAME
+      - END_OF_CTF
+
+    FIRMWARE:
+      - LOGIN_SIGNAL_CHART
       - GOOLOOG
       - PASSWORD_GAME
       - END_OF_CTF
