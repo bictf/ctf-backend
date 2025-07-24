@@ -18,8 +18,13 @@ class UserDataService(
      * @param uuid The UUID of the user to find or create.
      * @return The found or newly created UserDataEntity.
      */
-    fun findOrSaveUser(uuid: String, megama: Megama): UserDataEntity =
-        findUserByUuid(uuid) ?: saveUser(uuid, megama)
+    fun findOrSaveUser(uuid: String, megama: Megama): UserDataEntity {
+        val user = findUserByUuid(uuid) ?: saveUser(uuid, megama)
+
+        if (user.megama != megama) throw IllegalArgumentException("User '$uuid' megama is different from user '$user' megama")
+
+        return user
+    }
 
     /**
      * Finds a user by their UUID.
