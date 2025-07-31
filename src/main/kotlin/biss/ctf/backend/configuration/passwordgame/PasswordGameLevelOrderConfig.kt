@@ -4,7 +4,6 @@ import biss.ctf.backend.services.passwordlevels.DigitsSumDivisibleByBissNumberPa
 import biss.ctf.backend.services.passwordlevels.LengthPasswordLevel
 import biss.ctf.backend.services.passwordlevels.BissSpecificWordsPasswordLevel
 import biss.ctf.backend.services.passwordlevels.CapitalCharacterPasswordLevel
-import biss.ctf.backend.services.passwordlevels.CometAndCoralPasswordLevel
 import biss.ctf.backend.services.passwordlevels.CompilationPasswordLevel
 import biss.ctf.backend.services.passwordlevels.CoolestStateInAfricaPasswordLevel
 import biss.ctf.backend.services.passwordlevels.EvenAmountOfEveryCharPasswordLevel
