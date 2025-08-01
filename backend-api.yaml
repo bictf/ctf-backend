@@ -359,6 +359,24 @@ paths:
               schema:
                 type: boolean
 
+  /access-denied/message:
+    get:
+      tags:
+        - access denied
+      parameters:
+        - name: user
+          required: true
+          in: cookie
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+
 components:
   schemas:
     LoginResponseToUser:
