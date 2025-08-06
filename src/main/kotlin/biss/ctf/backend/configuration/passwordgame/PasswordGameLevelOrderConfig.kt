@@ -45,7 +45,6 @@ class PasswordGameLevelOrderConfig {
             passwordGameLevelDescriptionConfig.bissSpecificWords,
             passwordGameLevelValueConfig.bissSpecificWordsList
         ),
-        CometAndCoralPasswordLevel(),
         HeartachePasswordLevel(),
         CoolestStateInAfricaPasswordLevel(),
         StrengthPasswordLevel(),
