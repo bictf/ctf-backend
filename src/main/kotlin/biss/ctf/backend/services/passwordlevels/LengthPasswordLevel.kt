@@ -1,11 +1,11 @@
 package biss.ctf.backend.services.passwordlevels
 
-class LengthPasswordLevel: PasswordGameLevel {
-    companion object {
-        private const val MINIMUM_PASSWORD_LENGTH = 8
-    }
+class LengthPasswordLevel(
+    private val minimumPasswordLength: Int,
+): PasswordGameLevel {
+
     override fun getLevelDescription(): String {
-        return "Password must be at least $MINIMUM_PASSWORD_LENGTH characters long"
+        return "Password must be at least $minimumPasswordLength characters long"
     }
 
     override fun getLevelHint(): String {
@@ -13,6 +13,6 @@ class LengthPasswordLevel: PasswordGameLevel {
     }
 
     override fun doesAnswerLevel(password: String): Boolean {
-        return password.length >= MINIMUM_PASSWORD_LENGTH
+        return password.length >= minimumPasswordLength
     }
 }
