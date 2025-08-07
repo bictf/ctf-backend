@@ -48,7 +48,6 @@ class LoginService(
 
         val (passwordResponseData, isPasswordCorrect) = loginPasswordService.handlePasswordAttempt(
             password,
-            user.password,
             user
         )
 
