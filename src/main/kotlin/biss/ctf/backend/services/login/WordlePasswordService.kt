@@ -69,17 +69,7 @@ class WordlePasswordService(private val eventPublisher: ApplicationEventPublishe
         }.joinToString("")
     }
 
-    /**
-     * First checks whether the password length is the actual password length, and if not - throws exception.
-     * This is done so the user will get to the correct length to play the wordle.
-     *
-     * It then checks whether the password is correct.
-     *
-     * @param inputtedPassword The attempted password from the user
-     * @param actualPassword The correct password
-     *
-     * @return Boolean value representing whether the password is correct or not
-     */
+
     /**
      * First checks whether the password length is the actual password length, and if not - throws exception.
      * This is done so the user will get to the correct length to play the wordle.

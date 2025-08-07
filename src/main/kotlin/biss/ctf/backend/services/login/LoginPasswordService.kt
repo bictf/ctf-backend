@@ -19,7 +19,7 @@ abstract class LoginPasswordService {
     abstract fun handlePasswordAttempt(
         passwordAttempt: String,
         user: UserDataEntity
-    ): Pair<Any, Boolean>
+    ): Pair<Any?, Boolean>
 
     abstract fun generatePassword(uuid: String): String
 

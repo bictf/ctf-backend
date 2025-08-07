@@ -7,6 +7,7 @@ login:
     osama: INTEGRATION
     noor: VALIDATION
     jamila: PLATFORM
+
   can-request-admin:
   - VALIDATION
 
@@ -48,6 +49,26 @@ routing:
       - GOOLOOG
       - PASSWORD_GAME
       - END_OF_CTF
+
+    PLATFORM:
+      - LOGIN_DOCKER_IMAGES
+      - GOOLOOG
+      - PASSWORD_GAME
+      - END_OF_CTF
+
+    DEVOPS:
+      - LOGIN_DOCKER_IMAGES
+      - GOOLOOG
+      - PASSWORD_GAME
+      - END_OF_CTF
+
+    INTEGRATION:
+      - LOGIN_WORDLE
+      - GOOLOOG
+      - PASSWORD_GAME
+      - END_OF_CTF
+
+
 
 password-game:
   values:
