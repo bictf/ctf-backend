@@ -8,6 +8,8 @@ typealias LookUpTable = MutableMap<List<LogicGateSignal>, LogicGateSignal>
 
 @Service
 class LogicGatesService {
+    fun 
+
     // TODO(114) - add configurable LUT sizes
     fun generateLookupTable(seed: Long, inputCount: Int = 3): LookUpTable {
         val randomizer = Random(seed);
