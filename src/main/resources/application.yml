@@ -7,6 +7,8 @@ login:
     osama: INTEGRATION
     noor: VALIDATION
     jamila: PLATFORM
+  can-request-admin:
+  - VALIDATION
 
 signal-chart:
   password-parts:
@@ -37,6 +39,12 @@ routing:
 
     FIRMWARE:
       - LOGIN_SIGNAL_CHART
+      - GOOLOOG
+      - PASSWORD_GAME
+      - END_OF_CTF
+
+    VALIDATION:
+      - LOGIN_WORDLE
       - GOOLOOG
       - PASSWORD_GAME
       - END_OF_CTF

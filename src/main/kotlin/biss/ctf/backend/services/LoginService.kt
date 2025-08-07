@@ -72,4 +72,17 @@ class LoginService(
         userDataService.assertIsLoggedIn(cookieData.uuid)
         return cookieData.isAdmin
     }
+
+    /**
+     * Checks if the megama can request to be admin if yes than return admin cookie
+     */
+    fun updateUserAdmin(userCookie: String): String {
+        var cookieData = SecretUserCookie.fromEncryptedJson(userCookie)
+        userDataService.assertIsLoggedIn(cookieData.uuid)
+        val megama = userDataService.findUserByUuid(cookieData.uuid)!!.megama
+        if (loginConfiguration.canRequestAdmin.contains(megama)) {
+            cookieData = SecretUserCookie(cookieData, true)
+        }
+        return cookieData.toEncryptedJson()
+    }
 }
