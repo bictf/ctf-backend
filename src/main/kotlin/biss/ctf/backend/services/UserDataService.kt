@@ -42,10 +42,11 @@ class UserDataService(
      * @param megama The megama of the user to create.
      */
     private fun saveUser(uuid: String, megama: Megama): UserDataEntity = userDataRepository.save(
+
         UserDataEntity(
             uuid,
             megama,
-            PasswordUtils.generateNewPassword(),
+            this.loginPasswordServiceFactory.getLoginPasswordService(megama).generatePassword(uuid),
             false
         )
     )
@@ -63,32 +64,12 @@ class UserDataService(
     }
 
     /**
-     * Sets the user with the given UUID as logged out and generates a new password.
-     *
-     * @param uuid The UUID of the user to set as logged out.
-     */
-    fun expireUserPassword(uuid: String) {
-        val user = findUserByUuid(uuid)
-            ?: throw NoSuchElementException("Attempted to expire password of user with uuid '$uuid', but the user doesn't exist")
-        user.password = PasswordUtils.generateNewPassword()
-        val user = findUserByUuid(uuid)
-            ?: throw NoSuchElementException("Attempted to expire password of user with uuid '$uuid', but the user doesn't exist")
-
-        val loginPasswordService = loginPasswordServiceFactory.getLoginPasswordService(user.megama)
-
-        user.password = loginPasswordService.generatePassword(uuid)
-        user.hasLoggedIn = false
-        userDataRepository.save(user)
-    }
-
-    /**
      * Checks if the user with the given UUID is logged in.
      *
      * @param uuid The UUID of the user to check.
      * @return `true` if the user is logged in, `false` otherwise.
      */
     fun isUserLoggedIn(uuid: String): Boolean = findUserByUuid(uuid)?.hasLoggedIn ?: false
-
 
     /**
      * Asserts that a user is logged in.
@@ -98,8 +79,25 @@ class UserDataService(
         if (!isUserLoggedIn(uuid)) throw UnauthorizedException(uuid) else return
     }
 
+
     @EventListener
     fun expirePasswordOnEvent(event: ExpirePasswordEvent) {
         if (!isUserLoggedIn(event.uuid)) expireUserPassword(event.uuid)
+    }
+
+    /**
+     * Sets the user with the given UUID as logged out and generates a new password.
+     *
+     * @param uuid The UUID of the user to set as logged out.
+     */
+    fun expireUserPassword(uuid: String) {
+        val user = findUserByUuid(uuid)
+            ?: throw NoSuchElementException("Attempted to expire password of user with uuid '$uuid', but the user doesn't exist")
+
+        val loginPasswordService = loginPasswordServiceFactory.getLoginPasswordService(user.megama)
+
+        user.password = loginPasswordService.generatePassword(uuid)
+        user.hasLoggedIn = false
+        userDataRepository.save(user)
     }
 }
