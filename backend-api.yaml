@@ -388,6 +388,7 @@ components:
       enum:
         - LOGIN_WORDLE
         - LOGIN_SIGNAL_CHART
+        - LOGIN_DOCKER_IMAGES
         - GOOLOOG
         - PASSWORD_GAME
         - END_OF_CTF
@@ -400,6 +401,7 @@ components:
       enum:
         - LOGIN_WORDLE
         - LOGIN_SIGNAL_CHART
+        - LOGIN_DOCKER_IMAGES
       description: |
         Subset of CTF stages used for login-related challenges only.
 

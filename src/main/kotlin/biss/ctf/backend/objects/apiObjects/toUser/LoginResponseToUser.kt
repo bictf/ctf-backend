@@ -6,5 +6,5 @@ data class LoginResponseToUser(
     val success: Boolean,
     val cookie: String,
     val loginType: CTFStage,
-    val passwordData: Any
+    val passwordData: Any?
 )
