@@ -3,12 +3,14 @@ package biss.ctf.backend.services.login
 import biss.ctf.backend.entities.UserDataEntity
 import biss.ctf.backend.objects.routing.CTFStage
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Service
 
 // TODO - can be generic
+@Service
 class DockerImagesPasswordService() : LoginPasswordService() {
     override val ctfStage: CTFStage = CTFStage.LOGIN_DOCKER_IMAGES
 
-    @Value("docker-images.login-password")
+    @Value("\${docker-images.login-password}")
     private lateinit var loginPassword: String
 
     override fun handlePasswordAttempt(

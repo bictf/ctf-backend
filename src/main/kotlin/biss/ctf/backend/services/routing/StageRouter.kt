@@ -26,21 +26,6 @@ class StageRouter(
     }
 
     /**
-     * Gets the corresponding login page for a megama.
-     *
-     * @param megama The megama to get the login page for
-     * @return The login stage.
-     */
-    fun getLoginStage(megama: Megama): CTFStage {
-        if (megama !in routingConfiguration.routingPaths.keys) {
-            logger.error("Megama ${megama.name} not mapped to a routing path!")
-            throw ConfigurationException("Megama ${megama.name} not mapped to a routing path!")
-        }
-
-        return this.routingConfiguration.routingPaths[megama]!!.first()
-    }
-
-    /**
      * Gets the next stage for a given user, according to his CTF path.
      *
      * @param uuid UUID of the user that requests the next stage.
