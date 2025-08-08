@@ -74,6 +74,27 @@ paths:
               schema:
                 type: "boolean"
 
+  /login/please_get_me_admin:
+    get:
+      tags:
+        - login
+      summary: GET login/please_get_me_admin
+      operationId: "pleaseGetMeAdmin"
+      parameters:
+        - name: "user"
+          in: "cookie"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            text/plain:
+              schema:
+                type: string
+
+
   /stage/next:
     get:
       tags:

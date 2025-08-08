@@ -8,4 +8,5 @@ import org.springframework.context.annotation.Configuration
 @ConfigurationProperties(prefix = "login")
 class LoginConfiguration {
     var allowedUsers: Map<String, Megama> = emptyMap()
+    var canRequestAdmin: List<Megama> = emptyList()
 }

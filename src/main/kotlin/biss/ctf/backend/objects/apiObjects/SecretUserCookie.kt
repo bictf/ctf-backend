@@ -21,5 +21,12 @@ class SecretUserCookie(
         }
     }
 
+    constructor(secretUserCookie: SecretUserCookie, isAdmin: Boolean? = null, secret: String? = null) : this(
+        secretUserCookie.uuid,
+        isAdmin ?: secretUserCookie.isAdmin,
+        secretUserCookie.username,
+        secret ?: secretUserCookie.secret,
+    )
+
     fun toEncryptedJson() = EncryptUtils.encrypt(Json.encodeToString(this))
 }

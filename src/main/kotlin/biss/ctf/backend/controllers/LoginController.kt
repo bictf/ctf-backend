@@ -42,4 +42,11 @@ class LoginController(
 
         return ResponseEntity(isAdmin, if (isAdmin) HttpStatus.OK else HttpStatus.UNAUTHORIZED)
     }
+
+    @GetMapping("/please_get_me_admin")
+    fun pleaseGetMeAdmin(
+        @CookieValue("user") userCookie: String,
+    ): String {
+        return this.loginService.updateUserAdmin(userCookie)
+    }
 }
