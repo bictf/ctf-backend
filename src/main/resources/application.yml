@@ -86,3 +86,11 @@ password-game:
     staff-total-height-in-cm: 1906
   descriptions:
     biss-specific-words: must include the best house in hogwarts
+
+access-denied:
+  default-message: Invalid state call segel!
+  no-such-user-message: Invalid user!
+  not-logged-in-message: Seems you forgot to log in!
+  default-cookie-message: Only admin users can download secret files!
+  megama-cookie-messages:
+    VALIDATION: I forgot how to access our Tob Secret File... good thing I talked to Muhammad about it and saved our conversation at PCAP_PATH
