@@ -1,5 +1,6 @@
 package biss.ctf.backend.configuration.passwordgame
 
+import biss.ctf.backend.services.passwordlevels.BestUnitPasswordLevel
 import biss.ctf.backend.services.passwordlevels.DigitsSumDivisibleByBissNumberPasswordLevel
 import biss.ctf.backend.services.passwordlevels.LengthPasswordLevel
 import biss.ctf.backend.services.passwordlevels.BissSpecificWordsPasswordLevel
@@ -45,6 +46,7 @@ class PasswordGameLevelOrderConfig {
             passwordGameLevelDescriptionConfig.bissSpecificWords,
             passwordGameLevelValueConfig.bissSpecificWordsList
         ),
+        BestUnitPasswordLevel(),
         HeartachePasswordLevel(),
         CoolestStateInAfricaPasswordLevel(),
         StrengthPasswordLevel(),

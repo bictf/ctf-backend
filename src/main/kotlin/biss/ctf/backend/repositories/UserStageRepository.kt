@@ -8,5 +8,4 @@ import org.springframework.stereotype.Repository
  * Maps between a user's UUID and the current stage he is in.
  */
 @Repository
-interface UserStageRepository : CrudRepository<UserStageEntity, String> {
-}
+interface UserStageRepository : CrudRepository<UserStageEntity, String>

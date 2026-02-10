@@ -1,12 +1,12 @@
 login:
   allowed-users:
     muhammad: DEVELOPMENT
-    fatma: DEVOPS
     hamud: RESEARCH
     fuad: FIRMWARE
-    osama: INTEGRATION
     noor: VALIDATION
-    jamila: PLATFORM
+#    fatma: DEVOPS
+#    osama: INTEGRATION
+#    jamila: PLATFORM
 
   can-request-admin:
   - VALIDATION
@@ -32,6 +32,12 @@ signal-chart:
 
 routing:
   routing-paths:
+    RESEARCH:
+      - LOGIN_WORDLE
+      - GOOLOOG
+      - PASSWORD_GAME
+      - END_OF_CTF
+
     DEVELOPMENT:
       - LOGIN_WORDLE
       - GOOLOOG
@@ -50,23 +56,23 @@ routing:
       - PASSWORD_GAME
       - END_OF_CTF
 
-    PLATFORM:
-      - LOGIN_DOCKER_IMAGES
-      - GOOLOOG
-      - PASSWORD_GAME
-      - END_OF_CTF
-
-    DEVOPS:
-      - LOGIN_DOCKER_IMAGES
-      - GOOLOOG
-      - PASSWORD_GAME
-      - END_OF_CTF
-
-    INTEGRATION:
-      - LOGIN_WORDLE
-      - GOOLOOG
-      - PASSWORD_GAME
-      - END_OF_CTF
+#    PLATFORM:
+#      - LOGIN_DOCKER_IMAGES
+#      - GOOLOOG
+#      - PASSWORD_GAME
+#      - END_OF_CTF
+#
+#    DEVOPS:
+#      - LOGIN_DOCKER_IMAGES
+#      - GOOLOOG
+#      - PASSWORD_GAME
+#      - END_OF_CTF
+#
+#    INTEGRATION:
+#      - LOGIN_WORDLE
+#      - GOOLOOG
+#      - PASSWORD_GAME
+#      - END_OF_CTF
 
 
 
@@ -74,18 +80,18 @@ password-game:
   values:
     minimum-password-length: 8
     biss-specific-words-list:
-      - hufflepuff
-      - gryffindor
-      - slytherin
-      - ravenclaw
-    biss-number: 20
+      - air
+      - water
+      - earth
+      - fire
+    biss-number: 21
     biss-sponsor: olga
     sum-of-atomic-elements: 500
     roman-numeral-devisor: 35
     phrase-not-to-include: y8
     staff-total-height-in-cm: 1906
   descriptions:
-    biss-specific-words: must include the best house in hogwarts
+    biss-specific-words: must include the best nation
 
 access-denied:
   default-message: Invalid state call segel!
@@ -94,3 +100,6 @@ access-denied:
   default-cookie-message: Only admin users can download secret files!
   megama-cookie-messages:
     VALIDATION: I forgot how to access our Tob Secret File... good thing I talked to Muhammad about it and saved our conversation at PCAP_PATH
+
+docker-images:
+  login-password: DEVOPS_DOCKER_PASS
