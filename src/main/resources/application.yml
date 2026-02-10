@@ -99,7 +99,7 @@ access-denied:
   not-logged-in-message: Seems you forgot to log in!
   default-cookie-message: Only admin users can download secret files!
   megama-cookie-messages:
-    VALIDATION: I forgot how to access our Tob Secret File... good thing I talked to Muhammad about it and saved our conversation at [PCAP_PATH]
+    VALIDATION: I forgot how to access our Tob Secret File... good thing I talked to Muhammad about it and saved our conversation at PCAP_PATH
 
 docker-images:
   login-password: DEVOPS_DOCKER_PASS
