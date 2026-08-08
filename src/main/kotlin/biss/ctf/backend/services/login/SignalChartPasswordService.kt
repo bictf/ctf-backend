@@ -55,7 +55,7 @@ class SignalChartPasswordService(private val signalChartConfiguration: SignalCha
         val passwordParts = this.signalChartConfiguration.passwordParts
         val passwordOrder = generatePasswordOrder(uuid, passwordParts.size)
 
-        return passwordOrder.joinToString("") { passwordParts[it] }
+        return passwordOrder.joinToString("") { passwordParts[it][0].toString() }
     }
 
     /**

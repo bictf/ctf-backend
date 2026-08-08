@@ -13,23 +13,22 @@ import kotlin.random.Random
 
 typealias WordleDiff = ArrayList<WordleCharState>
 
-private const val MINUTES_TO_RESET_PASSWORD: Long = 1
-private const val SECONDS_TO_RESET_PASSWORD: Long = MINUTES_TO_RESET_PASSWORD * 60
-private const val MILLISECONDS_TO_RESET_PASSWORD: Long = SECONDS_TO_RESET_PASSWORD * 1000
-
-/**
- * A service responsible for the password validation and wordle game logic.
- */
-const val MINIMUM_PASSWORD_LENGTH = 24
-const val MAXIMUM_PASSWORD_LENGTH = 28
-val PASSWORD_CHAR_POOL = ('0'..'9') + ('a'..'z') + ('A'..'Z')
-
 /**
  * A service responsible for the password validation and wordle game logic.
  */
 @Service
 class WordlePasswordService(private val eventPublisher: ApplicationEventPublisher) : LoginPasswordService() {
     override val ctfStage: CTFStage = CTFStage.LOGIN_WORDLE
+
+    companion object {
+        private const val MINUTES_TO_RESET_PASSWORD: Long = 1
+        private const val SECONDS_TO_RESET_PASSWORD: Long = MINUTES_TO_RESET_PASSWORD * 60
+        private const val MILLISECONDS_TO_RESET_PASSWORD: Long = SECONDS_TO_RESET_PASSWORD * 1000
+
+        const val MINIMUM_PASSWORD_LENGTH = 24
+        const val MAXIMUM_PASSWORD_LENGTH = 28
+        val PASSWORD_CHAR_POOL = ('0'..'9') + ('a'..'z') + ('A'..'Z')
+    }
 
     override fun handlePasswordAttempt(
         passwordAttempt: String,
