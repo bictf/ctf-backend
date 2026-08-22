@@ -37,10 +37,11 @@ class SignalChartPasswordService(private val signalChartConfiguration: SignalCha
         passwordAttempt: String,
         user: UserDataEntity
     ): Pair<SignalChartResponseData, Boolean> {
-        val passwordOrder = generatePasswordOrder(user.UUID, this.signalChartConfiguration.passwordParts.size)
+        val passwordParts = this.signalChartConfiguration.passwordParts
+        val passwordOrder = generatePasswordOrder(user.UUID, passwordParts.size)
         val signalChart = generateSignalChart(passwordOrder)
 
-        val signalChartResponseData = SignalChartResponseData(signalChart, this.signalChartConfiguration.passwordParts)
+        val signalChartResponseData = SignalChartResponseData(signalChart, passwordParts)
 
         val isPasswordCorrect = this.validatePassword(passwordAttempt, user.password)
 
@@ -54,7 +55,7 @@ class SignalChartPasswordService(private val signalChartConfiguration: SignalCha
         val passwordParts = this.signalChartConfiguration.passwordParts
         val passwordOrder = generatePasswordOrder(uuid, passwordParts.size)
 
-        return passwordOrder.joinToString("") { passwordParts[it] }
+        return passwordOrder.joinToString("") { passwordParts[it][0].toString() }
     }
 
     /**
@@ -81,8 +82,14 @@ class SignalChartPasswordService(private val signalChartConfiguration: SignalCha
      *
      * @return A signal chart (represented as a list of [SignalGraph])
      */
-    private fun generateSignalChart(passwordOrder: List<Int>): List<SignalGraph> =
-        List(4) { bitIndex -> passwordOrder.to4Bit().map { it[bitIndex] } }
+    private fun generateSignalChart(passwordOrder: List<Int>): List<SignalGraph> {
+        val passwordSignalChartValues: MutableList<Int> = List(passwordOrder.size) { 0 }.toMutableList()
+        passwordOrder.forEachIndexed { index, value ->
+            passwordSignalChartValues[value] = index
+        }
+
+        return List(4) { bitIndex -> passwordSignalChartValues.to4Bit().map { it[bitIndex] } }
+    }
 
     /**
      * Represents an [Int] as an [Int4Bit].
