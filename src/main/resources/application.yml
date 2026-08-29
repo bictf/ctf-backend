@@ -4,9 +4,9 @@ login:
     hamud: RESEARCH
     fuad: FIRMWARE
     noor: VALIDATION
-#    fatma: DEVOPS
-#    osama: INTEGRATION
-#    jamila: PLATFORM
+    fatma: DEVOPS
+    osama: INTEGRATION
+    jamila: PLATFORM
 
   can-request-admin:
   - VALIDATION
@@ -56,23 +56,23 @@ routing:
       - PASSWORD_GAME
       - END_OF_CTF
 
-#    PLATFORM:
-#      - LOGIN_DOCKER_IMAGES
-#      - GOOLOOG
-#      - PASSWORD_GAME
-#      - END_OF_CTF
-#
-#    DEVOPS:
-#      - LOGIN_DOCKER_IMAGES
-#      - GOOLOOG
-#      - PASSWORD_GAME
-#      - END_OF_CTF
-#
-#    INTEGRATION:
-#      - LOGIN_WORDLE
-#      - GOOLOOG
-#      - PASSWORD_GAME
-#      - END_OF_CTF
+    PLATFORM:
+      - LOGIN_DOCKER_IMAGES
+      - GOOLOOG
+      - PASSWORD_GAME
+      - END_OF_CTF
+
+    DEVOPS:
+      - LOGIN_DOCKER_IMAGES
+      - GOOLOOG
+      - PASSWORD_GAME
+      - END_OF_CTF
+
+    INTEGRATION:
+      - LOGIN_WORDLE
+      - GOOLOOG
+      - PASSWORD_GAME
+      - END_OF_CTF
 
 
 
@@ -84,7 +84,7 @@ password-game:
       - water
       - earth
       - fire
-    biss-number: 21
+    biss-number: 22
     biss-sponsor: olga
     sum-of-atomic-elements: 500
     roman-numeral-devisor: 35
